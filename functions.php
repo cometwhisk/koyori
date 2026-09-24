@@ -984,46 +984,19 @@ function get_link_items() {
     
     $result = '';
     $pending_cat_name = __('Pending Links', 'sakurairo'); // 未审核链接分类名称
-
-    // 伙伴优先，失联置底；同一组内继续沿用后台设置的 term_priority。
-    usort($linkcats, function ($left, $right) {
-        $role_priority = function ($term) {
-            $name = trim(wp_strip_all_tags($term->name));
-            if (preg_match('/伙伴|友链|朋友/u', $name)) {
-                return 0;
-            }
-            if (preg_match('/失联|失效|断联/u', $name)) {
-                return 2;
-            }
-            return 1;
-        };
-
-        return $role_priority($left) <=> $role_priority($right);
-    });
     
     foreach ($linkcats as $linkcat) {
         // 跳过未审核链接分类
         if ($linkcat->name === $pending_cat_name) {
             continue;
         }
-
-        $category_name = trim(wp_strip_all_tags($linkcat->name));
-        $category_role = 'normal';
-        if (preg_match('/伙伴|友链|朋友/u', $category_name)) {
-            $category_role = 'partner';
-        } elseif (preg_match('/失联|失效|断联/u', $category_name)) {
-            $category_role = 'lost';
-        }
-        $category_class = 'link-category link-category-' . $category_role;
         
-        $result .= '<section class="' . esc_attr($category_class) . '">';
-        $result .= '<h3 class="link-title"><span class="link-fix">' . esc_html($linkcat->name) . '</span></h3>';
+        $result .= '<h3 class="link-title"><span class="link-fix">' . $linkcat->name . '</span></h3>';
         if ($linkcat->description) {
-            $result .= '<div class="link-description">' . esc_html($linkcat->description) . '</div>';
+            $result .= '<div class="link-description">' . $linkcat->description . '</div>';
         }
 
         $result .= get_the_link_items($linkcat->term_id);
-        $result .= '</section>';
     }
     return $result;
 }
