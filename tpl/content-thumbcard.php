@@ -64,19 +64,8 @@ if (!function_exists('get_post_cover_html')) {
                 break;
             default:
                 $post_img = '';
-                if (has_post_thumbnail()) {
-                    $post_thumbnail_id = get_post_thumbnail_id($post->ID);
-                    $large_image_url = wp_get_attachment_image_src($post_thumbnail_id, 'large');
-                    if ($large_image_url == false) {
-                        $large_image_url = wp_get_attachment_image_src($post_thumbnail_id, 'medium');
-                        if ($large_image_url == false) {
-                            $large_image_url = wp_get_attachment_image_src($post_thumbnail_id);
-                            if ($large_image_url == false) {
-                                $post_img = DEFAULT_FEATURE_IMAGE();
-                            }
-                        }
-                    }
-                    $post_img = $large_image_url[0] ?? DEFAULT_FEATURE_IMAGE('th');
+                if (koyori_has_cover($post->ID)) {
+                    $post_img = koyori_get_cover_url($post->ID, 'large');
                 } else {
                     $post_img = DEFAULT_FEATURE_IMAGE('th');
                 }

@@ -595,7 +595,7 @@ get_header();
 
 <?php while (have_posts()) : the_post(); ?>
     <?php $bgm = (iro_opt('bilibili_id')) ? new \Sakura\API\BilibiliFavList() : null; ?>
-    <?php if (!empty($bgm) && (!iro_opt('patternimg') || !get_post_thumbnail_id(get_the_ID()))) : ?>
+    <?php if (!empty($bgm) && (!iro_opt('patternimg') || !koyori_has_cover(get_the_ID()))) : ?>
         <span class="linkss-title"><?php the_title(); ?></span>
     <?php endif; ?>
     <article <?php post_class("post-item"); ?>>

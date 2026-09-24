@@ -257,8 +257,7 @@ add_action('save_post', function ($post_id) {
         return;
     }
     // 获取文章特色图片
-    $thumbnail_id = get_post_thumbnail_id($post_id);
-    $image_url = $thumbnail_id ? wp_get_attachment_url($thumbnail_id) : '';
+    $image_url = koyori_get_cover_url($post_id, 'full');
 
     $theme_color = ($image_url) ? get_image_theme_color($image_url) : 'false';
 
@@ -279,8 +278,7 @@ function get_post_theme_color($post_id) {
     }
 
     // 没有则获取
-    $thumbnail_id = get_post_thumbnail_id($post_id);
-    $image_url = $thumbnail_id ? wp_get_attachment_url($thumbnail_id) : '';
+    $image_url = koyori_get_cover_url($post_id, 'full');
 
     // 没有特色图片
     if (!$image_url) {

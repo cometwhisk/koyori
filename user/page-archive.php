@@ -756,7 +756,7 @@ get_header();
 </style>
 
 <?php 
-    if (!iro_opt('patternimg') || !get_post_thumbnail_id(get_the_ID())) { 
+    if (!iro_opt('patternimg') || !koyori_has_cover(get_the_ID())) { 
     ?>
         <span class="linkss-title"><?php the_title(); ?></span>
     <?php 

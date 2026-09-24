@@ -484,7 +484,7 @@ if ($link_align == 'right' || $link_align == 'center') {
 
 			function submit_button_struct($pending_links_limit_reached) { // 按钮结构?>
 				<button class="submit-link-btn" id="openLinkModal" <?php echo $pending_links_limit_reached ? 'disabled' : ''; ?> 
-				<?php if (iro_opt('patternimg') && get_post_thumbnail_id(get_the_ID())) { // 只有当真正有头图时才应用动画效果 ?>
+				<?php if (iro_opt('patternimg') && koyori_has_cover(get_the_ID())) { // 只有当真正有头图时才应用动画效果 ?>
 					style="display:block;animation:homepage-load-animation 2s;"
 				<?php } ?>>
 					<?php _e('Submit Link', 'sakurairo'); ?>
@@ -497,7 +497,7 @@ if ($link_align == 'right' || $link_align == 'center') {
 				</div>
 			<?php } ?>
 
-		<?php if (!iro_opt('patternimg') || !get_post_thumbnail_id(get_the_ID())) { //没有头图?>
+		<?php if (!iro_opt('patternimg') || !koyori_has_cover(get_the_ID())) { //没有头图?>
 
 			<div class="title-container">
 				<span class="linkss-title"><?php echo esc_html(get_the_title()); ?></span>
