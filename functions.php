@@ -285,14 +285,14 @@ function koyori_enqueue_cover_editor_assets() {
         'koyori-cover-editor',
         get_template_directory_uri() . '/js/koyori-cover-editor.js',
         array('wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-block-editor'),
-        '1.0.1',
+        '1.0.2',
         true
     );
     wp_enqueue_style(
         'koyori-cover-editor',
         get_template_directory_uri() . '/css/koyori-cover-editor.css',
         array('wp-edit-post'),
-        '1.0.1'
+        '1.0.2'
     );
 }
 add_action('enqueue_block_editor_assets', 'koyori_enqueue_cover_editor_assets');
