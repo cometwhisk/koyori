@@ -133,7 +133,7 @@ span.linkss-title {
 	bottom: -5px;
 	right: 0;
 	width: 70%;
-	height: 0.35em;
+	height: 0.7em;
 	background-color: var(--theme-skin-matching);
 	opacity: 0.4;
 	z-index: 0;
