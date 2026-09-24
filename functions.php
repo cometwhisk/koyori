@@ -971,9 +971,8 @@ function get_link_items() {
     // 获取链接分类并按优先级降序排列
     $linkcats = get_terms(array(
         'taxonomy'   => 'link_category',
-        'meta_key'   => 'term_priority', // 优先级字段
-        'orderby'    => 'meta_value_num', 
-        'order'      => 'DESC', 
+        'orderby'    => 'term_id',
+        'order'      => 'ASC',
         'hide_empty' => false
     ));
 
