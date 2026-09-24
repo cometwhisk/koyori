@@ -105,45 +105,53 @@ class Steam
         return $html;
     }    private function prime_steam_covers(array $games)
     {
+        $missing = array();
         foreach ($games as $game) {
             $appid = absint($game['appid'] ?? 0);
-            if (!$appid || false !== get_transient('steam_cover_path_' . $appid)) {
+            if ($appid && false === get_transient('steam_cover_path_' . $appid)) {
+                $missing[] = $appid;
+            }
+        }
+
+        if (empty($missing)) {
+            return;
+        }
+
+        $payload = array(
+            'ids' => array_map(function ($appid) {
+                return array('appid' => $appid);
+            }, array_values(array_unique($missing))),
+            'context' => array(
+                'language'     => 'english',
+                'country_code' => 'US',
+            ),
+            'data_request' => array(
+                'include_assets'     => true,
+                'include_basic_info' => true,
+            ),
+        );
+        $endpoint = add_query_arg(
+            'input_json',
+            wp_json_encode($payload),
+            'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/'
+        );
+        $response = wp_remote_get($endpoint, array('timeout' => 20));
+        if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+            return;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($response), true);
+        $items = $data['response']['store_items'] ?? array();
+        foreach ($items as $item) {
+            $appid = absint($item['appid'] ?? $item['id'] ?? 0);
+            $format = $item['assets']['asset_url_format'] ?? '';
+            $header = $item['assets']['header'] ?? '';
+            if (!$appid || !$format || !$header) {
                 continue;
             }
 
-            $endpoint = add_query_arg(
-                array(
-                    'appids' => $appid,
-                    'l'      => 'english',
-                ),
-                'https://store.steampowered.com/api/appdetails'
-            );
-            $response = wp_remote_get($endpoint, array('timeout' => 15));
-            if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
-                continue;
-            }
-
-            $data = json_decode(wp_remote_retrieve_body($response), true);
-            $entry = $data[(string) $appid] ?? null;
-            if (!$entry || empty($entry['data']['header_image'])) {
-                foreach ((array) $data as $candidate) {
-                    if (!empty($candidate['success'])
-                        && !empty($candidate['data']['header_image'])
-                        && (int) ($candidate['data']['steam_appid'] ?? 0) === $appid) {
-                        $entry = $candidate;
-                        break;
-                    }
-                }
-            }
-            $header = $entry['data']['header_image'] ?? '';
-            $parts = $header ? wp_parse_url($header) : false;
-            $path = is_array($parts) && !empty($parts['path']) ? $parts['path'] : '';
-            if (!empty($parts['query'])) {
-                $path .= '?' . $parts['query'];
-            }
-            if ($path) {
-                set_transient('steam_cover_path_' . $appid, $path, DAY_IN_SECONDS);
-            }
+            $path = '/store_item_assets/' . ltrim(str_replace('${FILENAME}', $header, $format), '/');
+            set_transient('steam_cover_path_' . $appid, $path, DAY_IN_SECONDS);
         }
     }
 
