@@ -130,15 +130,20 @@ span.linkss-title {
 .link-title::after {
 	content: '';
 	position: absolute;
-	bottom: -2px;
+	bottom: -5px;
 	right: 0;
 	width: 70%;
-	height: 0.7em;
+	height: 0.35em;
 	background-color: var(--theme-skin-matching);
 	opacity: 0.4;
 	z-index: 0;
 	border-radius: 30px;
 	transition: all 0.3s ease;
+}
+
+.link-title .link-fix {
+	position: relative;
+	z-index: 1;
 }
 
 .link-title:hover::after {
