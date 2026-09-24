@@ -4025,7 +4025,7 @@ $prefix = 'iro_options';
       array(
         'type'    => 'submessage',
         'style'   => 'normal',
-        'content' => sprintf(__('Theme Sakurairo Version %s | Internal Version %s | <a href="https://github.com/mirai-mamori/Sakurairo">Project Address</a>','sakurairo_csf'), IRO_VERSION, INT_VERSION), 
+        'content' => sprintf(__('Theme Koyori Version %s | Internal Version %s | <a href="https://github.com/cometwhisk/koyori">Project Address</a> | Based on Sakurairo','sakurairo_csf'), IRO_VERSION, INT_VERSION), 
       ),
 
       array(
