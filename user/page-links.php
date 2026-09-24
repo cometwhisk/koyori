@@ -146,6 +146,32 @@ span.linkss-title {
 	opacity: 0.7;
 }
 
+/* 失联链接单独置底并弱化，保留记录但不抢主内容视觉 */
+.links-page .link-category-lost {
+    margin-top: 72px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(120, 120, 120, 0.35);
+}
+
+.links-page .link-category-lost .link-title {
+    color: #777;
+}
+
+.links-page .link-category-lost .link-title::after {
+    background-color: #aaa;
+    opacity: 0.25;
+}
+
+.links-page .link-category-lost ul li {
+    opacity: 0.72;
+    filter: grayscale(0.35);
+}
+
+.links-page .link-category-lost ul li:hover {
+    opacity: 0.95;
+    filter: grayscale(0);
+}
+
 /* 站点名称样式 */
 span.sitename {
     font-size: 20px;
