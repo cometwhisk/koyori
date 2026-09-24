@@ -74,6 +74,9 @@ class Steam
         $offset = ($page - 1) * $perPage;
         $games = array_slice($games, $offset, $perPage); // 当前页数据
 
+        // 一次性获取当前页游戏的新版 Steam 封面路径，避免逐张请求 API。
+        $this->prime_steam_covers($games);
+
 
         $html = "";
         foreach ($games as $index => $game) {
@@ -100,13 +103,60 @@ class Steam
         }
 
         return $html;
-    }    private function game_items(array $game, $playtime, $last_played)
+    }    private function prime_steam_covers(array $games)
+    {
+        foreach ($games as $game) {
+            $appid = absint($game['appid'] ?? 0);
+            if (!$appid || false !== get_transient('steam_cover_path_' . $appid)) {
+                continue;
+            }
+
+            $endpoint = add_query_arg(
+                array(
+                    'appids' => $appid,
+                    'l'      => 'english',
+                ),
+                'https://store.steampowered.com/api/appdetails'
+            );
+            $response = wp_remote_get($endpoint, array('timeout' => 15));
+            if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+                continue;
+            }
+
+            $data = json_decode(wp_remote_retrieve_body($response), true);
+            $header = $data[(string) $appid]['data']['header_image'] ?? '';
+            $parts = $header ? wp_parse_url($header) : false;
+            $path = is_array($parts) && !empty($parts['path']) ? $parts['path'] : '';
+            if (!empty($parts['query'])) {
+                $path .= '?' . $parts['query'];
+            }
+            if ($path) {
+                set_transient('steam_cover_path_' . $appid, $path, DAY_IN_SECONDS);
+            }
+        }
+    }
+
+    private function get_steam_cover_url($appid)
+    {
+        $path = get_transient('steam_cover_path_' . absint($appid));
+        if (!$path) {
+            return '';
+        }
+
+        $cdn = $this->get_steam_covercdn();
+        if (!$cdn) {
+            return '';
+        }
+
+        return esc_url(rtrim($cdn, '/') . '/' . ltrim($path, '/'));
+    }
+
+    private function game_items(array $game, $playtime, $last_played)
     {
     return
         '<a class="steam-card" href="' . esc_url($this->get_steam_store($game['appid'])) . '" target="_blank" rel="nofollow">' .
         '<div class="steam-card-image">' .
-        '<img src="' . esc_url($this->get_steam_covercdn() . '/store_item_assets/steam/apps/' . $game['appid'] . '/header.jpg') . 
-        '" alt="' . esc_attr($game['name']) . '" loading="lazy">' .
+        '<img src="' . $this->get_steam_cover_url($game['appid']) . '" alt="' . esc_attr($game['name']) . '" loading="lazy">' .
         '<div class="steam-title-overlay">' .
         '<h3 class="steam-title" title="' . esc_attr($game['name']) . '">' . esc_html($game['name']) . '</h3>' .
         '</div>' .
