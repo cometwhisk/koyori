@@ -1035,12 +1035,17 @@ function get_link_items() {
             continue;
         }
         
-        $result .= '<h3 class="link-title"><span class="link-fix">' . $linkcat->name . '</span></h3>';
-        if ($linkcat->description) {
-            $result .= '<div class="link-description">' . $linkcat->description . '</div>';
+        $category_items = get_the_link_items($linkcat->term_id);
+        if (empty($category_items)) {
+            continue;
         }
 
-        $result .= get_the_link_items($linkcat->term_id);
+        $result .= '<h3 class="link-title"><span class="link-fix">' . esc_html($linkcat->name) . '</span></h3>';
+        if ($linkcat->description) {
+            $result .= '<div class="link-description">' . esc_html($linkcat->description) . '</div>';
+        }
+
+        $result .= $category_items;
     }
     return $result;
 }
