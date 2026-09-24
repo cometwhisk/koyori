@@ -124,7 +124,18 @@ class Steam
             }
 
             $data = json_decode(wp_remote_retrieve_body($response), true);
-            $header = $data[(string) $appid]['data']['header_image'] ?? '';
+            $entry = $data[(string) $appid] ?? null;
+            if (!$entry || empty($entry['data']['header_image'])) {
+                foreach ((array) $data as $candidate) {
+                    if (!empty($candidate['success'])
+                        && !empty($candidate['data']['header_image'])
+                        && (int) ($candidate['data']['steam_appid'] ?? 0) === $appid) {
+                        $entry = $candidate;
+                        break;
+                    }
+                }
+            }
+            $header = $entry['data']['header_image'] ?? '';
             $parts = $header ? wp_parse_url($header) : false;
             $path = is_array($parts) && !empty($parts['path']) ? $parts['path'] : '';
             if (!empty($parts['query'])) {
