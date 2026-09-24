@@ -3786,10 +3786,14 @@ function get_archive_info($get_page = false) {
     return $years;
 }
 
-//更新文章后更新缓存
-add_action('save_post', function(){
-    get_archive_info();
-});
+// 文章状态变化后清除时光轴缓存，避免回收站文章继续出现在时光轴。
+function koyori_clear_archive_cache() {
+    delete_transient('time_archive');
+}
+add_action('save_post', 'koyori_clear_archive_cache', 20);
+add_action('trashed_post', 'koyori_clear_archive_cache');
+add_action('untrashed_post', 'koyori_clear_archive_cache');
+add_action('deleted_post', 'koyori_clear_archive_cache');
 
 /*
  * 友情链接提交功能
