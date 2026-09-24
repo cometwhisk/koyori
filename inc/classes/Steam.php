@@ -151,10 +151,7 @@ class Steam
             }
 
             $path = '/store_item_assets/' . ltrim(str_replace('${FILENAME}', $header, $format), '/');
-            // 只接受 Steam 返回的新版哈希资源路径，拒绝旧的无哈希 header.jpg。
-            if (!preg_match('~/steam/apps/[0-9]+/[a-f0-9]{20,}/~i', $path)) {
-                continue;
-            }
+            // 该路径来自 Steam 接口，不自行拼接或改写资源路径。
             set_transient('steam_cover_path_' . $appid, $path, DAY_IN_SECONDS);
         }
     }
