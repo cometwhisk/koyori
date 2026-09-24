@@ -130,7 +130,7 @@ span.linkss-title {
 .link-title::after {
 	content: '';
 	position: absolute;
-	bottom: -5px;
+	bottom: -12px;
 	right: 0;
 	width: 70%;
 	height: 0.7em;
