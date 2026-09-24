@@ -922,6 +922,51 @@ function is_webp(): bool
 }
 
 /**
+ * Add a clear visibility switch to the classic WordPress Links editor.
+ */
+function koyori_link_visibility_meta_box($link) {
+    $visible = !isset($link->link_visible) || 'N' !== $link->link_visible;
+    wp_nonce_field('koyori_link_visibility_save', 'koyori_link_visibility_nonce');
+    echo '<label for="koyori-link-visible">';
+    echo '<input type="checkbox" id="koyori-link-visible" name="koyori_link_visible" value="Y" ' . checked($visible, true, false) . ' /> ';
+    echo esc_html__('在友情链接页面显示', 'sakurairo');
+    echo '</label>';
+    echo '<p class="description">' . esc_html__('取消勾选后保留后台链接，但前台不显示。', 'sakurairo') . '</p>';
+}
+
+function koyori_add_link_visibility_meta_box($link) {
+    add_meta_box(
+        'koyori-link-visibility',
+        __('前台显示', 'sakurairo'),
+        'koyori_link_visibility_meta_box',
+        'link',
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes_link', 'koyori_add_link_visibility_meta_box');
+
+function koyori_save_link_visibility($link_id) {
+    if (!isset($_POST['koyori_link_visibility_nonce'])
+        || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['koyori_link_visibility_nonce'])), 'koyori_link_visibility_save')
+        || !current_user_can('manage_links')) {
+        return;
+    }
+
+    global $wpdb;
+    $visible = isset($_POST['koyori_link_visible']) && 'Y' === $_POST['koyori_link_visible'] ? 'Y' : 'N';
+    $wpdb->update(
+        $wpdb->links,
+        array('link_visible' => $visible),
+        array('link_id' => absint($link_id)),
+        array('%s'),
+        array('%d')
+    );
+    clean_bookmark_cache($link_id);
+}
+add_action('edit_link', 'koyori_save_link_visibility');
+
+/**
  * 获取友情链接列表
  * @Param: string $sorting_mode 友情链接列表排序模式，name、updated、rating、rand四种模式
  * @Param: string $link_order 友情链接列表排序方法，ASC、DESC（升序或降序）
