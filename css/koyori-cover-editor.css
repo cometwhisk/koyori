@@ -1,0 +1,50 @@
+.koyori-cover-panel .koyori-cover-tabs {
+    display: flex;
+    gap: 14px;
+    margin: 0 0 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.koyori-cover-panel .koyori-cover-tab {
+    padding: 0 0 8px;
+    color: #757575;
+    font-size: 12px;
+}
+
+.koyori-cover-panel .koyori-cover-tab.is-active {
+    color: #1d2327;
+    border-bottom: 2px solid #2271b1;
+    font-weight: 600;
+}
+
+.koyori-cover-panel .koyori-cover-preview {
+    display: block;
+    width: 100%;
+    max-height: 180px;
+    margin: 0 0 12px;
+    border-radius: 4px;
+    object-fit: cover;
+    background: #f0f0f1;
+}
+
+.koyori-cover-panel .koyori-cover-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.koyori-cover-panel .koyori-cover-divider {
+    margin: 8px 0 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e0e0e0;
+    color: #50575e;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* The Koyori panel replaces the duplicate native featured-image panel. */
+.editor-post-featured-image {
+    display: none !important;
+}

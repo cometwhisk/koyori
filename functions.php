@@ -257,55 +257,45 @@ function koyori_has_cover($post_id = 0) {
     return (bool) koyori_get_cover_url($post_id, 'full');
 }
 
-function koyori_add_external_cover_meta_box() {
+function koyori_register_external_cover_meta() {
     foreach (array('post', 'page', 'shuoshuo') as $post_type) {
         if (post_type_exists($post_type)) {
-            add_meta_box(
-                'koyori-external-cover',
-                __('Koyori 外链封面', 'sakurairo'),
-                'koyori_render_external_cover_meta_box',
-                $post_type,
-                'side',
-                'default'
-            );
+            register_post_meta($post_type, '_koyori_external_cover_url', array(
+                'type'              => 'string',
+                'single'            => true,
+                'default'           => '',
+                'show_in_rest'      => true,
+                'sanitize_callback' => 'esc_url_raw',
+                'auth_callback'     => function ($allowed, $meta_key, $post_id) {
+                    return current_user_can('edit_post', $post_id);
+                },
+            ));
         }
     }
 }
-add_action('add_meta_boxes', 'koyori_add_external_cover_meta_box');
+add_action('init', 'koyori_register_external_cover_meta');
 
-function koyori_render_external_cover_meta_box($post) {
-    wp_nonce_field('koyori_external_cover_save', 'koyori_external_cover_nonce');
-    $value = get_post_meta($post->ID, '_koyori_external_cover_url', true);
-    ?>
-    <p>
-        <label for="koyori-external-cover-url">
-            <?php esc_html_e('直接填写图床图片 URL。填写后优先使用外链；留空则使用本地特色图片。', 'sakurairo'); ?>
-        </label>
-    </p>
-    <input type="url" class="widefat" id="koyori-external-cover-url"
-        name="koyori_external_cover_url" value="<?php echo esc_attr($value); ?>"
-        placeholder="https://static.example.com/cover.webp" />
-    <?php
-}
-
-function koyori_save_external_cover_meta($post_id) {
-    if (!isset($_POST['koyori_external_cover_nonce'])
-        || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['koyori_external_cover_nonce'])), 'koyori_external_cover_save')
-        || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-        || wp_is_post_revision($post_id)
-        || !current_user_can('edit_post', $post_id)
-        || !isset($_POST['koyori_external_cover_url'])) {
+function koyori_enqueue_cover_editor_assets() {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || !in_array($screen->post_type, array('post', 'page', 'shuoshuo'), true)) {
         return;
     }
 
-    $value = esc_url_raw(trim(wp_unslash($_POST['koyori_external_cover_url'])));
-    if ($value && wp_http_validate_url($value)) {
-        update_post_meta($post_id, '_koyori_external_cover_url', $value);
-    } else {
-        delete_post_meta($post_id, '_koyori_external_cover_url');
-    }
+    wp_enqueue_script(
+        'koyori-cover-editor',
+        get_template_directory_uri() . '/js/koyori-cover-editor.js',
+        array('wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-block-editor'),
+        '1.0.1',
+        true
+    );
+    wp_enqueue_style(
+        'koyori-cover-editor',
+        get_template_directory_uri() . '/css/koyori-cover-editor.css',
+        array('wp-edit-post'),
+        '1.0.1'
+    );
 }
-add_action('save_post', 'koyori_save_external_cover_meta');
+add_action('enqueue_block_editor_assets', 'koyori_enqueue_cover_editor_assets');
 
 function i18n_templates_name ($translated_name, $original_name) {
     $lang = get_user_locale();
