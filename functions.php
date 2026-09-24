@@ -83,15 +83,19 @@ function UpdateCheck($url, $flag = 'Sakurairo')
         $flag
     );
 }
-switch (iro_opt('iro_update_source')) {
-    case 'github':
-        $iroThemeUpdateChecker = UpdateCheck('https://github.com/mirai-mamori/Sakurairo', 'Sakurairo');
-        break;
-    case 'upyun':
-        $iroThemeUpdateChecker = UpdateCheck('https://api.fuukei.org/update/jsdelivr.json');
-        break;
-    case 'official_building':
-        $iroThemeUpdateChecker = UpdateCheck('https://api.fuukei.org/update/' . iro_opt('iro_update_channel') . '/check.json');
+// Koyori is maintained independently. Do not let the upstream Sakurairo
+// update checker offer an in-place update that could overwrite customizations.
+if (get_stylesheet() === 'Sakurairo') {
+    switch (iro_opt('iro_update_source')) {
+        case 'github':
+            $iroThemeUpdateChecker = UpdateCheck('https://github.com/mirai-mamori/Sakurairo', 'Sakurairo');
+            break;
+        case 'upyun':
+            $iroThemeUpdateChecker = UpdateCheck('https://api.fuukei.org/update/jsdelivr.json');
+            break;
+        case 'official_building':
+            $iroThemeUpdateChecker = UpdateCheck('https://api.fuukei.org/update/' . iro_opt('iro_update_channel') . '/check.json');
+    }
 }
 
 add_action('init', 'set_user_locale');
