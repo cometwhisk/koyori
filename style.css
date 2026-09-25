@@ -727,7 +727,7 @@ nav .menu > li .sub-menu {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  padding: 5px 0;
+  padding: 0;
   border: 1px solid #f7f7f7;
   pointer-events: none;
 }
