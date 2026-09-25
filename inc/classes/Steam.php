@@ -20,7 +20,7 @@ class Steam
      * @author Ummio
      */
 
-    function fetch_api()
+    function fetch_api($cache_name = 'steam_cache', $cache_duration = HOUR_IN_SECONDS)
     {
         $id = $this->id;
         $key = $this->key;
@@ -30,7 +30,7 @@ class Steam
 
         if ($steam_cache) {
             // 检查缓存
-            $cached_content = get_transient('steam_cache');
+            $cached_content = get_transient($cache_name);
             if (!empty($cached_content)){
                 $response = json_decode($cached_content,true);
             } else {
@@ -39,7 +39,7 @@ class Steam
                 if (is_wp_error($response)) {
                     return ['response' => ['games' => []]]; // 返回空游戏列表
                 }
-                auto_update_cache('steam_cache', wp_remote_retrieve_body($response), 1 * HOUR_IN_SECONDS);
+                auto_update_cache($cache_name, wp_remote_retrieve_body($response), $cache_duration);
                 $response = json_decode(wp_remote_retrieve_body($response), true);
             }
         } else {
@@ -66,19 +66,23 @@ class Steam
 
     public function get_steam_summary()
     {
-        $resp = $this->fetch_api();
-        $games = isset($resp['response']['games']) && is_array($resp['response']['games']) ? $resp['response']['games'] : [];
-        $total = count($games);
+        $library_resp = $this->fetch_api('steam_cache', HOUR_IN_SECONDS);
+        $active_resp = $this->fetch_api('steam_active_cache', 10 * MINUTE_IN_SECONDS);
+        $library_games = isset($library_resp['response']['games']) && is_array($library_resp['response']['games']) ? $library_resp['response']['games'] : [];
+        $active_games = isset($active_resp['response']['games']) && is_array($active_resp['response']['games']) ? $active_resp['response']['games'] : [];
+        $total = count($library_games);
         $played = 0;
         $total_minutes = 0;
         $recent_minutes = 0;
-        foreach ($games as $library_game) {
+        foreach ($library_games as $library_game) {
             $minutes = max(0, absint($library_game['playtime_forever'] ?? 0));
             $total_minutes += $minutes;
             if ($minutes > 0) {
                 $played++;
             }
-            $recent_minutes += max(0, absint($library_game['playtime_2weeks'] ?? 0));
+        }
+        foreach ($active_games as $active_game) {
+            $recent_minutes += max(0, absint($active_game['playtime_2weeks'] ?? 0));
         }
 
         return '<div class="steam-summary" aria-label="Steam 游戏统计">'
