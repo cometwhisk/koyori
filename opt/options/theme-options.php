@@ -3532,9 +3532,10 @@ $prefix = 'iro_options';
         'function' => function () {
           ?>
           <div class="koyori-ai-connection-test">
-            <h5>测试 AI 连接</h5>
-            <button type="button" class="button" id="koyori-ai-test-connection">测试连接</button>
-            <span id="koyori-ai-test-result" aria-live="polite"></span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" class="button" id="koyori-ai-test-connection">测试连接</button>
+              <span id="koyori-ai-test-result" aria-live="polite"></span>
+            </div>
           </div>
           <script>
           (function () {
