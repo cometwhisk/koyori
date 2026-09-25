@@ -14,6 +14,7 @@ class Turnstile
                 turnstile.render('.cf-turnstile', {
                     sitekey: `{$site_key}`,
                     theme: `{$theme}`,
+                    size: 'flexible',
                 });
             };
         </script>
