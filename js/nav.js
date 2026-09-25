@@ -1033,32 +1033,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     //放叠加结束
 
-    //子菜单对齐
-    const subMenus = document.querySelectorAll("nav .menu > li .sub-menu");
-
-    subMenus.forEach(subMenu => {
-        const MainMenu = subMenu.parentElement;
-
-        // 获取渲染后的宽度
-        const MainMenuWidth = MainMenu.getBoundingClientRect().width;
-        const subMenuWidth = subMenu.getBoundingClientRect().width;
-
-        // 偏移计算，确保子菜单居中
-        const offsetX = (subMenuWidth - MainMenuWidth) / 2;
-
-        // 设置初始样式
-        const BasicSubMenuStyle = `translateY(-10px) translateX(${offsetX}px)`;
-        subMenu.style.transform = BasicSubMenuStyle;
-
-        // 设置偏移量
-        MainMenu.addEventListener("mouseenter", () => {
-            subMenu.style.transform = `translateY(0) translateX(${offsetX}px)`;
-        });
-        MainMenu.addEventListener("mouseleave", () => {
-            subMenu.style.transform = BasicSubMenuStyle;
-        });
+    // 二级菜单的水平与垂直位置交给 CSS 统一处理，避免脚本写入内联 transform 覆盖布局。
+    document.querySelectorAll("nav .menu > li .sub-menu").forEach(subMenu => {
+        subMenu.style.removeProperty("transform");
     });
-    //子菜单对齐结束
+    // 二级菜单对齐结束
 
     //以下是窄屏/移动端通用部分
     //移动端菜单开关

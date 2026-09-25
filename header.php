@@ -137,7 +137,7 @@ header('X-Frame-Options: SAMEORIGIN');
         });
     });
 	</script>
-    <script src="<?= $core_lib_basepath . '/js/nav.js' ?>" defer></script>
+    <script src="<?= $core_lib_basepath . '/js/nav.js?ver=2.0.1' ?>" defer></script>
 </head>
 
 <body <?php body_class(); ?>>
