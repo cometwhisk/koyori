@@ -134,6 +134,39 @@ get_header();
         transition-delay: 0.05s;
     }
 
+    .steam-library-summary-card {
+        margin: 0 1.5% 20px;
+        overflow: hidden;
+        border: 1px solid rgba(232, 232, 232, 0.8);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .steam-library-summary-card .steam-user-card {
+        margin: 0;
+    }
+    .steam-library-summary-card .steam-profile {
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+    .steam-library-summary-card .steam-profile:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    .steam-library-summary-card .steam-summary {
+        margin: 0;
+        padding: 16px;
+        border-top: 1px solid rgba(232, 232, 232, 0.8);
+    }
+    body.dark .steam-library-summary-card {
+        border-color: rgba(70, 70, 70, 0.35);
+        background: var(--dark-bg-secondary);
+        box-shadow: var(--dark-shadow-normal);
+    }
+
     .steam-summary {
         width: 100%;
         display: grid;
@@ -344,10 +377,15 @@ get_header();
     ?>
 
 <article <?php post_class("post-item"); ?>>
-    <?php the_content('', true); ?>
-    <section class="steam-row have-columns row">
-        <?php 
+    <div class="steam-library-summary-card">
+        <?php the_content('', true); ?>
+        <?php
         $steam = new \Sakura\API\Steam();
+        echo $steam->get_steam_summary();
+        ?>
+    </div>
+    <section class="steam-row have-columns row">
+        <?php
         $steam_page = max(1, absint($_GET['steam_page'] ?? 1));
         echo $steam->get_steam_items($steam_page, get_permalink());
         ?>
