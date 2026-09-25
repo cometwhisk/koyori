@@ -4684,25 +4684,6 @@ h1.page-title.mb- {
   font-size: 16px;
 }
 
-.ai-excerpt h4::after {
-	content: '';
-	position: absolute;
-	bottom: -5px;
-  right: -5px;
-  width: 55%;
-	height: 0.6em;
-	background-color: var(--article-theme-highlight,var(--theme-skin-matching));
-	opacity: 0.4;
-	z-index: 0;
-	border-radius: 30px;
-	transition: all 0.3s ease;
-}
-
-.ai-excerpt h4:hover::after {
-	width: 75%;
-	opacity: 0.7;
-}
-
 .ai-excerpt i {
   margin-right: 8px;
 }
