@@ -716,7 +716,7 @@ nav .menu > li .sub-menu {
   position: absolute;
   left: 50%;
   right: auto;
-  top: calc(100% + 6px);
+  top: calc(100% + 9px);
   min-width: 90px;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
