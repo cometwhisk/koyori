@@ -3488,35 +3488,35 @@ $prefix = 'iro_options';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'others', 
-    'title' => __('AI Options','sakurairo_csf'),
+    'title' => __('AI 设置','sakurairo_csf'),
     'icon' => 'fas fa-atom',
     'fields' => array(
 
       array(
         'type' => 'submessage',
         'style' => 'info',
-        'content' => __('You can click <a href="https://docs.fuukei.org/Sakurairo/Others/#ChatGPT%E8%AE%BE%E7%BD%AE">here</a> to learn how to set the options on this page','sakurairo_csf'),
+        'content' => __('本页面用于配置 AI 文章摘要功能。','sakurairo_csf'),
       ),
 
       array(
         'type'    => 'submessage',
         'style'   => 'info',
-        'content' => __('Use one OpenAI-compatible connection for OpenAI, OpenRouter, DeepSeek, Ollama, or another compatible service. Do not paste API keys into posts or public messages.','sakurairo_csf'),
+        'content' => __('使用一个兼容 OpenAI 格式的 AI 接口即可。API 密钥不要填写到文章或公开内容中。','sakurairo_csf'),
       ),
 
       array(
         'id' => 'chatgpt_endpoint',
         'type' => 'text',
-        'title' => __('AI API Base URL','sakurairo_csf'),
-        'desc' => __('Enter the service base URL, for example https://api.openai.com/v1. The system will append /chat/completions automatically.','sakurairo_csf'),
+        'title' => __('AI 接口基础地址','sakurairo_csf'),
+        'desc' => __('填写 AI 服务的基础地址，例如 https://api.openai.com/v1。系统会自动补充 /chat/completions。','sakurairo_csf'),
         'default' => 'https://api.openai.com/v1'
       ),
 
       array(
         'id' => 'chatgpt_access_token',
         'type' => 'text',
-        'title' => __('AI API Key','sakurairo_csf'),
-        'desc' => __('Enter the API key for the selected service. The key is only sent from the server to the configured endpoint.','sakurairo_csf'),
+        'title' => __('AI API 密钥','sakurairo_csf'),
+        'desc' => __('填写所选 AI 服务的 API 密钥。密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
       ),
 
       array(
@@ -3524,8 +3524,8 @@ $prefix = 'iro_options';
         'function' => function () {
           ?>
           <div class="koyori-ai-connection-test">
-            <h5><?= esc_html__('Test AI connection', 'sakurairo_csf') ?></h5>
-            <button type="button" class="button" id="koyori-ai-test-connection"><?= esc_html__('Test connection', 'sakurairo_csf') ?></button>
+            <h5>测试 AI 连接</h5>
+            <button type="button" class="button" id="koyori-ai-test-connection">测试连接</button>
             <span id="koyori-ai-test-result" aria-live="polite"></span>
           </div>
           <script>
@@ -3539,7 +3539,7 @@ $prefix = 'iro_options';
               const token = document.querySelector('input[name="iro_options[chatgpt_access_token]"]')?.value || '';
               const model = document.querySelector('input[name="iro_options[chatgpt_model]"]')?.value || '';
               if (!endpoint.trim() || !token.trim() || !model.trim()) {
-                result.textContent = '请先填写接口地址、API Key 和模型。';
+                result.textContent = '请先填写接口地址、API 密钥和模型。';
                 return;
               }
               button.disabled = true;
@@ -3558,7 +3558,7 @@ $prefix = 'iro_options';
               }).then(response => response.json()).then(data => {
                 result.textContent = data.success ? '连接成功。' : (data.data?.message || '连接失败。');
               }).catch(() => {
-                result.textContent = '连接失败，请检查地址和网络。';
+                result.textContent = '连接失败，请检查接口地址和网络。';
               }).finally(() => {
                 button.disabled = false;
               });
@@ -3572,8 +3572,8 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_max_tokens',
         'type' => 'slider',
-        'title' => __('ChatGPT Max Tokens', 'sakurairo_csf'),
-        'desc' => __('Maximum number of words to be sent per segment', 'sakurairo_csf'),
+        'title' => __('每次发送的文章长度上限', 'sakurairo_csf'),
+        'desc' => __('文章过长时，只会截取前面的内容发送给 AI。','sakurairo_csf'),
         'step' => '100',
         'min' => '1000',
         'max' => '32700',
@@ -3583,15 +3583,15 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_model',
         'type' => 'text',
-        'title' => __('ChatGPT Model','sakurairo_csf'),
-        'descr' => __('Only models support Chat Completion API can be used. The default is "gpt-4o-mini. View https://platform.openai.com/docs/models/overview for further info.','sakurairo_csf'),
+        'title' => __('AI 模型','sakurairo_csf'),
+        'descr' => __('填写接口支持的模型名称，默认使用 gpt-4o-mini。','sakurairo_csf'),
         "default" => "gpt-4o-mini"
       ),
       array(
         'id' => 'chatgpt_api_request_timeout',
         'type' => 'slider',
-        'title' => __('ChatGPT API Request Timeout', 'sakurairo_csf'),
-        'desc' => __('The maximum time to wait for a response from the AI service. Increase if you experience frequent "request timed out" errors.', 'sakurairo_csf'),
+        'title' => __('AI 请求超时时间', 'sakurairo_csf'),
+        'desc' => __('等待 AI 服务响应的最长时间。如果经常出现请求超时，可以适当增加。', 'sakurairo_csf'),
         'step' => '1',
         'min' => '5',
         'max' => '360',
@@ -3600,37 +3600,37 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_auto_article_summarize',
         'type' => 'switcher',
-        'title' => __('ChatGPT Auto Article Summarize','sakurairo_csf'),
-        'label' => __('After turning on, title and context of your articles will be automatically sent to ChatGPT to generate excerpts when you save your articles.','sakurairo_csf'),
+        'title' => __('自动生成文章摘要','sakurairo_csf'),
+        'label' => __('开启后，保存文章时会自动将文章标题和正文内容发送给 AI，生成文章摘要。','sakurairo_csf'),
         'default' => false
       ),
 
       array(
         'type'    => 'content',
-        'content'=> __('Each update of your post will trigger a request to generate a summary. Due to current API limitations, if your article exceeds 4097 Token, the system will only send the unexceeded portion to generate a summary','sakurairo_csf'),
+        'content'=> __('每次更新文章都可能触发一次摘要请求。文章内容过长时，只会发送长度上限以内的部分。','sakurairo_csf'),
       ),
 
       array(
         'id' => 'chatgpt_exclude_ids',
         'type' => 'text',
-        'title' => __('Article IDs that do not Require ChatGPT Summarize','sakurairo_csf'),
-        'desc' => __('Those articles will never be sent to ChatGPT for excerpt generation. Split each id with a ",".','sakurairo_csf'),
+        'title' => __('不生成摘要的文章 ID','sakurairo_csf'),
+        'desc' => __('填写后，这些文章不会发送给 AI 生成摘要。多个 ID 请用英文逗号分隔。','sakurairo_csf'),
         'default'     => ''
       ),
 
       array(
         'id' => 'chatgpt_init_prompt',
         'type' => 'textarea',
-        'title' => __('ChatGPT Article Summarize Init Prompt','sakurairo_csf'),
-        'desc' => __('Init Prompt instructs AI how to generate summaries for your articles. Init Prompt will be passed to ChatGPT as "system" role','sakurairo_csf'),
+        'title' => __('文章摘要提示词','sakurairo_csf'),
+        'desc' => __('用于告诉 AI 应该如何生成文章摘要，会作为系统提示词发送。','sakurairo_csf'),
         'default' => '请以作者的身份，以激发好奇吸引阅读为目的，结合文章核心观点来提取的文章中最吸引人的内容，为以下文章编写一个用词精炼简短、110字以内、与文章语言一致的引言。'
       ),
 
       array(
         'id' => 'chatgpt_annotations_prompt',
         'type' => 'textarea',
-        'title' => __('ChatGPT Article Annotations Init Prompt','sakurairo_csf'),
-        'desc' => __('Init Prompt instructs AI how to generate annotations for your articles. Init Prompt will be passed to ChatGPT as "system" role','sakurairo_csf'),
+        'title' => __('文章名词注释提示词','sakurairo_csf'),
+        'desc' => __('用于告诉 AI 应该如何识别和解释文章中的专业名词。','sakurairo_csf'),
         'default' => "分析以下文章正文内容(排除标题及引语类文本)，用最认真的态度和较为严格的识别标准筛选出专业术语、复杂概念、事件、社会热点、网络黑话烂梗热词、晦涩难懂、与文章语言不同的名词，并根据文章主要语言提供对应语言的简短解释。若文章出现与“事件”，“热点”，“介绍”等具有提示上下文功能的含义的名词时，请务必用最高优先级在前后查找符合要求的名词。名词选取时需要排除日常常用的名词、非著名人物的人名。仅返回JSON格式，格式为：{\"术语1\":\"解释1\", \"术语2\":\"解释2\", ...}。注意不要出现在原文中并没有出现的名词，生成的名词越多越好：\n\n",
       ),
 
