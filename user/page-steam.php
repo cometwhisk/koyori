@@ -156,6 +156,10 @@ get_header();
         transform: none;
         box-shadow: none;
     }
+    .steam-library-summary-card > p:empty {
+        display: none;
+        margin: 0;
+    }
     .steam-library-summary-card .steam-summary {
         margin: 0;
         padding: 8px 16px 16px;
