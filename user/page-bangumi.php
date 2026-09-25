@@ -114,7 +114,8 @@ span.linkss-title {
     justify-content: center;
     align-items: center;
     gap: 18px;
-    margin: 18px 0 8px;
+    margin: 18px 0 80px;
+    padding: 20px 0;
 }
 
 .bangumi-pagination-link,

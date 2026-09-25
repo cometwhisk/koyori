@@ -233,7 +233,8 @@ get_header();
         justify-content: center;
         align-items: center;
         gap: 18px;
-        margin: 36px 0 8px;
+        margin: 36px 0 80px;
+        padding: 20px 0;
     }
     .steam-pagination-link,
     .steam-pagination-current {
