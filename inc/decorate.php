@@ -828,8 +828,9 @@ if(iro_opt('cover_half_screen_curve',true)){
 }
 ?>
 body{
-    background-size:<?=iro_opt(('reception_background_size'),'auto')
-?>;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
 }
 #video-add{
     background-image: url(<?=iro_opt('vision_resource_basepath', 'https://s.nmxc.ltd/sakurairo_vision/@3.0/')?>basic/add.svg);
