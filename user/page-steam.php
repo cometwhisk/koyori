@@ -142,25 +142,43 @@ get_header();
         margin: 0 0 6px;
     }
     .steam-summary-item {
-        padding: 14px 16px;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 58px;
+        padding: 10px 16px;
+        text-align: left;
         border: 1px solid rgba(255, 255, 255, 0.8);
         border-radius: 14px;
         background: rgba(255, 255, 255, 0.62);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.045);
+    }
+    .steam-summary-icon {
+        flex: 0 0 34px;
+        width: 34px;
+        color: var(--theme-skin-matching);
+        font-size: 30px;
+        line-height: 1;
+        text-align: center;
+    }
+    .steam-summary-content {
+        min-width: 0;
     }
     .steam-summary-value {
         display: block;
         color: var(--global-font-color);
         font-size: 21px;
         font-weight: 600;
-        line-height: 1.25;
+        line-height: 1.15;
+        white-space: nowrap;
     }
     .steam-summary-label {
         display: block;
         margin-top: 5px;
         color: #777;
         font-size: 12px;
+        line-height: 1.2;
+        white-space: nowrap;
     }
     body.dark .steam-summary-item {
         border-color: rgba(70, 70, 70, 0.35);
@@ -295,7 +313,13 @@ get_header();
             gap: 10px;
         }
         .steam-summary-item {
+            gap: 8px;
             padding: 12px 8px;
+        }
+        .steam-summary-icon {
+            flex-basis: 28px;
+            width: 28px;
+            font-size: 24px;
         }
         .steam-summary-value {
             font-size: 18px;

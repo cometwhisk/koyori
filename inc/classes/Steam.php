@@ -92,10 +92,10 @@ class Steam
 
 
         $html = '<div class="steam-summary" aria-label="Steam 游戏统计">'
-            . $this->summary_item($total, '游戏总数')
-            . $this->summary_item($this->format_duration($total_minutes), '总游玩时长')
-            . $this->summary_item($played, '已游玩游戏')
-            . $this->summary_item($this->format_duration($recent_minutes), '最近两周游玩')
+            . $this->summary_item($total, '游戏总数', 'fa-solid fa-gamepad')
+            . $this->summary_item($this->format_duration($total_minutes), '总游玩时长', 'fa-regular fa-clock')
+            . $this->summary_item($played, '已游玩游戏', 'fa-solid fa-book-open')
+            . $this->summary_item($this->format_duration($recent_minutes), '最近两周游玩', 'fa-solid fa-fire-flame-curved')
             . '</div>';
         foreach ($games as $index => $game) {
             $playtime = $this->format_playtime($game['playtime_forever']);
@@ -241,13 +241,13 @@ class Steam
         }
     }
 
-    private function summary_item($value, $label)
+    private function summary_item($value, $label, $icon)
     {
-        return '<div class="steam-summary-item"><span class="steam-summary-value">'
+        return '<div class="steam-summary-item"><i class="steam-summary-icon ' . esc_attr($icon) . '" aria-hidden="true"></i><div class="steam-summary-content"><span class="steam-summary-value">'
             . esc_html($value)
             . '</span><span class="steam-summary-label">'
             . esc_html($label)
-            . '</span></div>';
+            . '</span></div></div>';
     }
 
     private function format_duration($minutes)
