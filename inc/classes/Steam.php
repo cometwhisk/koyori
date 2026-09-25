@@ -71,6 +71,17 @@ class Steam
         $games = isset($resp['response']['games']) && is_array($resp['response']['games']) ? $resp['response']['games'] : [];
 
         $total = count($games); // 总条目数
+        $played = 0;
+        $total_minutes = 0;
+        $recent_minutes = 0;
+        foreach ($games as $library_game) {
+            $minutes = max(0, absint($library_game['playtime_forever'] ?? 0));
+            $total_minutes += $minutes;
+            if ($minutes > 0) {
+                $played++;
+            }
+            $recent_minutes += max(0, absint($library_game['playtime_2weeks'] ?? 0));
+        }
         $perPage = 20; // 每页条目数
         $totalPages = ceil($total / $perPage); // 总页数
         $offset = ($page - 1) * $perPage;
@@ -80,7 +91,12 @@ class Steam
         $this->prime_steam_covers($games);
 
 
-        $html = "";
+        $html = '<div class="steam-summary" aria-label="Steam 游戏统计">'
+            . $this->summary_item($total, '游戏总数')
+            . $this->summary_item($this->format_duration($total_minutes), '总游玩时长')
+            . $this->summary_item($played, '已游玩游戏')
+            . $this->summary_item($this->format_duration($recent_minutes), '最近两周游玩')
+            . '</div>';
         foreach ($games as $index => $game) {
             $playtime = $this->format_playtime($game['playtime_forever']);
             // 如果未游玩则不加载游戏时间
@@ -223,6 +239,26 @@ class Steam
             case 'steamdb':
                 return 'https://steamdb.info/app/' . $appid;
         }
+    }
+
+    private function summary_item($value, $label)
+    {
+        return '<div class="steam-summary-item"><span class="steam-summary-value">'
+            . esc_html($value)
+            . '</span><span class="steam-summary-label">'
+            . esc_html($label)
+            . '</span></div>';
+    }
+
+    private function format_duration($minutes)
+    {
+        $minutes = max(0, absint($minutes));
+        if ($minutes < 60) {
+            return $minutes . ' 分钟';
+        }
+        $hours = $minutes / 60;
+        $formatted = rtrim(rtrim(number_format($hours, 1), '0'), '.');
+        return $formatted . ' 小时';
     }
 
     private function format_playtime($minutes)

@@ -134,6 +134,44 @@ get_header();
         transition-delay: 0.05s;
     }
 
+    .steam-summary {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin: 0 0 6px;
+    }
+    .steam-summary-item {
+        padding: 14px 16px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.62);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.045);
+    }
+    .steam-summary-value {
+        display: block;
+        color: var(--global-font-color);
+        font-size: 21px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    .steam-summary-label {
+        display: block;
+        margin-top: 5px;
+        color: #777;
+        font-size: 12px;
+    }
+    body.dark .steam-summary-item {
+        border-color: rgba(70, 70, 70, 0.35);
+        background: var(--dark-bg-secondary);
+        box-shadow: var(--dark-shadow-normal);
+    }
+    body.dark .steam-summary-value,
+    body.dark .steam-summary-label {
+        color: var(--dark-text-secondary);
+    }
+
     .steam-pagination {
         width: 100%;
         display: flex;
@@ -251,6 +289,16 @@ get_header();
     @media (max-width: 768px) {
         .steam-card {
             width: 96.5%;
+        }
+        .steam-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .steam-summary-item {
+            padding: 12px 8px;
+        }
+        .steam-summary-value {
+            font-size: 18px;
         }
         .steam-title-overlay{
             padding: 25px 30px;
