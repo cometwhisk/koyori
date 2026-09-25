@@ -660,9 +660,9 @@ $prefix = 'iro_options';
         'id' => 'reception_background_size',
         'type' => 'select',
         'options' => array(
-          'cover' => __('Cover','sakurairo_csf'),
-          'contain' => __('Contain','sakurairo_csf'),
-          'auto' => __('Auto','sakurairo_csf'),
+          'cover' => __('铺满','sakurairo_csf'),
+          'contain' => __('完整','sakurairo_csf'),
+          'auto' => __('原始','sakurairo_csf'),
         ),
         'title' => __('Frontend Background Scaling Method','sakurairo_csf'), 
         'desc' => __('You can choose two ways to scale the frontend background, the default is auto-scaling','sakurairo_csf'),

@@ -1303,9 +1303,9 @@ $sections = [
 				'iro_key'  => 'reception_background_size',
 				'label'    => esc_html__( 'Frontend Background Scaling Method', 'Sakurairo_C' ),
 				'choices'     => [
-					'cover' => __('Cover','Sakurairo_C'),
-					'contain' => __('Contain','Sakurairo_C'),
-					'auto' => __('Auto','Sakurairo_C'),
+					'cover' => __('铺满','Sakurairo_C'),
+					'contain' => __('完整','Sakurairo_C'),
+					'auto' => __('原始','Sakurairo_C'),
 				],
 				'transport'   => 'auto',
 				'output' => array(
