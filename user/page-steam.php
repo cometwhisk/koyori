@@ -170,6 +170,9 @@ get_header();
         background: var(--dark-bg-secondary);
         box-shadow: var(--dark-shadow-normal);
     }
+    body.dark .steam-library-summary-card .steam-summary {
+        border-top-color: rgba(70, 70, 70, 0.35);
+    }
 
     .steam-summary {
         width: 100%;
