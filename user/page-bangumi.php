@@ -108,6 +108,56 @@ span.linkss-title {
     width: 100%;
 }
 
+.bangumi-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 18px 0 8px;
+}
+
+.bangumi-pagination-link,
+.bangumi-pagination-current {
+    padding: 10px 18px;
+    border-radius: 999px;
+    color: var(--global-font-color);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 1px 14px rgba(0, 0, 0, 0.08);
+}
+
+.bangumi-pagination-link {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bangumi-pagination-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.bangumi-pagination-current {
+    color: var(--global-font-secondary-color);
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.bangumi-list-summary {
+    width: 100%;
+    margin: 0 0 18px;
+    text-align: center;
+    color: var(--global-font-secondary-color);
+}
+
+body.dark .bangumi-pagination-link,
+body.dark .bangumi-pagination-current {
+    color: var(--dark-text-secondary);
+    background: var(--dark-bg-secondary);
+    box-shadow: var(--dark-shadow-normal);
+}
+
+body.dark .bangumi-list-summary {
+    color: var(--dark-text-secondary);
+}
+
 /* 400px及以上 */
 @media screen and (min-width: 400px) {
   .bangumi .column {
@@ -205,27 +255,29 @@ span.linkss-title {
             $bilibili_id = iro_opt('bilibili_id');
             $mal_username = iro_opt('my_anime_list_username');
             $bangumi_id = iro_opt('bangumi_id');
+            $bangumi_page = max(1, absint($_GET['bangumi_page'] ?? 1));
+            $pagination_url = get_permalink();
             ?>
 
             <div class="row">
-                <?php 
-                if ($bangumi_source === 'bilibili') { 
-                    if ($bilibili_id) { 
-                        $bgm = new \Sakura\API\Bilibili(); 
-                        echo $bgm->get_bgm_items(); 
-                    } else { 
+                <?php
+                if ($bangumi_source === 'bilibili') {
+                    if ($bilibili_id) {
+                        $bgm = new \Sakura\API\Bilibili();
+                        echo $bgm->get_bgm_items($bangumi_page, $pagination_url);
+                    } else {
                         echo '<p>' . __("Please fill in the Bilibili UID in Sakura Options.", "sakurairo") . '</p>';
-                    } 
-                } elseif ($bangumi_source === 'bangumi') { 
-                    if (!empty($bangumi_id)) { 
-                        $bgmList = new \Sakura\API\BangumiList(); 
-                        echo $bgmList->get_bgm_items($bangumi_id); 
-                    } else { 
+                    }
+                } elseif ($bangumi_source === 'bangumi') {
+                    if (!empty($bangumi_id)) {
+                        $bgmList = new \Sakura\API\BangumiList();
+                        echo $bgmList->get_bgm_items($bangumi_id, $bangumi_page, $pagination_url);
+                    } else {
                         echo '<p>' . __("Please fill in the Bangumi UID in Sakura Options.", "sakurairo") . '</p>';
-                    } 
-                } elseif ($mal_username) { 
-                    $bgm = new \Sakura\API\MyAnimeList(); 
-                    echo $bgm->get_all_items(); 
+                    }
+                } elseif ($mal_username) {
+                    $bgm = new \Sakura\API\MyAnimeList();
+                    echo $bgm->get_all_items($bangumi_page, $pagination_url);
                 } else { 
                     echo '<p>' . __("Please fill in the My Anime List Username in Sakura Options.", "sakurairo") . '</p>';
                 } 

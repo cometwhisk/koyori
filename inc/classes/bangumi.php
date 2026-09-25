@@ -98,7 +98,7 @@ class BangumiAPI
 
 class BangumiList
 {
-    public function get_bgm_items($userID, $page = 1)
+    public function get_bgm_items($userID, $page = 1, $pagination_url = '')
     {
         if (empty($userID)) {
             return '<p>' . __('Bangumi ID not set.', 'sakurairo') . '</p>';
@@ -137,10 +137,16 @@ class BangumiList
                 $html .= '</div></div></a></div>';
             }
 
-            // 分页
-            if ($page < $totalPages) {
-                $nextPageUrl = rest_url('sakura/v1/bangumi') . '?userID=' . urlencode($userID) . '&page=' . ($page + 1);
-                $html .= '<div id="template-pagination">' . self::anchor_pagination_next($nextPageUrl) . '</div>';
+            if ($totalPages > 1 && $pagination_url) {
+                $html .= '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
+                if ($page > 1) {
+                    $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
+                }
+                $html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalPages) . '</span>';
+                if ($page < $totalPages) {
+                    $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
+                }
+                $html .= '</nav>';
             }
 
             return $html;

@@ -68,7 +68,7 @@ class MyAnimeList
 		}
 	}
 
-	public function get_all_items()
+	public function get_all_items($page = 1, $pagination_url = '')
 	{
 		$resp = $this->get_data();
 		if ($resp === false)
@@ -82,16 +82,38 @@ class MyAnimeList
 			$total_episodes = 0;
 			foreach ((array)$resp as $item)
 			{
-				$html .= MyAnimeList::get_item_details($item);
 				$total_episodes += $item['num_watched_episodes'];
 			}
-			$top_info = '<br><div id="template-pagination"><span>' .
+			$per_page = 12;
+			$total_pages = (int)ceil($item_count / $per_page);
+			$items = array_slice($resp, max(0, ($page - 1) * $per_page), $per_page);
+			foreach ($items as $item)
+			{
+				$html .= MyAnimeList::get_item_details($item);
+			}
+			$top_info = '<div class="bangumi-list-summary">' .
 			            __('Following ', 'sakurairo') . $item_count . __(' anime.', 'sakurairo') .
 			            __(' Watched ', 'sakurairo') . $total_episodes . __(' episodes.', 'sakurairo') .
-			            '</span></div>';
+			            '</div>';
 			$html = $top_info . $html;
+			if ($total_pages > 1 && $pagination_url) {
+				$html .= MyAnimeList::pagination_html($page, $total_pages, $pagination_url);
+			}
 			return $html;
 		}
+	}
+
+	private static function pagination_html($page, $total_pages, $pagination_url)
+	{
+		$html = '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
+		if ($page > 1) {
+			$html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
+		}
+		$html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $total_pages) . '</span>';
+		if ($page < $total_pages) {
+			$html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
+		}
+		return $html . '</nav>';
 	}
 
 	private static function get_item_details(array $item)

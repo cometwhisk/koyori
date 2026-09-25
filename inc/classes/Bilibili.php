@@ -23,7 +23,7 @@ class Bilibili
     {
         $uid = $this->uid;
         $cookies = $this->cookies;
-        $url = "https://api.bilibili.com/x/space/bangumi/follow/list?type=$type&pn=$page&ps=15&follow_status=0&vmid=$uid";
+        $url = "https://api.bilibili.com/x/space/bangumi/follow/list?type=$type&pn=$page&ps=12&follow_status=0&vmid=$uid";
         $args = array(
             'headers' => array(
                 'Cookie' => $cookies,
@@ -40,7 +40,7 @@ class Bilibili
         }
     }
 
-    public function get_bgm_items($page = 1)
+    public function get_bgm_items($page = 1, $pagination_url = '')
     {
         $resp = $this->fetch_api(1, $page);
         $code = $resp["code"];
@@ -49,19 +49,16 @@ class Bilibili
                 return "<div>" . __('Backend error', 'sakurairo') . "</div>";
             case 0: {
                     $bgm = $resp['data'];
-                    $totalpage = $bgm["total"] / 15;
-                    if ($totalpage - $page < 0) {
-                        $next = "<span>"  . __('Following ', 'sakurairo') . $bgm["total"] . __(' anime.', 'sakurairo') . "</span>";
-                    } else {
-                        $next = Bilibili::anchor_pagination_next(rest_url('sakura/v1/bangumi/bilibili') . '?page=' . ++$page);
-                    }
+                    $totalpage = (int)ceil($bgm["total"] / 12);
                     $lists = $bgm["list"];
                     $html = "";
                     foreach ((array)$lists as $item) {
                         $percent = Bilibili::get_percent($item);
-                            $html .= Bilibili::bangumi_item($item, $percent);
+                        $html .= Bilibili::bangumi_item($item, $percent);
                     }
-                    $html .= '<br><div id="template-pagination">' . $next . '</div>';
+                    if ($totalpage > 1 && $pagination_url) {
+                        $html .= Bilibili::pagination_html($page, $totalpage, $pagination_url);
+                    }
                     return $html;
                 }
             case 53013: //用户隐私设置未公开
@@ -70,30 +67,40 @@ class Bilibili
         }
     }
 
-    public function get_bfv_items($page = 1)
+    public function get_bfv_items($page = 1, $pagination_url = '')
     {
         $resp = $this->fetch_api(2, $page);
         $code = $resp["code"];
         switch ($code) {
             case 0: {
                     $bgm = $resp['data'];
-                    $totalpage = $bgm["total"] / 15;
-                    if ($totalpage - $page < 0) {
-                        $next = '<span>共追剧' . $bgm["total"] . '部，继续加油吧！٩(ˊᗜˋ*)و</span>';
-                    } else {
-                        $next = Bilibili::anchor_pagination_next(rest_url('sakura/v1/movies/bilibili') . '?page=' . ++$page);
-                    }
+                    $totalpage = (int)ceil($bgm["total"] / 12);
                     $lists = $bgm["list"];
                     $html = "";
                     foreach ((array)$lists as $item) {
                         $percent = Bilibili::get_percent($item);
                         $html .= Bilibili::bangumi_item($item, $percent);
                     }
-                    $html .= '<br><div id="template-pagination">' . $next . '</div>';
+                    if ($totalpage > 1 && $pagination_url) {
+                        $html .= Bilibili::pagination_html($page, $totalpage, $pagination_url);
+                    }
                     return $html;
                 }
         }
     }
+    private static function pagination_html($page, $totalpage, $pagination_url)
+    {
+        $html = '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
+        if ($page > 1) {
+            $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
+        }
+        $html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalpage) . '</span>';
+        if ($page < $totalpage) {
+            $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
+        }
+        return $html . '</nav>';
+    }
+
     private static function anchor_pagination_next(string $href)
     {
         return '<a class="pagination-next" data-href="' . $href . '"><i class="fa-solid fa-guitar"></i>' . __('Load More', 'sakurairo') . '</a>';
