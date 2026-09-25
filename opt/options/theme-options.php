@@ -3513,6 +3513,14 @@ $prefix = 'iro_options';
       ),
 
       array(
+        'id' => 'chatgpt_model',
+        'type' => 'text',
+        'title' => __('AI 模型','sakurairo_csf'),
+        'descr' => __('填写接口支持的模型名称，默认使用 gpt-4o-mini。','sakurairo_csf'),
+        "default" => "gpt-4o-mini"
+      ),
+
+      array(
         'id' => 'chatgpt_access_token',
         'type' => 'text',
         'title' => __('AI API 密钥','sakurairo_csf'),
@@ -3580,13 +3588,6 @@ $prefix = 'iro_options';
         'default' => '7000'
       ),
 
-      array(
-        'id' => 'chatgpt_model',
-        'type' => 'text',
-        'title' => __('AI 模型','sakurairo_csf'),
-        'descr' => __('填写接口支持的模型名称，默认使用 gpt-4o-mini。','sakurairo_csf'),
-        "default" => "gpt-4o-mini"
-      ),
       array(
         'id' => 'chatgpt_api_request_timeout',
         'type' => 'slider',
