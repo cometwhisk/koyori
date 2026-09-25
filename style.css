@@ -714,16 +714,16 @@ nav .menu > li {
 
 nav .menu > li .sub-menu {
   position: absolute;
-  left: 0;
+  left: 50%;
   right: auto;
-  top: 155%;
+  top: calc(100% + 6px);
   min-width: 90px;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.4s ease-in-out;
+  transform: translateX(-50%);
+  transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -744,21 +744,6 @@ nav .menu > li .sub-menu:hover {
 nav .menu > li:hover > .sub-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
-}
-
-/* 桌面导航的二级菜单按一级菜单项中心对齐，避免被搜索区布局带偏。 */
-.nav-search-wrapper nav .menu > li .sub-menu {
-  left: 50%;
-  right: auto;
-  top: calc(100% - 7px) !important;
-  margin-left: -45px;
-  transform: none !important;
-  transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
-}
-
-.nav-search-wrapper nav .menu > li:hover > .sub-menu {
-  transform: none !important;
 }
 
 nav .menu > li .sub-menu li {

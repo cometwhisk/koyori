@@ -1033,12 +1033,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     //放叠加结束
 
-    // 二级菜单的水平与垂直位置交给 CSS 统一处理，避免脚本写入内联 transform 覆盖布局。
-    document.querySelectorAll("nav .menu > li .sub-menu").forEach(subMenu => {
-        subMenu.style.removeProperty("transform");
-    });
-    // 二级菜单对齐结束
-
     //以下是窄屏/移动端通用部分
     //移动端菜单开关
     //通用部分
