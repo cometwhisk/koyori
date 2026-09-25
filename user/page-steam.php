@@ -377,13 +377,18 @@ get_header();
     ?>
 
 <article <?php post_class("post-item"); ?>>
+    <?php
+    $steam = new \Sakura\API\Steam();
+    $steam_profile_enabled = has_shortcode(get_post_field('post_content', get_the_ID()), 'steamuser');
+    ?>
+    <?php if ($steam_profile_enabled): ?>
     <div class="steam-library-summary-card">
         <?php the_content('', true); ?>
-        <?php
-        $steam = new \Sakura\API\Steam();
-        echo $steam->get_steam_summary();
-        ?>
+        <?php echo $steam->get_steam_summary(); ?>
     </div>
+    <?php else: ?>
+        <?php the_content('', true); ?>
+    <?php endif; ?>
     <section class="steam-row have-columns row">
         <?php
         $steam_page = max(1, absint($_GET['steam_page'] ?? 1));
