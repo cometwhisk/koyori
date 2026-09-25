@@ -4687,7 +4687,7 @@ h1.page-title.mb- {
 .ai-excerpt h4::after {
 	content: '';
 	position: absolute;
-	bottom: -2px;
+	bottom: -5px;
   right: -5px;
   width: 55%;
 	height: 0.6em;
