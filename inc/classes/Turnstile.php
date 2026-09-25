@@ -7,13 +7,12 @@ class Turnstile
   public function script()
   {
     $site_key = iro_opt('turnstile_site_key');
-    $theme = iro_opt('turnstile_theme') ?: 'light';
     return <<<JS
         <script>
             function _turnstileOnLoad() {
                 turnstile.render('.cf-turnstile', {
                     sitekey: `{$site_key}`,
-                    theme: `{$theme}`,
+                    theme: 'light',
                     size: 'normal',
                 });
             };

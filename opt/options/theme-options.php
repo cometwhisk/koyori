@@ -3376,19 +3376,6 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'id' => 'turnstile_theme',
-        'type' => 'select',
-        'title' => 'Turnstile Theme',
-        'options' => array(
-            'light' => 'Light',
-            'dark' => 'Dark',
-            'auto' => 'Auto',
-        ),
-        'default' => 'light',
-        'dependency' => array('captcha_select', '==', 'turnstile'),
-      ),
-
-      array(
         'id' => 'login_urlskip',
         'type' => 'switcher',
         'title' => __('Jump after login','sakurairo_csf'),
