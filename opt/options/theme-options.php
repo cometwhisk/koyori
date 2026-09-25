@@ -3488,34 +3488,34 @@ $prefix = 'iro_options';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'others', 
-    'title' => __('AI 设置','sakurairo_csf'),
+    'title' => __('AI 配置','sakurairo_csf'),
     'icon' => 'fas fa-atom',
     'fields' => array(
 
       array(
         'type' => 'submessage',
         'style' => 'info',
-        'content' => __('本页面用于配置 AI 文章摘要功能。','sakurairo_csf'),
+        'content' => __('本页面用于配置文章摘要功能。','sakurairo_csf'),
       ),
 
       array(
         'type'    => 'submessage',
         'style'   => 'info',
-        'content' => __('使用一个兼容 OpenAI 格式的 AI 接口即可。API 密钥不要填写到文章或公开内容中。','sakurairo_csf'),
+        'content' => __('使用一个兼容 OpenAI 格式的接口即可。API 密钥不要填写到文章或公开内容中。','sakurairo_csf'),
       ),
 
       array(
         'id' => 'chatgpt_endpoint',
         'type' => 'text',
-        'title' => __('AI 接口基础地址','sakurairo_csf'),
-        'desc' => __('填写 AI 服务的基础地址，例如 https://api.openai.com/v1。系统会自动补充 /chat/completions。','sakurairo_csf'),
+        'title' => __('接口基础地址','sakurairo_csf'),
+        'desc' => __('填写服务的基础地址，例如 https://api.openai.com/v1。系统会自动补充 /chat/completions。','sakurairo_csf'),
         'default' => 'https://api.openai.com/v1'
       ),
 
       array(
         'id' => 'chatgpt_model',
         'type' => 'text',
-        'title' => __('AI 模型','sakurairo_csf'),
+        'title' => __('模型','sakurairo_csf'),
         'descr' => __('填写接口支持的模型名称，默认使用 gpt-4o-mini。','sakurairo_csf'),
         "default" => "gpt-4o-mini"
       ),
@@ -3523,8 +3523,8 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_access_token',
         'type' => 'text',
-        'title' => __('AI API 密钥','sakurairo_csf'),
-        'desc' => __('填写所选 AI 服务的 API 密钥。密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
+        'title' => __('API 密钥','sakurairo_csf'),
+        'desc' => __('填写服务的 API 密钥。密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
       ),
 
       array(
@@ -3582,7 +3582,7 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_max_tokens',
         'type' => 'slider',
         'title' => __('每次发送的文章长度上限', 'sakurairo_csf'),
-        'desc' => __('文章过长时，只会截取前面的内容发送给 AI。','sakurairo_csf'),
+        'desc' => __('文章过长时，只会截取前面的内容发送给模型。','sakurairo_csf'),
         'step' => '100',
         'min' => '1000',
         'max' => '32700',
@@ -3592,8 +3592,8 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_api_request_timeout',
         'type' => 'slider',
-        'title' => __('AI 请求超时时间', 'sakurairo_csf'),
-        'desc' => __('等待 AI 服务响应的最长时间。如果经常出现请求超时，可以适当增加。', 'sakurairo_csf'),
+        'title' => __('请求超时时间', 'sakurairo_csf'),
+        'desc' => __('等待服务响应的最长时间。如果经常出现请求超时，可以适当增加。', 'sakurairo_csf'),
         'step' => '1',
         'min' => '5',
         'max' => '360',
@@ -3603,7 +3603,7 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_auto_article_summarize',
         'type' => 'switcher',
         'title' => __('自动生成文章摘要','sakurairo_csf'),
-        'label' => __('开启后，保存文章时会自动将文章标题和正文内容发送给 AI，生成文章摘要。','sakurairo_csf'),
+        'label' => __('开启后，保存文章时会自动将文章标题和正文内容发送给模型，生成文章摘要。','sakurairo_csf'),
         'default' => false
       ),
 
@@ -3616,7 +3616,7 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_exclude_ids',
         'type' => 'text',
         'title' => __('不生成摘要的文章 ID','sakurairo_csf'),
-        'desc' => __('填写后，这些文章不会发送给 AI 生成摘要。多个 ID 请用英文逗号分隔。','sakurairo_csf'),
+        'desc' => __('填写后，这些文章不会发送给模型生成摘要。多个 ID 请用英文逗号分隔。','sakurairo_csf'),
         'default'     => ''
       ),
 
@@ -3624,7 +3624,7 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_init_prompt',
         'type' => 'textarea',
         'title' => __('文章摘要提示词','sakurairo_csf'),
-        'desc' => __('用于告诉 AI 应该如何生成文章摘要，会作为系统提示词发送。','sakurairo_csf'),
+        'desc' => __('用于告诉模型应该如何生成文章摘要，会作为系统提示词发送。','sakurairo_csf'),
         'default' => '请以作者的身份，以激发好奇吸引阅读为目的，结合文章核心观点来提取的文章中最吸引人的内容，为以下文章编写一个用词精炼简短、110字以内、与文章语言一致的引言。'
       ),
 
