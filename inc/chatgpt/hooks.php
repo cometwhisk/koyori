@@ -62,7 +62,7 @@ namespace IROChatGPT {
                 'messages' => [
                     ['role' => 'user', 'content' => 'Reply with OK.'],
                 ],
-                'max_tokens' => 5,
+                'max_tokens' => 64,
             ], JSON_UNESCAPED_UNICODE),
         ]);
 
