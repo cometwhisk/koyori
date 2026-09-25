@@ -746,19 +746,15 @@ nav .menu > li:hover > .sub-menu {
   visibility: visible;
 }
 
+/* 二级菜单项复用一级菜单胶囊的尺寸与排版。 */
 nav .menu > li .sub-menu li {
   display: flex;
-  padding: 1px 5px;
+  padding: 0;
   justify-content: center;
 }
 
 nav .menu > li .sub-menu li:last-child {
   border-bottom: none;
-}
-
-nav .menu > li .sub-menu a {
-  display: block;
-  font-size: 14px;
 }
 
 .nav-article-title{
