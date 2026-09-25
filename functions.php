@@ -3120,17 +3120,7 @@ function register_shortcodes() {
                 $output .= '<img class="steam-avatar" src="' . $avatar . '" alt="Steam Avatar">';
                 $output .= '<div class="steam-profile-info">';
                 $output .= '<a href="' . esc_attr($player['profileurl']) . '" target="_blank" class="steam-username"><i class="fa-brands fa-steam"></i> ' . esc_attr($player['personaname']) . '</a>';
-                $last_online = '';
-                if (($player['personastate'] ?? 0) === 0 && isset($player['lastlogoff'])) {
-                    $last_online = wp_date('Y-m-d H:i', $player['lastlogoff']);
-                }
-                $output .= '<div class="steam-status-row">';
                 $output .= '<div class="steam-status status-' . strtolower(str_replace(' ', '-', $status)) . '">' . $status . '</div>';
-                if ($last_online !== '') {
-                    $output .= '<div class="steam-last-online"><i class="fa-regular fa-clock"></i> ' .
-                        ($status_text['last_online'][$lang] ?? $status_text['last_online']['zh_CN']) . '：' . esc_attr($last_online) . '</div>';
-                }
-                $output .= '</div>';
                 $output .= '</div>'; // .steam-profile-info
                 $output .= '</div>'; // .steam-profile-header
 
@@ -3142,9 +3132,14 @@ function register_shortcodes() {
                     $output .= '</div>'; // .steam-game-info
                 }
                 
+                if (($player['personastate'] ?? 0) === 0 && isset($player['lastlogoff'])) {
+                    $last_online = wp_date('Y-m-d H:i', $player['lastlogoff']);
+                    $output .= '<div class="steam-last-online"><i class="fa-regular fa-clock"></i> ' . 
+                        ($status_text['last_online'][$lang] ?? $status_text['last_online']['zh_CN']) . '：' . esc_attr($last_online) . '</div>';
+                }
+                
                 $output .= '</div>'; // .steam-profile
             }
-
         }
         $output .= '</div>'; // .steam-user-card
         return $output;
