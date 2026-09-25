@@ -827,9 +827,15 @@ if(iro_opt('cover_half_screen_curve',true)){
    <?php
 }
 ?>
+<?php
+$background_size = iro_opt('reception_background_size', 'cover');
+if (!in_array($background_size, array('cover', 'contain', 'auto'), true)) {
+    $background_size = 'cover';
+}
+?>
 body{
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: <?=esc_attr($background_size); ?>;
     background-position: center top;
 }
 #video-add{
