@@ -74,7 +74,7 @@
 .entry-content h2:after {
     content: '';
     position: absolute;
-    bottom: -10px !important;
+    bottom: -18px !important;
     left: 30%;
     right: 0;
     width: 70%;
