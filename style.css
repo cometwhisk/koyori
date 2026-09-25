@@ -6,7 +6,7 @@ Theme URI: https://github.com/cometwhisk/koyori
 Author: Smallmaple
 Author URI: https://www.smallmaple.com/
 Description: A personal derivative theme based on Sakurairo, customized for Smallmaple.
-Version: 1.0.0
+Version: 1.0.1
 Tested up to: 6.8
 Requires at least: 6.0
 Requires PHP: 8.0
@@ -716,22 +716,20 @@ nav .menu > li .sub-menu {
   position: absolute;
   left: 50%;
   right: auto;
-  top: calc(100% + 3px);
-  min-width: 130px;
-  background-color: rgba(255, 255, 255, 0.78);
-  -webkit-backdrop-filter: saturate(180%) blur(14px);
-  backdrop-filter: saturate(180%) blur(14px);
+  top: calc(100% + 5px);
+  min-width: 90px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-50%);
   transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
-  border-radius: 16px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  min-height: 50px;
-  padding: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 8px 24px rgba(80, 50, 100, 0.12);
+  min-height: 0;
+  padding: 5px 0;
+  border: 1px solid #f7f7f7;
   pointer-events: none;
 }
 
@@ -740,7 +738,7 @@ nav .menu > li .sub-menu {
 }
 
 nav .menu > li .sub-menu:hover {
-  background-color: rgba(255, 255, 255, 0.82);
+  background-color: rgba(255, 255, 255, 0.95);
   transition: all 0.4s ease-in-out;
 }
 
@@ -749,33 +747,16 @@ nav .menu > li:hover > .sub-menu {
   visibility: visible;
 }
 
-/* 二级菜单使用轻量文字项，避免与一级胶囊抢层级。 */
+/* 参考站点的紧凑二级菜单：普通文字项，悬停时使用主题强调色。 */
 nav .menu > li .sub-menu li {
   display: flex;
-  width: 100%;
-  padding: 0;
-  justify-content: stretch;
+  padding: 1px 5px;
+  justify-content: center;
 }
 
-nav .menu > li .sub-menu li a {
-  display: flex;
-  width: 100%;
-  height: 36px;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: transparent;
-  color: rgba(50, 50, 55, 0.88);
+nav .menu > li .sub-menu a {
+  display: block;
   font-size: 14px;
-  line-height: 20px;
-  box-sizing: border-box;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-nav .menu > li .sub-menu li a:hover {
-  background-color: rgba(190, 110, 190, 0.12);
-  color: var(--theme-skin-matching);
 }
 
 nav .menu > li .sub-menu li:last-child {
