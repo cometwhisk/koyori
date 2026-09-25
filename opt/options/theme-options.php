@@ -3488,7 +3488,7 @@ $prefix = 'iro_options';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'others', 
-    'title' => __('ChatGPT Options','sakurairo_csf'),
+    'title' => __('AI Options','sakurairo_csf'),
     'icon' => 'fas fa-atom',
     'fields' => array(
 
@@ -3499,74 +3499,74 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'type'    => 'content',
-        'content' => __('<img src="https://s.nmxc.ltd/sakurairo_vision/@3.0/options/postchat.webp" width="25%" height="25%"/>','sakurairo_csf'),
-      ),
-
-      array(
-        'type'     => 'callback',
-        'function' =>   function (){
-          ?>
-          <div>
-           <h5><?=__("Reset to API providers' default options","sakurairo_csf")?></h5>
-           <div class="chatgpt_config_defaults">
-           <button data-name="postchat">
-           <?=__("PostChat","sakurairo_csf")?>
-           </button>
-           <button data-name="openai">
-           <?=__("OpenAI","sakurairo_csf")?>
-           </button>
-          </div>
-           <script>
-        const defaults = {
-          postchat:{
-            chatgpt_endpoint:"https://ai.tianli0.top/v1/chat/completions",
-            chatgpt_model:"tianli"
-          },
-          openai:{
-            chatgpt_endpoint:"https://api.openai.com/v1/chat/completions",
-            chatgpt_model:"gpt-4o-mini",
-          }
-            }
-        document.querySelector(".chatgpt_config_defaults").addEventListener('click',(e)=>{
-          if(e.target.tagName === "BUTTON"){
-            const name = e.target.dataset.name
-
-            const def = defaults[name]
-            if(!def)return
-            e.preventDefault()
-            e.stopPropagation()
-            try {
-            for(const key in def){
-            document.querySelector(`input[name="iro_options[${key}]"]`).value = def[key]
-            }
-            alert('<?=__("Reset successfully","sakurairo_csf")?>')
-
-            } catch (error) {
-          alert("<?=__("Failed to reset","sakurairo_csf")?>" )
-          console.error(error)
-            }
-          }
-        })
-           </script> 
-         </div>
-          <?php
-         },
+        'type'    => 'submessage',
+        'style'   => 'info',
+        'content' => __('Use one OpenAI-compatible connection for OpenAI, OpenRouter, DeepSeek, Ollama, or another compatible service. Do not paste API keys into posts or public messages.','sakurairo_csf'),
       ),
 
       array(
         'id' => 'chatgpt_endpoint',
         'type' => 'text',
-        'title' => __('ChatGPT Base URL','sakurairo_csf'),
-        'desc' => __('Fill in the ChatGPT Base URL','sakurairo_csf'),
-        'default' => 'https://api.openai.com/v1/chat/completions'
+        'title' => __('AI API Base URL','sakurairo_csf'),
+        'desc' => __('Enter the service base URL, for example https://api.openai.com/v1. The system will append /chat/completions automatically.','sakurairo_csf'),
+        'default' => 'https://api.openai.com/v1'
       ),
 
       array(
         'id' => 'chatgpt_access_token',
         'type' => 'text',
-        'title' => __('ChatGPT API keys','sakurairo_csf'),
-        'desc' => __('Fill in Your ChatGPT API keys, please refer to <a href="https://platform.openai.com/account/api-keys">OpenAI Website</a> for further information.','sakurairo_csf'),
+        'title' => __('AI API Key','sakurairo_csf'),
+        'desc' => __('Enter the API key for the selected service. The key is only sent from the server to the configured endpoint.','sakurairo_csf'),
+      ),
+
+      array(
+        'type'     => 'callback',
+        'function' => function () {
+          ?>
+          <div class="koyori-ai-connection-test">
+            <h5><?= esc_html__('Test AI connection', 'sakurairo_csf') ?></h5>
+            <button type="button" class="button" id="koyori-ai-test-connection"><?= esc_html__('Test connection', 'sakurairo_csf') ?></button>
+            <span id="koyori-ai-test-result" aria-live="polite"></span>
+          </div>
+          <script>
+          (function () {
+            const button = document.getElementById('koyori-ai-test-connection');
+            const result = document.getElementById('koyori-ai-test-result');
+            if (!button || !result || button.dataset.bound) return;
+            button.dataset.bound = '1';
+            button.addEventListener('click', function () {
+              const endpoint = document.querySelector('input[name="iro_options[chatgpt_endpoint]"]')?.value || '';
+              const token = document.querySelector('input[name="iro_options[chatgpt_access_token]"]')?.value || '';
+              const model = document.querySelector('input[name="iro_options[chatgpt_model]"]')?.value || '';
+              if (!endpoint.trim() || !token.trim() || !model.trim()) {
+                result.textContent = '请先填写接口地址、API Key 和模型。';
+                return;
+              }
+              button.disabled = true;
+              result.textContent = '正在测试…';
+              const body = new URLSearchParams({
+                action: 'koyori_test_chatgpt_connection',
+                nonce: '<?= esc_js(wp_create_nonce('koyori_test_chatgpt_connection')) ?>',
+                endpoint: endpoint,
+                token: token,
+                model: model
+              });
+              fetch('<?= esc_url(admin_url('admin-ajax.php')) ?>', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                body: body.toString()
+              }).then(response => response.json()).then(data => {
+                result.textContent = data.success ? '连接成功。' : (data.data?.message || '连接失败。');
+              }).catch(() => {
+                result.textContent = '连接失败，请检查地址和网络。';
+              }).finally(() => {
+                button.disabled = false;
+              });
+            });
+          }());
+          </script>
+          <?php
+        },
       ),
 
       array(
@@ -3634,53 +3634,6 @@ $prefix = 'iro_options';
         'default' => "分析以下文章正文内容(排除标题及引语类文本)，用最认真的态度和较为严格的识别标准筛选出专业术语、复杂概念、事件、社会热点、网络黑话烂梗热词、晦涩难懂、与文章语言不同的名词，并根据文章主要语言提供对应语言的简短解释。若文章出现与“事件”，“热点”，“介绍”等具有提示上下文功能的含义的名词时，请务必用最高优先级在前后查找符合要求的名词。名词选取时需要排除日常常用的名词、非著名人物的人名。仅返回JSON格式，格式为：{\"术语1\":\"解释1\", \"术语2\":\"解释2\", ...}。注意不要出现在原文中并没有出现的名词，生成的名词越多越好：\n\n",
       ),
 
-      array(
-        'type'     => 'callback',
-        'function' =>   function (){
-          ?>
-          <div>
-           <h5><?=__("ChatGPT API self test","sakurairo_csf")?></h5>
-           <label for="chatgpt_post_id">post_id: </label>
-           <input type="text" id="chatgpt_post_id" value="" required pattern="\d+"/>
-           <button>
-           <?=__("TEST","sakurairo_csf")?>
-           </button>
-           <br>
-           <label><?=__("Results: ","sakurairo_csf")?></label>
-           <p id="chatgpt_result"></p>
-           <script>
-             /**@type {HTMLInputElement} */
-             const input = document.querySelector("#chatgpt_post_id");
-             input.nextElementSibling.addEventListener('click',async (e)=>{
-               e.stopPropagation()
-               e.preventDefault()
-               const btn = e.currentTarget
-               try{
-                 btn.disabled = true
-                 if(input.checkValidity()){
-                 chatgpt_result.innerHTML = "<?=__("Waiting for response...","sakurairo_csf")?>"
-                 const resp = await fetch(`/wp-json/sakura/v1/chatgpt?post_id=${input.value}`,{
-                   headers:{'X-WP-Nonce':"<?=wp_create_nonce( 'wp_rest' )?>"}
-                 })
-                 const data = await resp.text()
-               try{
-                 chatgpt_result.textContent = JSON.stringify(JSON.parse(data),null,2)
-               }catch{
-                 chatgpt_result.innerHTML = data.replaceAll(/\\u[\da-f]{4}/gi,(m)=>String.fromCharCode(parseInt(m.slice(2),16)))
-               }
-               }else{
-                 chatgpt_result.textContent = "<?=__("Malformed post_id: ","sakurairo_csf")?>"+input.validationMessage
-               }
-               }finally{
-                 btn.disabled = false
-               }
-             })
-           </script> 
-         </div>
-          <?php
-         },
-      ),
-      
       )
     ) );
 

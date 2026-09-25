@@ -25,6 +25,62 @@ namespace IROChatGPT {
     }
 
 
+    function chatgpt_completion_endpoint($base_url)
+    {
+        $base_url = trim((string) $base_url);
+        if ($base_url === '') {
+            return '';
+        }
+
+        return rtrim($base_url, '/') . '/chat/completions';
+    }
+
+    function test_chatgpt_connection()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+
+        check_ajax_referer('koyori_test_chatgpt_connection', 'nonce');
+
+        $endpoint = chatgpt_completion_endpoint(wp_unslash($_POST['endpoint'] ?? ''));
+        $token = trim((string) wp_unslash($_POST['token'] ?? ''));
+        $model = trim((string) wp_unslash($_POST['model'] ?? ''));
+
+        if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
+            wp_send_json_error(['message' => '接口地址、API Key 或模型无效。'], 400);
+        }
+
+        $response = wp_remote_post($endpoint, [
+            'timeout' => 20,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+            ],
+            'body' => wp_json_encode([
+                'model' => $model,
+                'messages' => [
+                    ['role' => 'user', 'content' => 'Reply with OK.'],
+                ],
+                'max_tokens' => 5,
+            ], JSON_UNESCAPED_UNICODE),
+        ]);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(['message' => '请求失败，请检查接口地址和服务器网络。'], 502);
+        }
+
+        $status = wp_remote_retrieve_response_code($response);
+        $decoded = json_decode(wp_remote_retrieve_body($response), true);
+        if ($status < 200 || $status >= 300 || empty($decoded['choices'][0]['message']['content'])) {
+            wp_send_json_error(['message' => '接口返回异常，请检查 API Key 和模型名称。'], 502);
+        }
+
+        wp_send_json_success(['message' => '连接成功。']);
+    }
+
+    add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
+
     function apply_chatgpt_hook()
     {
         if (iro_opt('chatgpt_auto_article_summarize')) {
@@ -73,7 +129,7 @@ namespace IROChatGPT {
 
     function summon_article_excerpt(WP_Post $post)
     {
-        $chatgpt_endpoint = iro_opt('chatgpt_endpoint');
+        $chatgpt_endpoint = chatgpt_completion_endpoint(iro_opt('chatgpt_endpoint'));
         $chatGPT_access_token = iro_opt('chatgpt_access_token');
         $chatGPT_prompt_init = iro_opt('chatgpt_init_prompt', DEFAULT_INIT_PROMPT);
         $chatGPT_model = iro_opt('chatgpt_model', DEFAULT_MODEL);
