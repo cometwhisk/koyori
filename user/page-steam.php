@@ -135,7 +135,7 @@ get_header();
     }
 
     .steam-library-summary-card {
-        margin: 0 1.5% 20px;
+        margin: 10px 1.5% 20px;
         overflow: hidden;
         border: 1px solid rgba(232, 232, 232, 0.8);
         border-radius: 12px;
