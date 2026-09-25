@@ -31,6 +31,18 @@ add_action('wp_enqueue_scripts', static function (): void {
     }
     markLoginLinksNoPjax();
     document.addEventListener('pjax:complete', markLoginLinksNoPjax);
+
+    document.addEventListener('click', function (event) {
+        var tiledBackground = event.target.closest('#diy1-bg, #diy2-bg, #diy3-bg, #diy4-bg');
+        var regularBackground = event.target.closest('#white-bg, #dark-bg');
+        if (tiledBackground) {
+            document.body.style.backgroundRepeat = 'repeat';
+            document.body.style.backgroundSize = 'auto';
+        } else if (regularBackground) {
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundSize = '';
+        }
+    }, true);
 }());
 JS;
     wp_add_inline_script('app', $script, 'before');
