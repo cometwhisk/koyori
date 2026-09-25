@@ -3612,10 +3612,10 @@ $prefix = 'iro_options';
         'id' => 'statistics_api',
         'type' => 'radio',
         'title' => __('Statistics API','sakurairo_csf'),
-        'desc' => __('You can choose WP-Statistics plugin statistics or theme built-in statistics to display','sakurairo_csf'),
+        'desc' => __('You can choose Burst Statistics plugin statistics or theme built-in statistics to display','sakurairo_csf'),
         'options' => array(
           'theme_build_in' => __('Theme Built in Statistics','sakurairo_csf'),
-          'wp_statistics' => __('WP-Statistics Plugin Statistics','sakurairo_csf'),
+          'burst_statistics' => __('Burst Statistics Plugin Statistics','sakurairo_csf'),
         ),
         'default' => 'theme_build_in'
       ),

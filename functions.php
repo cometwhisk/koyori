@@ -897,20 +897,23 @@ function get_post_views($post_id)
     if (empty($post_id) || !is_numeric($post_id)) {
         return 'Error: Invalid post ID.';
     }
-    // 检查 WP-Statistics 插件是否安装
-    if ((function_exists('wp_statistics_pages')) && (iro_opt('statistics_api') == 'wp_statistics')) {
-        // 使用 WP-Statistics 插件获取浏览量
-        $views = wp_statistics_pages('total', 'uri', $post_id);
-        return empty($views) ? 0 : intval($views);
-    } else {
-        // 使用文章自定义字段获取浏览量
-        $views = get_post_meta($post_id, 'views', true);
-        if(empty($views)){
-            return 0;
-        }
-        // 格式化浏览量
-        return restyle_text(intval($views));
+
+    // Burst Statistics 记录每次页面浏览，按文章 ID 统计累计浏览量。
+    if (iro_opt('statistics_api') === 'burst_statistics' && defined('BURST_VERSION')) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'burst_statistics';
+        $views = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$table} WHERE page_id = %d AND page_type <> %s",
+            (int) $post_id,
+            '404'
+        ));
+
+        return restyle_text((int) $views);
     }
+
+    // Burst 未启用时，保留主题内置计数作为安全回退。
+    $views = get_post_meta($post_id, 'views', true);
+    return empty($views) ? 0 : restyle_text((int) $views);
 }
 
 // 引入post_metas方法
