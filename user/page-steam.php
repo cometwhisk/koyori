@@ -133,6 +133,50 @@ get_header();
     .steam-stat:nth-child(2) {
         transition-delay: 0.05s;
     }
+
+    .steam-pagination {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 18px;
+        margin: 36px 0 8px;
+    }
+    .steam-pagination-link,
+    .steam-pagination-current {
+        padding: 10px 18px;
+        border-radius: 999px;
+        color: var(--global-font-color);
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow: 0 1px 14px rgba(0, 0, 0, 0.08);
+    }
+    .steam-pagination-link {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .steam-pagination-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+    }
+    .steam-pagination-current {
+        color: var(--global-font-secondary-color);
+        background: rgba(255, 255, 255, 0.45);
+    }
+    body.dark .steam-pagination-link,
+    body.dark .steam-pagination-current {
+        color: var(--dark-text-secondary);
+        background: var(--dark-bg-secondary);
+        box-shadow: var(--dark-shadow-normal);
+    }
+    @media (max-width: 768px) {
+        .steam-pagination {
+            gap: 8px;
+        }
+        .steam-pagination-link,
+        .steam-pagination-current {
+            padding: 9px 12px;
+            font-size: 13px;
+        }
+    }
     
     /* Dark mode styles */
     body.dark .steam-card {
@@ -232,7 +276,8 @@ get_header();
     <section class="steam-row have-columns row">
         <?php 
         $steam = new \Sakura\API\Steam();
-        echo $steam->get_steam_items();
+        $steam_page = max(1, absint($_GET['steam_page'] ?? 1));
+        echo $steam->get_steam_items($steam_page, get_permalink());
         ?>
     </section>
 </article>

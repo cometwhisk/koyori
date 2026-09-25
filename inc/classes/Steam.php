@@ -62,7 +62,9 @@ class Steam
             });
         }
         return $data;
-    }    public function get_steam_items($page = 1)
+    }
+
+    public function get_steam_items($page = 1, $pagination_url = '')
     {
         $resp = $this->fetch_api();
         // 添加检查，确保 $resp['response']['games'] 存在且为数组
@@ -96,10 +98,19 @@ class Steam
             $html .= $card_html;
         }
 
-        //分页
-        if ($page < $totalPages) {
-            $nextPageUrl = rest_url('sakura/v1/steam') . '?page=' . ($page + 1);
-            $html .= '<div id="template-pagination">' . '<a class="pagination-next" data-href="' . esc_url($nextPageUrl) . '"><i class="fa-solid fa-guitar"></i> ' . __('Load more', 'sakurairo') . '</a>' . '</div>';
+        // 标准分页，Steam 页面使用普通链接跳转，不追加内容。
+        if ($totalPages > 1 && $pagination_url) {
+            $html .= '<nav class="steam-pagination" aria-label="' . esc_attr__('Steam library pagination', 'sakurairo') . '">';
+            if ($page > 1) {
+                $prev_url = add_query_arg('steam_page', $page - 1, $pagination_url);
+                $html .= '<a class="steam-pagination-link steam-pagination-prev" href="' . esc_url($prev_url) . '"><i class="fa-solid fa-angle-left"></i> ' . esc_html__('上一页', 'sakurairo') . '</a>';
+            }
+            $html .= '<span class="steam-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalPages) . '</span>';
+            if ($page < $totalPages) {
+                $next_url = add_query_arg('steam_page', $page + 1, $pagination_url);
+                $html .= '<a class="steam-pagination-link steam-pagination-next" href="' . esc_url($next_url) . '">' . esc_html__('下一页', 'sakurairo') . ' <i class="fa-solid fa-angle-right"></i></a>';
+            }
+            $html .= '</nav>';
         }
 
         return $html;
