@@ -158,7 +158,7 @@ get_header();
     }
     .steam-library-summary-card .steam-summary {
         margin: 0;
-        padding: 16px;
+        padding: 8px 16px 16px;
         border-top: 1px solid rgba(232, 232, 232, 0.8);
     }
     body.dark .steam-library-summary-card {
