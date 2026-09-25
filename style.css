@@ -718,18 +718,19 @@ nav .menu > li .sub-menu {
   right: auto;
   top: calc(100% + 5px);
   min-width: 90px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(10px);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-50%);
   transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
-  border-radius: 10px;
+  border-radius: 50px;
   display: flex;
   flex-direction: column;
   min-height: calc(100% + 10px);
   padding: 4px 0;
-  border: 1px solid #f7f7f7;
+  border: 0;
   pointer-events: none;
 }
 
