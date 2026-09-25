@@ -141,10 +141,9 @@ function sakurairo_cache_setting_update() {
 }
 add_action('admin_post_sakurairo_cache_setting_update', 'sakurairo_cache_setting_update');
 
-function auto_update_cache($name, $content) {
+function auto_update_cache($name, $content, $duration = 2592000) {
     $name = $name;
     $content = $content;
-    $duration = 2592000;
 
     set_transient($name, $content, $duration);
 

@@ -39,7 +39,7 @@ class Steam
                 if (is_wp_error($response)) {
                     return ['response' => ['games' => []]]; // 返回空游戏列表
                 }
-                auto_update_cache('steam_cache', wp_remote_retrieve_body($response), true);
+                auto_update_cache('steam_cache', wp_remote_retrieve_body($response), 6 * HOUR_IN_SECONDS);
                 $response = json_decode(wp_remote_retrieve_body($response), true);
             }
         } else {
