@@ -513,7 +513,9 @@ body.dark .navigator i:hover {
 
 body.dark .entry-content code:not(pre code),
 body.dark .entry-content code {
-  background: var(--inline_code_background_color_in_dark_mode, #505050);
+  background: #161b22;
+  color: #c9d1d9;
+  border-color: #30363d;
 }
 
 body.dark pre.wp-block-code {
