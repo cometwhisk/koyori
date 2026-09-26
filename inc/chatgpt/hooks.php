@@ -181,16 +181,25 @@ namespace IROChatGPT {
         curl_close($ch);
         // === 替换结束 ===
 
-        $decoded_chat = json_decode($chat);
+        $decoded_chat = json_decode($chat, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new Exception("JSON decode error: " . json_last_error_msg());
         }
 
-        if (is_null($decoded_chat) || isset($decoded_chat->error)) {
-            throw new Exception("ChatGPT error: " . json_encode($decoded_chat));
+        if (!is_array($decoded_chat)) {
+            throw new Exception("ChatGPT returned an invalid response.");
         }
 
-        return $decoded_chat->choices[0]->message->content;
+        if (!empty($decoded_chat['error'])) {
+            throw new Exception("ChatGPT returned an API error.");
+        }
+
+        $content = $decoded_chat['choices'][0]['message']['content'] ?? null;
+        if (!is_string($content) || trim($content) === '') {
+            throw new Exception("ChatGPT response did not contain summary content.");
+        }
+
+        return $content;
     }
 }
