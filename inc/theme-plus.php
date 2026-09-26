@@ -181,7 +181,7 @@ function comment_captcha(){
       return siren_ajax_comment_err(__('Please fill in the correct captcha answer','sakurairo'));
   } else if (iro_opt('comment_captcha_select') == "turnstile") {
       if (!(isset($_POST['cf-turnstile-response']) && !empty(trim($_POST['cf-turnstile-response'])))) {
-          return siren_ajax_comment_err(__('Please wait for cloudflare turnstile checking...','sakurairo'));
+          return siren_ajax_comment_err(__('请先完成人机验证后再提交评论。','sakurairo'));
       }
 
       $token = sanitize_text_field($_POST['cf-turnstile-response']);
@@ -192,11 +192,11 @@ function comment_captcha(){
       $response = $turnstile->verify($token, $ip);
 
       if ($response['success'] === false) {
-          return siren_ajax_comment_err(__('Captcha verification failed', 'sakurairo'));
+          return siren_ajax_comment_err(__('人机验证失败，请刷新后重试。', 'sakurairo'));
       }
 
       if (!$response['success']) {
-          return siren_ajax_comment_err(__('Captcha verification failed', 'sakurairo'));
+          return siren_ajax_comment_err(__('人机验证失败，请刷新后重试。', 'sakurairo'));
       }
 
       return true;
