@@ -181,9 +181,6 @@ namespace IROChatGPT {
         curl_close($ch);
         // === 替换结束 ===
 
-        // 输出 API 原始响应调试信息
-        error_log("GPT error: " . $chat);
-
         $decoded_chat = json_decode($chat);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
