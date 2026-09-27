@@ -3469,7 +3469,7 @@ $prefix = 'iro_options';
       'access_token' => $token,
     ));
     $data['chatgpt_active_profile'] = 0;
-    unset($data['chatgpt_profile_access_token']);
+    $data['chatgpt_profile_access_token'] = $token;
     return $data;
   });
 
