@@ -3464,7 +3464,6 @@ $prefix = 'iro_options';
       'name' => sanitize_text_field($model !== '' ? $model : (string)($current['name'] ?? '当前配置')),
       'endpoint' => esc_url_raw((string)($data['chatgpt_profile_endpoint'] ?? ($current['endpoint'] ?? ''))),
       'model' => sanitize_text_field($model),
-      'reasoning_effort' => sanitize_text_field((string)($data['chatgpt_profile_reasoning_effort'] ?? ($current['reasoning_effort'] ?? ''))),
       'timeout' => max(5, min(120, (int)($data['chatgpt_profile_timeout'] ?? ($current['timeout'] ?? 30)))),
       'access_token' => $token,
     ));
@@ -3479,7 +3478,6 @@ $prefix = 'iro_options';
   $chatgpt_profile_endpoint = trim((string)($chatgpt_profile['endpoint'] ?? ($chatgpt_saved_options['chatgpt_endpoint'] ?? '')));
   $chatgpt_profile_model = trim((string)($chatgpt_profile['model'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? '')));
   $chatgpt_profile_key = (string)($chatgpt_profile['access_token'] ?? ($chatgpt_saved_options['chatgpt_access_token'] ?? ''));
-  $chatgpt_profile_reasoning = trim((string)($chatgpt_profile['reasoning_effort'] ?? ''));
   $chatgpt_profile_timeout = max(5, min(120, (int)($chatgpt_profile['timeout'] ?? 30)));
 
   Sakurairo_CSF::createSection( $prefix, array(
@@ -3518,19 +3516,6 @@ $prefix = 'iro_options';
         'options' => $chatgpt_profile_model !== '' ? array($chatgpt_profile_model => $chatgpt_profile_model) : array(),
         'default' => $chatgpt_profile_model,
         'desc' => __('点击下方“获取模型列表”后，从接口返回的模型中选择。','sakurairo_csf'),
-      ),
-      array(
-        'id' => 'chatgpt_profile_reasoning_effort',
-        'type' => 'select',
-        'title' => __('推理级别','sakurairo_csf'),
-        'options' => array(
-          '' => __('跟随模型默认值','sakurairo_csf'),
-          'low' => 'Low',
-          'medium' => 'Medium',
-          'high' => 'High',
-        ),
-        'default' => $chatgpt_profile_reasoning,
-        'desc' => __('可留空以跟随模型默认值；仅在接口和模型支持时填写。','sakurairo_csf'),
       ),
       array(
         'id' => 'chatgpt_profile_timeout',
@@ -3575,7 +3560,6 @@ $prefix = 'iro_options';
             const keyInput=field('chatgpt_access_token');
             if(keyInput){keyInput.type='text';keyInput.autocomplete='off';}
             const model=()=>value('chatgpt_profile_model');
-            const reasoning=()=>value('chatgpt_profile_reasoning_effort');
             const timeout=()=>value('chatgpt_profile_timeout')||'30';
             const fetchButton=document.querySelector('#koyori-ai-fetch-models');
             if(fetchButton)fetchButton.addEventListener('click',()=>{
@@ -3593,7 +3577,7 @@ $prefix = 'iro_options';
             if(testButton)testButton.addEventListener('click',()=>{
               if(!endpoint()||!model()){status('请先填写接口并选择模型。',false);return}
               testButton.disabled=true;status('测试连接中…',true);
-              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(),token:token(),model:model(),reasoning_effort:reasoning(),timeout:timeout()});
+              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(),token:token(),model:model(),timeout:timeout()});
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>status(data.success?(data.data?.message||'连接成功。'):(data.data?.message||'连接失败。'),!!data.success)).catch(()=>status('网络请求失败，请稍后重试。',false)).finally(()=>{testButton.disabled=false});
             });
           }());

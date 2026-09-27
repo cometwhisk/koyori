@@ -105,13 +105,12 @@ namespace IROChatGPT {
         return '接口返回异常（HTTP ' . (int) $status . '）。';
     }
 
-    function chatgpt_test_fingerprint($endpoint, $token, $model, $reasoning_effort, $timeout)
+    function chatgpt_test_fingerprint($endpoint, $token, $model, $timeout)
     {
         return hash('sha256', implode("\n", [
             trim((string) $endpoint),
             (string) $token,
             trim((string) $model),
-            trim((string) $reasoning_effort),
             (string) (int) $timeout,
         ]));
     }
@@ -132,7 +131,6 @@ namespace IROChatGPT {
             $token = trim((string)($active_config['access_token'] ?? ''));
         }
         $model = trim((string) wp_unslash($_POST['model'] ?? ''));
-        $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
         $request_timeout = max(5, min(120, (int)($_POST['timeout'] ?? 20)));
 
         if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
@@ -151,10 +149,7 @@ namespace IROChatGPT {
                     ['role' => 'user', 'content' => 'Reply with OK.'],
                 ],
                 'max_tokens' => 64,
-                'reasoning_effort' => in_array($reasoning_effort, ['low', 'medium', 'high'], true) ? $reasoning_effort : null,
-            ], static function ($value) {
-                return $value !== null;
-            }), JSON_UNESCAPED_UNICODE),
+            ], JSON_UNESCAPED_UNICODE),
         ]);
 
         if (is_wp_error($response)) {
@@ -171,7 +166,7 @@ namespace IROChatGPT {
             ], $status >= 400 ? $status : 502);
         }
 
-        $fingerprint = chatgpt_test_fingerprint($base_endpoint, $token, $model, $reasoning_effort, $request_timeout);
+        $fingerprint = chatgpt_test_fingerprint($base_endpoint, $token, $model, $request_timeout);
         $test_token = wp_generate_password(40, false, false);
         set_transient('koyori_ai_test_' . get_current_user_id() . '_' . hash('sha256', $test_token), [
             'fingerprint' => $fingerprint,
@@ -284,7 +279,6 @@ namespace IROChatGPT {
         $chatGPT_access_token = (string)($config['access_token'] ?? '');
         $chatGPT_prompt_init = iro_opt('chatgpt_init_prompt', DEFAULT_INIT_PROMPT);
         $chatGPT_model = (string)($config['model'] ?? DEFAULT_MODEL);
-        $reasoning_effort = trim((string)($config['reasoning_effort'] ?? ''));
         $request_timeout = (int)($config['timeout'] ?? iro_opt('chatgpt_api_request_timeout', 30));
         $request_timeout = max(5, min(120, $request_timeout));
 
@@ -316,10 +310,6 @@ namespace IROChatGPT {
                 ],
             ],
         ];
-        if (in_array($reasoning_effort, ['low', 'medium', 'high'], true)) {
-            $payload['reasoning_effort'] = $reasoning_effort;
-        }
-
         // === 替换开始：使用 cURL 发出请求 ===
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $chatgpt_endpoint);
