@@ -174,7 +174,16 @@ namespace IROChatGPT {
         }
 
         $options['chatgpt_active_profile'] = (int) $index;
-        update_option('iro_options', $options);
+        if (!update_option('iro_options', $options)) {
+            $saved_options = get_option('iro_options', []);
+            if (!is_array($saved_options) || (int)($saved_options['chatgpt_active_profile'] ?? -1) !== (int) $index) {
+                wp_send_json_error(['message' => '当前配置保存失败，请重试。'], 500);
+            }
+        }
+        $saved_options = get_option('iro_options', []);
+        if (!is_array($saved_options) || (int)($saved_options['chatgpt_active_profile'] ?? -1) !== (int) $index) {
+            wp_send_json_error(['message' => '当前配置保存失败，请重试。'], 500);
+        }
         wp_send_json_success(['active_profile' => (int) $index]);
     }
 

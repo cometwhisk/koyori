@@ -3451,6 +3451,14 @@ $prefix = 'iro_options';
     )
   ) );
 
+  add_filter('csf_iro_options_save', function ($data) {
+    $saved_options = get_option('iro_options', array());
+    if (is_array($saved_options) && array_key_exists('chatgpt_active_profile', $saved_options)) {
+      $data['chatgpt_active_profile'] = (int) $saved_options['chatgpt_active_profile'];
+    }
+    return $data;
+  });
+
   $chatgpt_saved_options = get_option('iro_options', array());
   $chatgpt_profiles = is_array($chatgpt_saved_options) ? ($chatgpt_saved_options['chatgpt_profiles'] ?? array()) : array();
   $chatgpt_profile_options = array();
@@ -3575,6 +3583,11 @@ $prefix = 'iro_options';
             const token=item=>value(item,'access_token');
             const model=item=>value(item,'model');
             function activeStorage(){return active&&active.closest('.csf-field')||active&&active.parentElement}
+            function profileIndex(item){
+              const el=item.querySelector('[name*="[chatgpt_profiles]"]');
+              const match=el&&el.name.match(/\[chatgpt_profiles\]\[(\d+)\]/);
+              return match?Number(match[1]):Number(item.dataset.koyoriIndex||0);
+            }
             function switchProfile(item,index){
               const button=item.querySelector('.koyori-ai-profile-switch');
               if(!button||!active)return;
@@ -3588,10 +3601,10 @@ $prefix = 'iro_options';
               }).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
             function refresh(){
-              let profileIndex=0;
+              let visibleIndex=0;
               wrapper.querySelectorAll('.csf-repeater-item').forEach(item=>{
                 if(item.classList.contains('csf-repeater-hidden'))return;
-                const index=profileIndex++;
+                const index=visibleIndex++;
                 item.dataset.koyoriIndex=index;
                 item.classList.add('koyori-ai-profile-card');
                 let summary=item.querySelector('.koyori-ai-profile-summary');
@@ -3600,7 +3613,7 @@ $prefix = 'iro_options';
                   summary.innerHTML='<span class="koyori-ai-profile-chevron">▶</span><span class="koyori-ai-profile-title"></span><span class="koyori-ai-profile-meta"></span><span class="koyori-ai-profile-current">当前使用</span><span class="koyori-ai-profile-actions"><button type="button" class="koyori-ai-profile-switch"></button><button type="button" class="koyori-ai-profile-edit">编辑</button><button type="button" class="koyori-ai-profile-test">测试</button><button type="button" class="koyori-ai-profile-models">获取模型</button></span>';
                   item.insertBefore(summary,item.firstChild);
                   summary.addEventListener('click',e=>{if(e.target.closest('button'))return;item.classList.toggle('is-open')});
-                  summary.querySelector('.koyori-ai-profile-switch').addEventListener('click',()=>switchProfile(item,item.dataset.koyoriIndex));
+                  summary.querySelector('.koyori-ai-profile-switch').addEventListener('click',()=>switchProfile(item,profileIndex(item)));
                   summary.querySelector('.koyori-ai-profile-edit').addEventListener('click',()=>item.classList.add('is-open'));
                   summary.querySelector('.koyori-ai-profile-test').addEventListener('click',()=>test(item));
                   summary.querySelector('.koyori-ai-profile-models').addEventListener('click',()=>fetchModels(item));
@@ -3634,7 +3647,20 @@ $prefix = 'iro_options';
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'获取模型失败',false);return}const input=field('model')(item);if(input){let list=item.querySelector('datalist');if(!list){list=document.createElement('datalist');list.id='koyori-ai-models-'+item.dataset.koyoriIndex;item.appendChild(list);input.setAttribute('list',list.id)}list.innerHTML='';data.data.models.forEach(id=>{const o=document.createElement('option');o.value=id;list.appendChild(o)});status(item,'已获取 '+data.data.count+' 个模型',true);item.classList.add('is-open')}}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
             if(active)active.addEventListener('change',refresh);
-            wrapper.addEventListener('click',e=>{const remove=e.target.closest('.csf-repeater-remove');if(!remove)return;const item=remove.closest('.csf-repeater-item');if(item&&active&&String(active.value)===String(item.dataset.koyoriIndex)){e.preventDefault();e.stopImmediatePropagation();alert('当前使用配置不能直接移除，请先切换到其他配置。')}});
+            wrapper.addEventListener('click',e=>{
+              const remove=e.target.closest('.csf-repeater-remove');
+              if(!remove)return;
+              const item=remove.closest('.csf-repeater-item');
+              if(item&&active&&String(active.value)===String(profileIndex(item))){
+                e.preventDefault();
+                e.stopPropagation();
+                alert('当前使用配置不能直接移除，请先切换到其他配置。');
+                return;
+              }
+              setTimeout(refresh,80);
+            },true);
+            const observer=new MutationObserver(()=>setTimeout(refresh,0));
+            observer.observe(wrapper,{childList:true,subtree:true});
             const add=wrapper.parentElement.querySelector('.csf-repeater-add');if(add)add.addEventListener('click',()=>setTimeout(refresh,80));
             refresh();
           }());
