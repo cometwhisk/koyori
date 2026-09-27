@@ -105,6 +105,17 @@ namespace IROChatGPT {
         return '接口返回异常（HTTP ' . (int) $status . '）。';
     }
 
+    function chatgpt_test_fingerprint($endpoint, $token, $model, $reasoning_effort, $timeout)
+    {
+        return hash('sha256', implode("\n", [
+            trim((string) $endpoint),
+            (string) $token,
+            trim((string) $model),
+            trim((string) $reasoning_effort),
+            (string) (int) $timeout,
+        ]));
+    }
+
     function test_chatgpt_connection()
     {
         if (!current_user_can('manage_options')) {
@@ -114,6 +125,7 @@ namespace IROChatGPT {
         check_ajax_referer('koyori_test_chatgpt_connection', 'nonce');
 
         $endpoint = chatgpt_completion_endpoint(wp_unslash($_POST['endpoint'] ?? ''));
+        $base_endpoint = rtrim(trim((string) wp_unslash($_POST['endpoint'] ?? '')), '/');
         $token = trim((string) wp_unslash($_POST['token'] ?? ''));
         $model = trim((string) wp_unslash($_POST['model'] ?? ''));
         $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
@@ -123,7 +135,7 @@ namespace IROChatGPT {
             wp_send_json_error(['message' => '接口地址、API Key 或模型无效。'], 400);
         }
 
-        $response = wp_remote_post($endpoint, [
+        $response = wp_safe_remote_post($endpoint, [
             'timeout' => $request_timeout,
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -155,7 +167,13 @@ namespace IROChatGPT {
             ], $status >= 400 ? $status : 502);
         }
 
-        wp_send_json_success(['message' => '连接成功（HTTP ' . (int) $status . '）。', 'status' => (int) $status]);
+        $fingerprint = chatgpt_test_fingerprint($base_endpoint, $token, $model, $reasoning_effort, $request_timeout);
+        $test_token = wp_generate_password(40, false, false);
+        set_transient('koyori_ai_test_' . get_current_user_id() . '_' . hash('sha256', $test_token), [
+            'fingerprint' => $fingerprint,
+            'expires' => time() + 600,
+        ], 600);
+        wp_send_json_success(['message' => '连接成功（HTTP ' . (int) $status . '）。', 'status' => (int) $status, 'test_token' => $test_token]);
     }
 
     add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
@@ -203,6 +221,7 @@ namespace IROChatGPT {
         $name = trim((string) wp_unslash($_POST['name'] ?? ''));
         $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
         $timeout = max(5, min(120, (int)($_POST['timeout'] ?? 30)));
+        $test_token = trim((string) wp_unslash($_POST['test_token'] ?? ''));
 
         if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
             wp_send_json_error(['message' => '请填写有效的接口地址、API Key 和模型。'], 400);
@@ -213,7 +232,20 @@ namespace IROChatGPT {
         if (!in_array($reasoning_effort, ['', 'low', 'medium', 'high'], true)) {
             $reasoning_effort = '';
         }
-
+        $test_key = 'koyori_ai_test_' . get_current_user_id() . '_' . hash('sha256', $test_token);
+        $test_data = $test_token !== '' ? get_transient($test_key) : false;
+        if (!is_array($test_data) || ($test_data['fingerprint'] ?? '') !== chatgpt_test_fingerprint($endpoint, $token, $model, $reasoning_effort, $timeout)) {
+            wp_send_json_error(['message' => '请先用当前配置测试连接，测试通过后再保存。'], 400);
+        }
+        delete_transient($test_key);
+        $lock_key = 'koyori_ai_profile_write_lock';
+        $existing_lock = get_option($lock_key, 0);
+        if ($existing_lock && (time() - (int) $existing_lock) > 60) {
+            delete_option($lock_key);
+        }
+        if (!add_option($lock_key, time(), '', 'no')) {
+            wp_send_json_error(['message' => '正在保存另一套配置，请稍后重试。'], 409);
+        }
         $options = get_option('iro_options', []);
         if (!is_array($options)) {
             $options = [];
@@ -231,9 +263,11 @@ namespace IROChatGPT {
         if (!update_option('iro_options', $options)) {
             $saved_options = get_option('iro_options', []);
             if (!is_array($saved_options) || count((array)($saved_options['chatgpt_profiles'] ?? [])) < count($profiles)) {
+                delete_option($lock_key);
                 wp_send_json_error(['message' => '配置保存失败，请重试。'], 500);
             }
         }
+        delete_option($lock_key);
         wp_send_json_success(['message' => '配置已保存。', 'profile_count' => count($profiles)]);
     }
 
@@ -252,7 +286,7 @@ namespace IROChatGPT {
             wp_send_json_error(['message' => '请先填写有效的基础地址和 API Key。'], 400);
         }
 
-        $response = wp_remote_get($base_url . '/models', [
+        $response = wp_safe_remote_get($base_url . '/models', [
             'timeout' => 20,
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
