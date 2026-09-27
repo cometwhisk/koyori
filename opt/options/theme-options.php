@@ -3654,12 +3654,23 @@ $prefix = 'iro_options';
               const body=new URLSearchParams({action:'koyori_fetch_chatgpt_models',nonce:modelsNonce,endpoint,token});
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){modalStatus(data.data?.message||'获取模型失败。',false);return}const list=document.querySelector('#koyori-ai-new-model-select');if(list){list.innerHTML='<option value="">请选择模型</option>';data.data.models.forEach(id=>{const option=document.createElement('option');option.value=id;option.textContent=id;list.appendChild(option)});list.disabled=!data.data.models.length}modalStatus('已获取 '+data.data.count+' 个模型，请选择一个模型。',true)}).catch(()=>modalStatus('网络请求失败，请稍后重试。',false)).finally(()=>{newModels.disabled=false});
             });
+            function appendSavedProfile(profile,index){
+              const item=document.createElement('div');
+              item.className='csf-repeater-item koyori-ai-profile-card';
+              item.dataset.koyoriIndex=String(index);
+              item.innerHTML='<input type="hidden" name="iro_options[chatgpt_profiles]['+index+'][name]" value="'+String(profile.name||'').replace(/"/g,'&quot;')+'"><input type="hidden" name="iro_options[chatgpt_profiles]['+index+'][endpoint]" value="'+String(profile.endpoint||'').replace(/"/g,'&quot;')+'"><input type="hidden" name="iro_options[chatgpt_profiles]['+index+'][model]" value="'+String(profile.model||'').replace(/"/g,'&quot;')+'"><input type="hidden" name="iro_options[chatgpt_profiles]['+index+'][reasoning_effort]" value="'+String(profile.reasoning_effort||'').replace(/"/g,'&quot;')+'"><input type="hidden" name="iro_options[chatgpt_profiles]['+index+'][timeout]" value="'+String(profile.timeout||30).replace(/"/g,'&quot;')+'"><div class="koyori-ai-profile-summary"><span class="koyori-ai-profile-chevron">▶</span><span class="koyori-ai-profile-title"></span><span class="koyori-ai-profile-meta"></span><span class="koyori-ai-profile-current">当前使用</span><span class="koyori-ai-profile-actions"><button type="button" class="koyori-ai-profile-switch">切换</button><button type="button" class="koyori-ai-profile-delete">删除</button><span class="koyori-ai-profile-status">已保存</span></span></div>';
+              wrapper.appendChild(item);
+              if(active&&!Array.from(active.options).some(option=>option.value===String(index))){const option=document.createElement('option');option.value=String(index);option.textContent=String(profile.name||profile.model||'新配置');active.appendChild(option)}
+              item.querySelector('.koyori-ai-profile-switch').addEventListener('click',()=>switchProfile(item,index));
+              item.querySelector('.koyori-ai-profile-delete').addEventListener('click',()=>deleteProfile(item,index));
+              refresh();
+            }
             const newSave=document.querySelector('#koyori-ai-new-save');
             if(newSave)newSave.addEventListener('click',()=>{
               const p=modalPayload();
               newSave.disabled=true;modalStatus('保存中…',true);
               const body=new URLSearchParams({action:'koyori_save_chatgpt_profile',nonce:saveNonce,name:modalValue('koyori_profile_name'),test_token:newTestToken,...p});
-              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){modalStatus(data.data?.message||'配置保存失败。',false);newSave.disabled=false;return}closeNewProfile();window.location.reload()}).catch(()=>{modalStatus('网络请求失败，请稍后重试。',false);newSave.disabled=false});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){modalStatus(data.data?.message||'配置保存失败。',false);newSave.disabled=false;return}appendSavedProfile(data.data.profile,data.data.profile_index);closeNewProfile();const globalStatus=document.querySelector('#koyori-ai-global-status');if(globalStatus)globalStatus.textContent='配置已保存，已加入下方配置列表。';newTestToken='';}).catch(()=>{modalStatus('网络请求失败，请稍后重试。',false);newSave.disabled=false});
             });
             const field=key=>item=>item.querySelector('[name$="[chatgpt_profiles]['+item.dataset.koyoriIndex+']['+key+']"]')||item.querySelector('[name*="[chatgpt_profiles]"][name$="['+key+']"]');
             const value=(item,key)=>{const el=field(key)(item);return el?el.value.trim():''};
@@ -3668,7 +3679,7 @@ $prefix = 'iro_options';
             const token=item=>value(item,'access_token');
             const model=item=>value(item,'model');
             function ensureModelSelect(item){
-              const input=item.querySelector('.csf-repeater-content input[type="text"][name$="[model]"]');
+              const input=item.querySelector('input[name$="[model]"]');
               if(!input)return;
               const select=document.createElement('select');
               Array.from(input.attributes).forEach(attr=>{if(attr.name!=='type'&&attr.name!=='list')select.setAttribute(attr.name,attr.value)});
@@ -3698,7 +3709,7 @@ $prefix = 'iro_options';
               const button=item.querySelector('.koyori-ai-profile-delete');if(button)button.disabled=true;
               status(item,'删除中…',true);
               const body=new URLSearchParams({action:'koyori_delete_chatgpt_profile',nonce:deleteNonce,profile:String(index)});
-              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'删除失败',false);if(button)button.disabled=false;return}window.location.reload()}).catch(()=>{status(item,'网络请求失败，请稍后重试。',false);if(button)button.disabled=false});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'删除失败',false);if(button)button.disabled=false;return}item.remove();if(active){active.value=String(data.data.active_profile);active.dispatchEvent(new Event('change',{bubbles:true}))}const globalStatus=document.querySelector('#koyori-ai-global-status');if(globalStatus)globalStatus.textContent='配置已删除。';refresh()}).catch(()=>{status(item,'网络请求失败，请稍后重试。',false);if(button)button.disabled=false});
             }
             function switchProfile(item,index){
               const button=item.querySelector('.koyori-ai-profile-switch');
@@ -3718,8 +3729,7 @@ $prefix = 'iro_options';
               if(!content||!modelField||content.querySelector('.koyori-ai-model-fetch'))return;
               const row=modelField.closest('.csf-field')||modelField.parentElement;
               const toolbar=document.createElement('div');toolbar.className='koyori-ai-model-fetch';toolbar.innerHTML='<button type="button" class="button">获取模型列表</button>';
-              const fetchButton=toolbar.querySelector('button');
-              fetchButton.addEventListener('click',()=>fetchModels(item,fetchButton));
+              toolbar.querySelector('button').addEventListener('click',()=>fetchModels(item));
               row.parentNode.insertBefore(toolbar,row);
               const saveBar=document.createElement('div');saveBar.className='koyori-ai-profile-editor-action';saveBar.innerHTML='<button type="button" class="button button-primary">保存配置</button>';
               saveBar.querySelector('button').addEventListener('click',()=>{const form=item.closest('form'),submit=form&&form.querySelector('[type="submit"],#submit');if(submit){submit.click()}else{status(item,'未找到设置保存按钮',false)}});
@@ -3766,9 +3776,9 @@ $prefix = 'iro_options';
               const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(item),token:token(item),model:model(item),reasoning_effort:value(item,'reasoning_effort'),timeout:value(item,'timeout')||'20'});
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{status(item,data.success?(data.data?.message||'连接成功'): (data.data?.message||'连接失败'),!!data.success)}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
-            function fetchModels(item,button){
+            function fetchModels(item){
               if(!endpoint(item)||!token(item)){status(item,'请先填写接口和 API Key',false);item.classList.add('is-open');return}
-              button=button||item.querySelector('.koyori-ai-model-fetch button');if(!button)return;button.disabled=true;status(item,'获取模型中…',true);
+              const button=item.querySelector('.koyori-ai-profile-models');button.disabled=true;status(item,'获取模型中…',true);
               const body=new URLSearchParams({action:'koyori_fetch_chatgpt_models',nonce:modelsNonce,endpoint:endpoint(item),token:token(item)});
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'获取模型失败',false);return}const select=field('model')(item);if(select){const selected=select.value;select.innerHTML='<option value="">请选择模型</option>';data.data.models.forEach(id=>{const option=document.createElement('option');option.value=id;option.textContent=id;select.appendChild(option)});if(data.data.models.includes(selected))select.value=selected}status(item,'已获取 '+data.data.count+' 个模型，请选择模型',true);item.classList.add('is-open')}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
@@ -3785,6 +3795,8 @@ $prefix = 'iro_options';
               }
               setTimeout(refresh,80);
             },true);
+            const observer=new MutationObserver(()=>setTimeout(refresh,0));
+            observer.observe(wrapper,{childList:true,subtree:true});
             refresh();
           }());
           </script>
