@@ -159,6 +159,27 @@ namespace IROChatGPT {
 
     add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
 
+    function switch_chatgpt_profile()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+
+        check_ajax_referer('koyori_switch_chatgpt_profile', 'nonce');
+        $index = filter_var(wp_unslash($_POST['profile'] ?? ''), FILTER_VALIDATE_INT);
+        $options = get_option('iro_options', []);
+        $profiles = is_array($options) ? ($options['chatgpt_profiles'] ?? []) : [];
+        if ($index === false || !is_array($profiles) || !array_key_exists($index, $profiles) || !is_array($profiles[$index])) {
+            wp_send_json_error(['message' => '目标配置不存在。'], 400);
+        }
+
+        $options['chatgpt_active_profile'] = (int) $index;
+        update_option('iro_options', $options);
+        wp_send_json_success(['active_profile' => (int) $index]);
+    }
+
+    add_action('wp_ajax_koyori_switch_chatgpt_profile', __NAMESPACE__ . '\\switch_chatgpt_profile');
+
     function fetch_chatgpt_models()
     {
         if (!current_user_can('manage_options')) {

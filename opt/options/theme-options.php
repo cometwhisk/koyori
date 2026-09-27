@@ -3487,6 +3487,7 @@ $prefix = 'iro_options';
       array(
         'id' => 'chatgpt_active_profile',
         'type' => 'select',
+        'class' => 'koyori-ai-active-profile-storage',
         'title' => __('当前使用配置','sakurairo_csf'),
         'options' => $chatgpt_profile_options,
         'default' => '0',
@@ -3545,6 +3546,7 @@ $prefix = 'iro_options';
         'function' => function () {
           $test_nonce = wp_create_nonce('koyori_test_chatgpt_connection');
           $models_nonce = wp_create_nonce('koyori_fetch_chatgpt_models');
+          $switch_nonce = wp_create_nonce('koyori_switch_chatgpt_profile');
           $ajax_url = admin_url('admin-ajax.php');
           ?>
           <div class="koyori-ai-panel-note">
@@ -3553,7 +3555,7 @@ $prefix = 'iro_options';
           </div>
           <div id="koyori-ai-global-status" class="koyori-ai-global-status" aria-live="polite"></div>
           <style>
-            .koyori-ai-panel-note{display:flex;gap:10px;align-items:baseline;padding:12px 14px;margin:4px 0 14px;border-left:3px solid #2271b1;background:#f6f7f7;color:#50575e}.koyori-ai-panel-note strong{color:#1d2327;white-space:nowrap}.koyori-ai-global-status{min-height:20px;margin:8px 0;color:#50575e}.koyori-ai-profile-card{border:1px solid #dcdcde;border-radius:8px;background:#fff;margin:10px 0;overflow:hidden}.koyori-ai-profile-summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}.koyori-ai-profile-summary:hover{background:#f6f7f7}.koyori-ai-profile-chevron{color:#646970;transition:transform .18s ease}.koyori-ai-profile-card.is-open .koyori-ai-profile-chevron{transform:rotate(90deg)}.koyori-ai-profile-title{font-weight:600;color:#1d2327;min-width:160px}.koyori-ai-profile-meta{color:#646970;font-size:12px;flex:1}.koyori-ai-profile-current{display:none;padding:3px 7px;border-radius:10px;background:#e7f5ea;color:#116329;font-size:11px}.koyori-ai-profile-card.is-current .koyori-ai-profile-current{display:inline-block}.koyori-ai-profile-actions{display:flex;gap:6px;align-items:center}.koyori-ai-profile-actions button{border:0;background:transparent;color:#2271b1;cursor:pointer;padding:3px 5px}.koyori-ai-profile-actions button:hover{text-decoration:underline}.koyori-ai-profile-actions .koyori-ai-profile-delete{color:#b32d2e}.koyori-ai-profile-status{font-size:12px;color:#646970;margin-left:4px}.koyori-ai-profile-card.is-open .csf-repeater-content{display:block!important}.koyori-ai-profile-card:not(.is-open) .csf-repeater-content{display:none!important}.koyori-ai-profile-card .csf-repeater-content{padding:8px 14px 14px;border-top:1px solid #f0f0f1}.koyori-ai-profile-card .csf-repeater-helper{display:none}.koyori-ai-model-list{margin-top:6px;max-width:360px}.koyori-ai-model-list select{max-width:100%}
+            .koyori-ai-active-profile-storage{display:none!important}.koyori-ai-panel-note{display:flex;gap:10px;align-items:baseline;padding:12px 14px;margin:4px 0 14px;border-left:3px solid #2271b1;background:#f6f7f7;color:#50575e}.koyori-ai-panel-note strong{color:#1d2327;white-space:nowrap}.koyori-ai-global-status{min-height:20px;margin:8px 0;color:#50575e}.koyori-ai-profile-card{border:1px solid #dcdcde;border-radius:8px;background:#fff;margin:10px 0;overflow:hidden}.koyori-ai-profile-summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}.koyori-ai-profile-summary:hover{background:#f6f7f7}.koyori-ai-profile-chevron{color:#646970;transition:transform .18s ease}.koyori-ai-profile-card.is-open .koyori-ai-profile-chevron{transform:rotate(90deg)}.koyori-ai-profile-title{font-weight:600;color:#1d2327;min-width:160px}.koyori-ai-profile-meta{color:#646970;font-size:12px;flex:1}.koyori-ai-profile-current{display:none;padding:3px 7px;border-radius:10px;background:#e7f5ea;color:#116329;font-size:11px}.koyori-ai-profile-actions{display:flex;gap:6px;align-items:center}.koyori-ai-profile-actions button{border:0;background:transparent;color:#2271b1;cursor:pointer;padding:3px 5px}.koyori-ai-profile-actions button:hover{text-decoration:underline}.koyori-ai-profile-actions button:disabled{cursor:default;opacity:1}.koyori-ai-profile-actions .koyori-ai-profile-switch.is-active{color:#116329;font-weight:600}.koyori-ai-profile-actions .koyori-ai-profile-delete{color:#b32d2e}.koyori-ai-profile-status{font-size:12px;color:#646970;margin-left:4px}.koyori-ai-profile-card.is-open .csf-repeater-content{display:block!important}.koyori-ai-profile-card:not(.is-open) .csf-repeater-content{display:none!important}.koyori-ai-profile-card .csf-repeater-content{padding:8px 14px 14px;border-top:1px solid #f0f0f1}.koyori-ai-profile-card .csf-repeater-helper{display:none}.koyori-ai-model-list{margin-top:6px;max-width:360px}.koyori-ai-model-list select{max-width:100%}
             @media(max-width:782px){.koyori-ai-profile-summary{align-items:flex-start;flex-wrap:wrap}.koyori-ai-profile-title{min-width:120px}.koyori-ai-profile-meta{flex-basis:100%;order:3}.koyori-ai-profile-actions{margin-left:auto}}
           </style>
           <script>
@@ -3561,6 +3563,7 @@ $prefix = 'iro_options';
             const ajaxUrl='<?= esc_js($ajax_url) ?>';
             const testNonce='<?= esc_js($test_nonce) ?>';
             const modelsNonce='<?= esc_js($models_nonce) ?>';
+            const switchNonce='<?= esc_js($switch_nonce) ?>';
             const wrapper=document.querySelector('.csf-repeater-wrapper[data-field-id="[chatgpt_profiles]"]');
             const active=document.querySelector('select[name="iro_options[chatgpt_active_profile]"]');
             if(!wrapper||wrapper.dataset.koyoriReady)return;
@@ -3571,6 +3574,19 @@ $prefix = 'iro_options';
             const endpoint=item=>value(item,'endpoint');
             const token=item=>value(item,'access_token');
             const model=item=>value(item,'model');
+            function activeStorage(){return active&&active.closest('.csf-field')||active&&active.parentElement}
+            function switchProfile(item,index){
+              const button=item.querySelector('.koyori-ai-profile-switch');
+              if(!button||!active)return;
+              button.disabled=true;status(item,'切换中…',true);
+              const body=new URLSearchParams({action:'koyori_switch_chatgpt_profile',nonce:switchNonce,profile:String(index)});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{
+                if(!data.success){status(item,data.data?.message||'切换失败',false);return}
+                active.value=String(data.data.active_profile);
+                active.dispatchEvent(new Event('change',{bubbles:true}));
+                status(item,'已切换',true);
+              }).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
+            }
             function refresh(){
               let profileIndex=0;
               wrapper.querySelectorAll('.csf-repeater-item').forEach(item=>{
@@ -3581,9 +3597,10 @@ $prefix = 'iro_options';
                 let summary=item.querySelector('.koyori-ai-profile-summary');
                 if(!summary){
                   summary=document.createElement('div');summary.className='koyori-ai-profile-summary';
-                  summary.innerHTML='<span class="koyori-ai-profile-chevron">▶</span><span class="koyori-ai-profile-title"></span><span class="koyori-ai-profile-meta"></span><span class="koyori-ai-profile-current">当前使用</span><span class="koyori-ai-profile-actions"><button type="button" class="koyori-ai-profile-edit">编辑</button><button type="button" class="koyori-ai-profile-test">测试</button><button type="button" class="koyori-ai-profile-models">获取模型</button></span>';
+                  summary.innerHTML='<span class="koyori-ai-profile-chevron">▶</span><span class="koyori-ai-profile-title"></span><span class="koyori-ai-profile-meta"></span><span class="koyori-ai-profile-current">当前使用</span><span class="koyori-ai-profile-actions"><button type="button" class="koyori-ai-profile-switch"></button><button type="button" class="koyori-ai-profile-edit">编辑</button><button type="button" class="koyori-ai-profile-test">测试</button><button type="button" class="koyori-ai-profile-models">获取模型</button></span>';
                   item.insertBefore(summary,item.firstChild);
                   summary.addEventListener('click',e=>{if(e.target.closest('button'))return;item.classList.toggle('is-open')});
+                  summary.querySelector('.koyori-ai-profile-switch').addEventListener('click',()=>switchProfile(item,item.dataset.koyoriIndex));
                   summary.querySelector('.koyori-ai-profile-edit').addEventListener('click',()=>item.classList.add('is-open'));
                   summary.querySelector('.koyori-ai-profile-test').addEventListener('click',()=>test(item));
                   summary.querySelector('.koyori-ai-profile-models').addEventListener('click',()=>fetchModels(item));
@@ -3593,7 +3610,16 @@ $prefix = 'iro_options';
                 summary.querySelector('.koyori-ai-profile-title').textContent=name;
                 summary.querySelector('.koyori-ai-profile-meta').textContent=(model(item)||'未设置模型')+' · '+(endpoint(item)||'未设置接口');
                 item.classList.toggle('is-current',active&&String(active.value)===String(index));
+                const switchButton=summary.querySelector('.koyori-ai-profile-switch');
+                if(switchButton){
+                  const isCurrent=item.classList.contains('is-current');
+                  switchButton.textContent=isCurrent?'当前使用':'切换';
+                  switchButton.disabled=isCurrent;
+                  switchButton.classList.toggle('is-active',isCurrent);
+                }
               });
+              const storage=activeStorage();
+              if(storage)storage.style.display='none';
             }
             function test(item){
               if(!endpoint(item)||!token(item)||!model(item)){status(item,'请先补全接口、Key 和模型',false);item.classList.add('is-open');return}
