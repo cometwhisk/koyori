@@ -3513,7 +3513,7 @@ $prefix = 'iro_options';
       ),
       array(
         'id' => 'chatgpt_profile_access_token',
-        'type' => 'password',
+        'type' => 'text',
         'title' => __('API 密钥','sakurairo_csf'),
         'default' => '',
         'desc' => __('已保存密钥时留空表示保持不变；后台不会回显原密钥。','sakurairo_csf'),
@@ -3575,6 +3575,8 @@ $prefix = 'iro_options';
             const status=(text,ok)=>{const el=document.querySelector('#koyori-ai-single-status');if(el){el.textContent=text;el.className=ok?'is-ok':'is-error'}};
             const endpoint=()=>value('chatgpt_profile_endpoint');
             const token=()=>value('chatgpt_profile_access_token');
+            const keyInput=field('chatgpt_profile_access_token');
+            if(keyInput){keyInput.type='password';keyInput.autocomplete='new-password';}
             const model=()=>value('chatgpt_profile_model');
             const reasoning=()=>value('chatgpt_profile_reasoning_effort');
             const timeout=()=>value('chatgpt_profile_timeout')||'30';
