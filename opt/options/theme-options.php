@@ -3541,6 +3541,14 @@ $prefix = 'iro_options';
             'desc' => __('Gemini 3 等思考模型可选择 Low；不支持此参数的服务会忽略它。','sakurairo_csf'),
           ),
           array(
+            'id' => 'timeout',
+            'type' => 'number',
+            'title' => __('请求超时时间','sakurairo_csf'),
+            'default' => 30,
+            'unit' => '秒',
+            'desc' => __('建议 10–120 秒。','sakurairo_csf'),
+          ),
+          array(
             'id' => 'access_token',
             'type' => 'text',
             'title' => __('API 密钥','sakurairo_csf'),
@@ -3555,15 +3563,35 @@ $prefix = 'iro_options';
           $test_nonce = wp_create_nonce('koyori_test_chatgpt_connection');
           $models_nonce = wp_create_nonce('koyori_fetch_chatgpt_models');
           $switch_nonce = wp_create_nonce('koyori_switch_chatgpt_profile');
+          $save_nonce = wp_create_nonce('koyori_save_chatgpt_profile');
           $ajax_url = admin_url('admin-ajax.php');
           ?>
           <div class="koyori-ai-panel-note">
             <strong>连接管理</strong>
-            <span>配置卡片默认收起；每条配置都可以单独测试或获取模型列表。API Key 仅显示为密码字段。</span>
+            <span>已保存配置可单独测试、编辑或切换。新增配置会先测试，测试成功后才会保存。</span>
+            <button type="button" class="button button-primary" id="koyori-ai-add-profile">添加配置</button>
           </div>
           <div id="koyori-ai-global-status" class="koyori-ai-global-status" aria-live="polite"></div>
+          <div id="koyori-ai-profile-modal" class="koyori-ai-profile-modal" hidden>
+            <div class="koyori-ai-profile-modal-backdrop" data-koyori-close></div>
+            <div class="koyori-ai-profile-dialog" role="dialog" aria-modal="true" aria-labelledby="koyori-ai-profile-dialog-title">
+              <div class="koyori-ai-profile-dialog-head"><h2 id="koyori-ai-profile-dialog-title">添加 AI 配置</h2><button type="button" class="koyori-ai-profile-dialog-close" data-koyori-close aria-label="关闭">×</button></div>
+              <p class="description">先填写一套配置并测试连接，测试成功后才会写入已保存配置。</p>
+              <div class="koyori-ai-profile-form-grid">
+                <label>配置名称<input type="text" name="koyori_profile_name" placeholder="例如：Gemini 生产环境"></label>
+                <label>接口基础地址<input type="url" name="koyori_profile_endpoint" placeholder="https://generativelanguage.googleapis.com/v1beta/openai"></label>
+                <label class="koyori-ai-profile-wide">API Key<input type="password" name="koyori_profile_token" autocomplete="new-password"></label>
+                <label>模型<input type="text" name="koyori_profile_model" list="koyori-ai-new-models" placeholder="例如：gemini-3.5-flash"><datalist id="koyori-ai-new-models"></datalist></label>
+                <label class="koyori-ai-profile-model-action"><span>&nbsp;</span><button type="button" class="button" id="koyori-ai-new-models-button">获取模型列表</button></label>
+                <label>推理级别<select name="koyori_profile_reasoning"><option value="">跟随模型默认值</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label>
+                <label>请求超时时间（秒）<input type="number" name="koyori_profile_timeout" min="5" max="120" value="30"></label>
+              </div>
+              <div id="koyori-ai-new-profile-status" class="koyori-ai-new-profile-status" aria-live="polite"></div>
+              <div class="koyori-ai-profile-dialog-actions"><button type="button" class="button" data-koyori-close>取消</button><button type="button" class="button button-secondary" id="koyori-ai-new-test">测试连接</button><button type="button" class="button button-primary" id="koyori-ai-new-save" disabled>保存配置</button></div>
+            </div>
+          </div>
           <style>
-            .koyori-ai-active-profile-storage{display:none!important}.koyori-ai-panel-note{display:flex;gap:10px;align-items:baseline;padding:12px 14px;margin:4px 0 14px;border-left:3px solid #2271b1;background:#f6f7f7;color:#50575e}.koyori-ai-panel-note strong{color:#1d2327;white-space:nowrap}.koyori-ai-global-status{min-height:20px;margin:8px 0;color:#50575e}.koyori-ai-profile-card{border:1px solid #dcdcde;border-radius:8px;background:#fff;margin:10px 0;overflow:hidden}.koyori-ai-profile-summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}.koyori-ai-profile-summary:hover{background:#f6f7f7}.koyori-ai-profile-chevron{color:#646970;transition:transform .18s ease}.koyori-ai-profile-card.is-open .koyori-ai-profile-chevron{transform:rotate(90deg)}.koyori-ai-profile-title{font-weight:600;color:#1d2327;min-width:160px}.koyori-ai-profile-meta{color:#646970;font-size:12px;flex:1}.koyori-ai-profile-current{display:none;padding:3px 7px;border-radius:10px;background:#e7f5ea;color:#116329;font-size:11px}.koyori-ai-profile-actions{display:flex;gap:6px;align-items:center}.koyori-ai-profile-actions button{border:0;background:transparent;color:#2271b1;cursor:pointer;padding:3px 5px}.koyori-ai-profile-actions button:hover{text-decoration:underline}.koyori-ai-profile-actions button:disabled{cursor:default;opacity:1}.koyori-ai-profile-actions .koyori-ai-profile-switch.is-active{color:#116329;font-weight:600}.koyori-ai-profile-actions .koyori-ai-profile-delete{color:#b32d2e}.koyori-ai-profile-status{font-size:12px;color:#646970;margin-left:4px}.koyori-ai-profile-card.is-open .csf-repeater-content{display:block!important}.koyori-ai-profile-card:not(.is-open) .csf-repeater-content{display:none!important}.koyori-ai-profile-card .csf-repeater-content{padding:8px 14px 14px;border-top:1px solid #f0f0f1}.koyori-ai-profile-card .csf-repeater-helper{display:none}.koyori-ai-model-list{margin-top:6px;max-width:360px}.koyori-ai-model-list select{max-width:100%}
+            .koyori-ai-active-profile-storage{display:none!important}.koyori-ai-panel-note{display:flex;gap:10px;align-items:baseline;padding:12px 14px;margin:4px 0 14px;border-left:3px solid #2271b1;background:#f6f7f7;color:#50575e}.koyori-ai-panel-note strong{color:#1d2327;white-space:nowrap}.koyori-ai-global-status{min-height:20px;margin:8px 0;color:#50575e}.koyori-ai-profile-card{border:1px solid #dcdcde;border-radius:8px;background:#fff;margin:10px 0;overflow:hidden}.koyori-ai-profile-summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}.koyori-ai-profile-summary:hover{background:#f6f7f7}.koyori-ai-profile-chevron{color:#646970;transition:transform .18s ease}.koyori-ai-profile-card.is-open .koyori-ai-profile-chevron{transform:rotate(90deg)}.koyori-ai-profile-title{font-weight:600;color:#1d2327;min-width:160px}.koyori-ai-profile-meta{color:#646970;font-size:12px;flex:1}.koyori-ai-profile-current{display:none;padding:3px 7px;border-radius:10px;background:#e7f5ea;color:#116329;font-size:11px}.koyori-ai-profile-actions{display:flex;gap:6px;align-items:center}.koyori-ai-profile-actions button{border:0;background:transparent;color:#2271b1;cursor:pointer;padding:3px 5px}.koyori-ai-profile-actions button:hover{text-decoration:underline}.koyori-ai-profile-actions button:disabled{cursor:default;opacity:1}.koyori-ai-profile-actions .koyori-ai-profile-switch.is-active{color:#116329;font-weight:600}.koyori-ai-profile-actions .koyori-ai-profile-delete{color:#b32d2e}.koyori-ai-profile-status{font-size:12px;color:#646970;margin-left:4px}.koyori-ai-profile-card.is-open .csf-repeater-content{display:block!important}.koyori-ai-profile-card:not(.is-open) .csf-repeater-content{display:none!important}.koyori-ai-profile-card .csf-repeater-content{padding:8px 14px 14px;border-top:1px solid #f0f0f1}.koyori-ai-profile-card .csf-repeater-helper{display:none}.koyori-ai-model-list{margin-top:6px;max-width:360px}.koyori-ai-model-list select{max-width:100%}.koyori-ai-panel-note #koyori-ai-add-profile{margin-left:auto}.koyori-ai-profile-modal[hidden]{display:none}.koyori-ai-profile-modal{position:fixed;inset:0;z-index:100000}.koyori-ai-profile-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}.koyori-ai-profile-dialog{position:relative;width:min(680px,calc(100% - 32px));max-height:calc(100vh - 48px);overflow:auto;margin:24px auto;background:#fff;border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.25);padding:22px}.koyori-ai-profile-dialog-head{display:flex;align-items:center;justify-content:space-between}.koyori-ai-profile-dialog-head h2{margin:0}.koyori-ai-profile-dialog-close{border:0;background:none;font-size:26px;color:#646970;cursor:pointer}.koyori-ai-profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.koyori-ai-profile-form-grid label{display:flex;flex-direction:column;gap:5px;font-weight:600}.koyori-ai-profile-form-grid input,.koyori-ai-profile-form-grid select{width:100%;font-weight:400}.koyori-ai-profile-wide{grid-column:1/-1}.koyori-ai-profile-model-action{justify-content:flex-end}.koyori-ai-new-profile-status{min-height:22px;margin-top:16px;color:#646970}.koyori-ai-profile-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}@media(max-width:782px){.koyori-ai-profile-form-grid{grid-template-columns:1fr}.koyori-ai-profile-wide{grid-column:auto}}
             @media(max-width:782px){.koyori-ai-profile-summary{align-items:flex-start;flex-wrap:wrap}.koyori-ai-profile-title{min-width:120px}.koyori-ai-profile-meta{flex-basis:100%;order:3}.koyori-ai-profile-actions{margin-left:auto}}
           </style>
           <script>
@@ -3572,10 +3600,52 @@ $prefix = 'iro_options';
             const testNonce='<?= esc_js($test_nonce) ?>';
             const modelsNonce='<?= esc_js($models_nonce) ?>';
             const switchNonce='<?= esc_js($switch_nonce) ?>';
+            const saveNonce='<?= esc_js($save_nonce) ?>';
             const wrapper=document.querySelector('.csf-repeater-wrapper[data-field-id="[chatgpt_profiles]"]');
             const active=document.querySelector('select[name="iro_options[chatgpt_active_profile]"]');
             if(!wrapper||wrapper.dataset.koyoriReady)return;
             wrapper.dataset.koyoriReady='1';
+            const nativeAdd=wrapper.parentElement.querySelector('.csf-repeater-add');
+            if(nativeAdd)nativeAdd.style.display='none';
+            const modal=document.querySelector('#koyori-ai-profile-modal');
+            const modalField=name=>modal&&modal.querySelector('[name="'+name+'"]');
+            const modalValue=name=>{const el=modalField(name);return el?el.value.trim():''};
+            const modalStatus=(text,ok)=>{const el=document.querySelector('#koyori-ai-new-profile-status');if(el){el.textContent=text;el.style.color=ok?'#116329':'#b32d2e'}};
+            const modalPayload=()=>({endpoint:modalValue('koyori_profile_endpoint'),token:modalValue('koyori_profile_token'),model:modalValue('koyori_profile_model'),reasoning_effort:modalValue('koyori_profile_reasoning'),timeout:modalValue('koyori_profile_timeout')||'30'});
+            function closeNewProfile(){if(modal)modal.hidden=true}
+            function openNewProfile(){
+              if(!modal)return;
+              modal.querySelectorAll('input').forEach(el=>{if(el.type!=='hidden')el.value=el.name==='koyori_profile_timeout'?'30':''});
+              const reasoning=modalField('koyori_profile_reasoning');if(reasoning)reasoning.value='';
+              const save=document.querySelector('#koyori-ai-new-save');if(save)save.disabled=true;
+              modalStatus('',true);modal.hidden=false;
+              const first=modalField('koyori_profile_name');if(first)first.focus();
+            }
+            document.querySelectorAll('[data-koyori-close]').forEach(el=>el.addEventListener('click',closeNewProfile));
+            const addProfile=document.querySelector('#koyori-ai-add-profile');if(addProfile)addProfile.addEventListener('click',openNewProfile);
+            const newTest=document.querySelector('#koyori-ai-new-test');
+            if(newTest)newTest.addEventListener('click',()=>{
+              const p=modalPayload();
+              if(!p.endpoint||!p.token||!p.model){modalStatus('请先填写接口、API Key 和模型。',false);return}
+              newTest.disabled=true;modalStatus('测试中…',true);
+              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,...p});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{const save=document.querySelector('#koyori-ai-new-save');if(data.success){modalStatus(data.data?.message||'连接成功，可以保存。',true);if(save)save.disabled=false}else{modalStatus(data.data?.message||'连接失败，请检查配置。',false);if(save)save.disabled=true}}).catch(()=>modalStatus('网络请求失败，请稍后重试。',false)).finally(()=>{newTest.disabled=false});
+            });
+            const newModels=document.querySelector('#koyori-ai-new-models-button');
+            if(newModels)newModels.addEventListener('click',()=>{
+              const endpoint=modalValue('koyori_profile_endpoint'),token=modalValue('koyori_profile_token');
+              if(!endpoint||!token){modalStatus('请先填写接口基础地址和 API Key。',false);return}
+              newModels.disabled=true;modalStatus('获取模型列表中…',true);
+              const body=new URLSearchParams({action:'koyori_fetch_chatgpt_models',nonce:modelsNonce,endpoint,token});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){modalStatus(data.data?.message||'获取模型失败。',false);return}const list=document.querySelector('#koyori-ai-new-models');if(list){list.innerHTML='';data.data.models.forEach(id=>{const option=document.createElement('option');option.value=id;list.appendChild(option)})}modalStatus('已获取 '+data.data.count+' 个模型。',true)}).catch(()=>modalStatus('网络请求失败，请稍后重试。',false)).finally(()=>{newModels.disabled=false});
+            });
+            const newSave=document.querySelector('#koyori-ai-new-save');
+            if(newSave)newSave.addEventListener('click',()=>{
+              const p=modalPayload();
+              newSave.disabled=true;modalStatus('保存中…',true);
+              const body=new URLSearchParams({action:'koyori_save_chatgpt_profile',nonce:saveNonce,name:modalValue('koyori_profile_name'),...p});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){modalStatus(data.data?.message||'配置保存失败。',false);newSave.disabled=false;return}modalStatus('配置已保存，正在刷新列表…',true);window.location.reload()}).catch(()=>{modalStatus('网络请求失败，请稍后重试。',false);newSave.disabled=false});
+            });
             const field=key=>item=>item.querySelector('[name$="[chatgpt_profiles]['+item.dataset.koyoriIndex+']['+key+']"]')||item.querySelector('[name*="[chatgpt_profiles]"][name$="['+key+']"]');
             const value=(item,key)=>{const el=field(key)(item);return el?el.value.trim():''};
             const status=(item,text,ok)=>{let el=item.querySelector('.koyori-ai-profile-status');if(!el){el=document.createElement('span');el.className='koyori-ai-profile-status';item.querySelector('.koyori-ai-profile-actions').appendChild(el)}el.textContent=text;el.style.color=ok?'#116329':'#b32d2e'};
@@ -3637,7 +3707,7 @@ $prefix = 'iro_options';
             function test(item){
               if(!endpoint(item)||!token(item)||!model(item)){status(item,'请先补全接口、Key 和模型',false);item.classList.add('is-open');return}
               const button=item.querySelector('.koyori-ai-profile-test');button.disabled=true;status(item,'测试中…',true);
-              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(item),token:token(item),model:model(item),reasoning_effort:value(item,'reasoning_effort')});
+              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(item),token:token(item),model:model(item),reasoning_effort:value(item,'reasoning_effort'),timeout:value(item,'timeout')||'20'});
               fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{status(item,data.success?(data.data?.message||'连接成功'): (data.data?.message||'连接失败'),!!data.success)}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
             function fetchModels(item){

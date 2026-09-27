@@ -117,13 +117,14 @@ namespace IROChatGPT {
         $token = trim((string) wp_unslash($_POST['token'] ?? ''));
         $model = trim((string) wp_unslash($_POST['model'] ?? ''));
         $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
+        $request_timeout = max(5, min(120, (int)($_POST['timeout'] ?? 20)));
 
         if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
             wp_send_json_error(['message' => '接口地址、API Key 或模型无效。'], 400);
         }
 
         $response = wp_remote_post($endpoint, [
-            'timeout' => 20,
+            'timeout' => $request_timeout,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
@@ -188,6 +189,55 @@ namespace IROChatGPT {
     }
 
     add_action('wp_ajax_koyori_switch_chatgpt_profile', __NAMESPACE__ . '\\switch_chatgpt_profile');
+
+    function save_chatgpt_profile()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+
+        check_ajax_referer('koyori_save_chatgpt_profile', 'nonce');
+        $endpoint = trim((string) wp_unslash($_POST['endpoint'] ?? ''));
+        $token = trim((string) wp_unslash($_POST['token'] ?? ''));
+        $model = trim((string) wp_unslash($_POST['model'] ?? ''));
+        $name = trim((string) wp_unslash($_POST['name'] ?? ''));
+        $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
+        $timeout = max(5, min(120, (int)($_POST['timeout'] ?? 30)));
+
+        if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
+            wp_send_json_error(['message' => '请填写有效的接口地址、API Key 和模型。'], 400);
+        }
+        if ($name === '') {
+            $name = $model;
+        }
+        if (!in_array($reasoning_effort, ['', 'low', 'medium', 'high'], true)) {
+            $reasoning_effort = '';
+        }
+
+        $options = get_option('iro_options', []);
+        if (!is_array($options)) {
+            $options = [];
+        }
+        $profiles = isset($options['chatgpt_profiles']) && is_array($options['chatgpt_profiles']) ? $options['chatgpt_profiles'] : [];
+        $profiles[] = [
+            'name' => sanitize_text_field($name),
+            'endpoint' => esc_url_raw($endpoint),
+            'model' => sanitize_text_field($model),
+            'reasoning_effort' => $reasoning_effort,
+            'timeout' => $timeout,
+            'access_token' => $token,
+        ];
+        $options['chatgpt_profiles'] = array_values($profiles);
+        if (!update_option('iro_options', $options)) {
+            $saved_options = get_option('iro_options', []);
+            if (!is_array($saved_options) || count((array)($saved_options['chatgpt_profiles'] ?? [])) < count($profiles)) {
+                wp_send_json_error(['message' => '配置保存失败，请重试。'], 500);
+            }
+        }
+        wp_send_json_success(['message' => '配置已保存。', 'profile_count' => count($profiles)]);
+    }
+
+    add_action('wp_ajax_koyori_save_chatgpt_profile', __NAMESPACE__ . '\\save_chatgpt_profile');
 
     function fetch_chatgpt_models()
     {
@@ -288,6 +338,8 @@ namespace IROChatGPT {
         $chatGPT_prompt_init = iro_opt('chatgpt_init_prompt', DEFAULT_INIT_PROMPT);
         $chatGPT_model = (string)($config['model'] ?? DEFAULT_MODEL);
         $reasoning_effort = trim((string)($config['reasoning_effort'] ?? ''));
+        $request_timeout = (int)($config['timeout'] ?? iro_opt('chatgpt_api_request_timeout', 30));
+        $request_timeout = max(5, min(120, $request_timeout));
 
         if (empty($chatgpt_endpoint) || empty($chatGPT_access_token) || empty($chatGPT_prompt_init) || empty($chatGPT_model)) {
             throw new Exception("Missing required ChatGPT configuration.");
@@ -326,7 +378,7 @@ namespace IROChatGPT {
         curl_setopt($ch, CURLOPT_URL, $chatgpt_endpoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, iro_opt('chatgpt_api_request_timeout', 30));
+        curl_setopt($ch, CURLOPT_TIMEOUT, $request_timeout);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Content-Type: application/json",
             "Authorization: Bearer " . $chatGPT_access_token
