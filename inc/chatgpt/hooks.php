@@ -127,6 +127,10 @@ namespace IROChatGPT {
         $endpoint = chatgpt_completion_endpoint(wp_unslash($_POST['endpoint'] ?? ''));
         $base_endpoint = rtrim(trim((string) wp_unslash($_POST['endpoint'] ?? '')), '/');
         $token = trim((string) wp_unslash($_POST['token'] ?? ''));
+        if ($token === '') {
+            $active_config = chatgpt_get_active_config();
+            $token = trim((string)($active_config['access_token'] ?? ''));
+        }
         $model = trim((string) wp_unslash($_POST['model'] ?? ''));
         $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
         $request_timeout = max(5, min(120, (int)($_POST['timeout'] ?? 20)));
@@ -178,146 +182,6 @@ namespace IROChatGPT {
 
     add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
 
-    function switch_chatgpt_profile()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => '无权执行此操作。'], 403);
-        }
-
-        check_ajax_referer('koyori_switch_chatgpt_profile', 'nonce');
-        $index = filter_var(wp_unslash($_POST['profile'] ?? ''), FILTER_VALIDATE_INT);
-        $options = get_option('iro_options', []);
-        $profiles = is_array($options) ? ($options['chatgpt_profiles'] ?? []) : [];
-        if ($index === false || !is_array($profiles) || !array_key_exists($index, $profiles) || !is_array($profiles[$index])) {
-            wp_send_json_error(['message' => '目标配置不存在。'], 400);
-        }
-
-        $options['chatgpt_active_profile'] = (int) $index;
-        if (!update_option('iro_options', $options)) {
-            $saved_options = get_option('iro_options', []);
-            if (!is_array($saved_options) || (int)($saved_options['chatgpt_active_profile'] ?? -1) !== (int) $index) {
-                wp_send_json_error(['message' => '当前配置保存失败，请重试。'], 500);
-            }
-        }
-        $saved_options = get_option('iro_options', []);
-        if (!is_array($saved_options) || (int)($saved_options['chatgpt_active_profile'] ?? -1) !== (int) $index) {
-            wp_send_json_error(['message' => '当前配置保存失败，请重试。'], 500);
-        }
-        wp_send_json_success(['active_profile' => (int) $index]);
-    }
-
-    add_action('wp_ajax_koyori_switch_chatgpt_profile', __NAMESPACE__ . '\\switch_chatgpt_profile');
-
-    function delete_chatgpt_profile()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => '无权执行此操作。'], 403);
-        }
-        check_ajax_referer('koyori_delete_chatgpt_profile', 'nonce');
-        $index = filter_var(wp_unslash($_POST['profile'] ?? ''), FILTER_VALIDATE_INT);
-        $options = get_option('iro_options', []);
-        $profiles = is_array($options) ? ($options['chatgpt_profiles'] ?? []) : [];
-        $active = is_array($options) ? (int)($options['chatgpt_active_profile'] ?? 0) : 0;
-        if ($index === false || !is_array($profiles) || !array_key_exists($index, $profiles)) {
-            wp_send_json_error(['message' => '配置不存在。'], 404);
-        }
-        if ($active === (int)$index) {
-            wp_send_json_error(['message' => '当前使用配置不能直接删除，请先切换到其他配置。'], 409);
-        }
-        array_splice($profiles, (int)$index, 1);
-        $options['chatgpt_profiles'] = array_values($profiles);
-        if ($profiles && $active > (int)$index) {
-            $active--;
-        }
-        $options['chatgpt_active_profile'] = $profiles ? max(0, min($active, count($profiles) - 1)) : 0;
-        update_option('iro_options', $options);
-        $saved_options = get_option('iro_options', []);
-        $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? []) : [];
-        if (count((array)$saved_profiles) !== count($profiles)) {
-            wp_send_json_error(['message' => '配置删除未成功，请重试。'], 500);
-        }
-        wp_send_json_success(['active_profile' => (int)($saved_options['chatgpt_active_profile'] ?? 0)]);
-    }
-
-    add_action('wp_ajax_koyori_delete_chatgpt_profile', __NAMESPACE__ . '\\delete_chatgpt_profile');
-
-    function save_chatgpt_profile()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => '无权执行此操作。'], 403);
-        }
-
-        check_ajax_referer('koyori_save_chatgpt_profile', 'nonce');
-        $endpoint = trim((string) wp_unslash($_POST['endpoint'] ?? ''));
-        $token = trim((string) wp_unslash($_POST['token'] ?? ''));
-        $model = trim((string) wp_unslash($_POST['model'] ?? ''));
-        $name = trim((string) wp_unslash($_POST['name'] ?? ''));
-        $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
-        $timeout = max(5, min(120, (int)($_POST['timeout'] ?? 30)));
-        $test_token = trim((string) wp_unslash($_POST['test_token'] ?? ''));
-
-        if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
-            wp_send_json_error(['message' => '请填写有效的接口地址、API Key 和模型。'], 400);
-        }
-        if ($name === '') {
-            $name = $model;
-        }
-        if (!in_array($reasoning_effort, ['', 'low', 'medium', 'high'], true)) {
-            $reasoning_effort = '';
-        }
-        $test_key = 'koyori_ai_test_' . get_current_user_id() . '_' . hash('sha256', $test_token);
-        $test_data = $test_token !== '' ? get_transient($test_key) : false;
-        if (!is_array($test_data) || ($test_data['fingerprint'] ?? '') !== chatgpt_test_fingerprint($endpoint, $token, $model, $reasoning_effort, $timeout)) {
-            wp_send_json_error(['message' => '请先用当前配置测试连接，测试通过后再保存。'], 400);
-        }
-        delete_transient($test_key);
-        $lock_key = 'koyori_ai_profile_write_lock';
-        $existing_lock = get_option($lock_key, 0);
-        if ($existing_lock && (time() - (int) $existing_lock) > 60) {
-            delete_option($lock_key);
-        }
-        if (!add_option($lock_key, time(), '', 'no')) {
-            wp_send_json_error(['message' => '正在保存另一套配置，请稍后重试。'], 409);
-        }
-        $options = get_option('iro_options', []);
-        if (!is_array($options)) {
-            $options = [];
-        }
-        $profiles = isset($options['chatgpt_profiles']) && is_array($options['chatgpt_profiles']) ? $options['chatgpt_profiles'] : [];
-        $profiles[] = [
-            'name' => sanitize_text_field($name),
-            'endpoint' => esc_url_raw($endpoint),
-            'model' => sanitize_text_field($model),
-            'reasoning_effort' => $reasoning_effort,
-            'timeout' => $timeout,
-            'access_token' => $token,
-        ];
-        $options['chatgpt_profiles'] = array_values($profiles);
-        if (!update_option('iro_options', $options)) {
-            $saved_options = get_option('iro_options', []);
-            if (!is_array($saved_options) || count((array)($saved_options['chatgpt_profiles'] ?? [])) < count($profiles)) {
-                delete_option($lock_key);
-                wp_send_json_error(['message' => '配置保存失败，请重试。'], 500);
-            }
-        }
-        delete_option($lock_key);
-        $new_index = count($profiles) - 1;
-        wp_send_json_success([
-            'message' => '配置已保存。',
-            'profile_count' => count($profiles),
-            'profile_index' => $new_index,
-            'profile' => [
-                'name' => sanitize_text_field($name),
-                'endpoint' => esc_url_raw($endpoint),
-                'model' => sanitize_text_field($model),
-                'reasoning_effort' => $reasoning_effort,
-                'timeout' => $timeout,
-            ],
-        ]);
-    }
-
-    add_action('wp_ajax_koyori_save_chatgpt_profile', __NAMESPACE__ . '\\save_chatgpt_profile');
-
     function fetch_chatgpt_models()
     {
         if (!current_user_can('manage_options')) {
@@ -327,6 +191,10 @@ namespace IROChatGPT {
         check_ajax_referer('koyori_fetch_chatgpt_models', 'nonce');
         $base_url = rtrim(trim((string) wp_unslash($_POST['endpoint'] ?? '')), '/');
         $token = trim((string) wp_unslash($_POST['token'] ?? ''));
+        if ($token === '') {
+            $active_config = chatgpt_get_active_config();
+            $token = trim((string)($active_config['access_token'] ?? ''));
+        }
         if (!$base_url || !$token || !wp_http_validate_url($base_url)) {
             wp_send_json_error(['message' => '请先填写有效的基础地址和 API Key。'], 400);
         }
