@@ -268,7 +268,19 @@ namespace IROChatGPT {
             }
         }
         delete_option($lock_key);
-        wp_send_json_success(['message' => '配置已保存。', 'profile_count' => count($profiles)]);
+        $new_index = count($profiles) - 1;
+        wp_send_json_success([
+            'message' => '配置已保存。',
+            'profile_count' => count($profiles),
+            'profile_index' => $new_index,
+            'profile' => [
+                'name' => sanitize_text_field($name),
+                'endpoint' => esc_url_raw($endpoint),
+                'model' => sanitize_text_field($model),
+                'reasoning_effort' => $reasoning_effort,
+                'timeout' => $timeout,
+            ],
+        ]);
     }
 
     add_action('wp_ajax_koyori_save_chatgpt_profile', __NAMESPACE__ . '\\save_chatgpt_profile');
