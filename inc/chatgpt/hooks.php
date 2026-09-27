@@ -143,7 +143,7 @@ namespace IROChatGPT {
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
-            'body' => wp_json_encode(array_filter([
+            'body' => wp_json_encode([
                 'model' => $model,
                 'messages' => [
                     ['role' => 'user', 'content' => 'Reply with OK.'],
