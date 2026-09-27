@@ -3657,6 +3657,20 @@ $prefix = 'iro_options';
             const endpoint=item=>value(item,'endpoint');
             const token=item=>value(item,'access_token');
             const model=item=>value(item,'model');
+            function ensureModelSelect(item){
+              const input=item.querySelector('input[name$="[model]"]');
+              if(!input)return;
+              const select=document.createElement('select');
+              Array.from(input.attributes).forEach(attr=>{if(attr.name!=='type'&&attr.name!=='list')select.setAttribute(attr.name,attr.value)});
+              select.className=input.className;
+              const current=input.value.trim();
+              const option=document.createElement('option');
+              option.value=current;
+              option.textContent=current?current+'（当前）':'请先获取模型列表';
+              select.appendChild(option);
+              select.value=current;
+              input.replaceWith(select);
+            }
             function activeStorage(){return active&&active.closest('.csf-field')||active&&active.parentElement}
             function profileIndex(item){
               const el=item.querySelector('[name*="[chatgpt_profiles]"]');
@@ -3682,6 +3696,7 @@ $prefix = 'iro_options';
                 const index=visibleIndex++;
                 item.dataset.koyoriIndex=index;
                 item.classList.add('koyori-ai-profile-card');
+                ensureModelSelect(item);
                 let summary=item.querySelector('.koyori-ai-profile-summary');
                 if(!summary){
                   summary=document.createElement('div');summary.className='koyori-ai-profile-summary';
@@ -3719,7 +3734,7 @@ $prefix = 'iro_options';
               if(!endpoint(item)||!token(item)){status(item,'请先填写接口和 API Key',false);item.classList.add('is-open');return}
               const button=item.querySelector('.koyori-ai-profile-models');button.disabled=true;status(item,'获取模型中…',true);
               const body=new URLSearchParams({action:'koyori_fetch_chatgpt_models',nonce:modelsNonce,endpoint:endpoint(item),token:token(item)});
-              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'获取模型失败',false);return}const input=field('model')(item);if(input){let list=item.querySelector('datalist');if(!list){list=document.createElement('datalist');list.id='koyori-ai-models-'+item.dataset.koyoriIndex;item.appendChild(list);input.setAttribute('list',list.id)}list.innerHTML='';data.data.models.forEach(id=>{const o=document.createElement('option');o.value=id;list.appendChild(o)});status(item,'已获取 '+data.data.count+' 个模型',true);item.classList.add('is-open')}}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'获取模型失败',false);return}const select=field('model')(item);if(select){const selected=select.value;select.innerHTML='<option value="">请选择模型</option>';data.data.models.forEach(id=>{const option=document.createElement('option');option.value=id;option.textContent=id;select.appendChild(option)});if(data.data.models.includes(selected))select.value=selected}status(item,'已获取 '+data.data.count+' 个模型，请选择模型',true);item.classList.add('is-open')}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
             }
             if(active)active.addEventListener('change',refresh);
             wrapper.addEventListener('click',e=>{
