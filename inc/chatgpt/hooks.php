@@ -25,6 +25,56 @@ namespace IROChatGPT {
     }
 
 
+    function chatgpt_get_legacy_config()
+    {
+        return [
+            'name' => (string) iro_opt('chatgpt_model', DEFAULT_MODEL),
+            'endpoint' => (string) iro_opt('chatgpt_endpoint', ''),
+            'model' => (string) iro_opt('chatgpt_model', DEFAULT_MODEL),
+            'access_token' => (string) iro_opt('chatgpt_access_token', ''),
+        ];
+    }
+
+    function chatgpt_migrate_profiles()
+    {
+        $options = get_option('iro_options', []);
+        if (!is_array($options) || !empty($options['chatgpt_profiles'])) {
+            return;
+        }
+
+        $endpoint = trim((string)($options['chatgpt_endpoint'] ?? ''));
+        $token = trim((string)($options['chatgpt_access_token'] ?? ''));
+        $model = trim((string)($options['chatgpt_model'] ?? DEFAULT_MODEL));
+        if ($endpoint === '' && $token === '') {
+            return;
+        }
+
+        $options['chatgpt_profiles'] = [[
+            'name' => $model !== '' ? $model : '当前配置',
+            'endpoint' => $endpoint,
+            'model' => $model,
+            'access_token' => $token,
+        ]];
+        $options['chatgpt_active_profile'] = 0;
+        update_option('iro_options', $options);
+    }
+
+    function chatgpt_get_active_config()
+    {
+        $profiles = iro_opt('chatgpt_profiles', []);
+        if (is_array($profiles) && !empty($profiles)) {
+            $index = max(0, (int) iro_opt('chatgpt_active_profile', 0));
+            $profile = $profiles[$index] ?? reset($profiles);
+            if (is_array($profile)) {
+                return $profile;
+            }
+        }
+
+        return chatgpt_get_legacy_config();
+    }
+
+    chatgpt_migrate_profiles();
+
     function chatgpt_completion_endpoint($base_url)
     {
         $base_url = trim((string) $base_url);
@@ -129,10 +179,11 @@ namespace IROChatGPT {
 
     function summon_article_excerpt(WP_Post $post)
     {
-        $chatgpt_endpoint = chatgpt_completion_endpoint(iro_opt('chatgpt_endpoint'));
-        $chatGPT_access_token = iro_opt('chatgpt_access_token');
+        $config = chatgpt_get_active_config();
+        $chatgpt_endpoint = chatgpt_completion_endpoint($config['endpoint'] ?? '');
+        $chatGPT_access_token = (string)($config['access_token'] ?? '');
         $chatGPT_prompt_init = iro_opt('chatgpt_init_prompt', DEFAULT_INIT_PROMPT);
-        $chatGPT_model = iro_opt('chatgpt_model', DEFAULT_MODEL);
+        $chatGPT_model = (string)($config['model'] ?? DEFAULT_MODEL);
 
         if (empty($chatgpt_endpoint) || empty($chatGPT_access_token) || empty($chatGPT_prompt_init) || empty($chatGPT_model)) {
             throw new Exception("Missing required ChatGPT configuration.");

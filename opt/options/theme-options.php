@@ -3451,8 +3451,23 @@ $prefix = 'iro_options';
     )
   ) );
 
+  $chatgpt_saved_options = get_option('iro_options', array());
+  $chatgpt_profiles = is_array($chatgpt_saved_options) ? ($chatgpt_saved_options['chatgpt_profiles'] ?? array()) : array();
+  $chatgpt_profile_options = array();
+  if (is_array($chatgpt_profiles)) {
+    foreach ($chatgpt_profiles as $profile_index => $profile) {
+      if (is_array($profile)) {
+        $profile_name = trim((string)($profile['name'] ?? $profile['model'] ?? '未命名配置'));
+        $chatgpt_profile_options[(string)$profile_index] = $profile_name !== '' ? $profile_name : '未命名配置';
+      }
+    }
+  }
+  if (empty($chatgpt_profile_options)) {
+    $chatgpt_profile_options['0'] = (string)($chatgpt_saved_options['chatgpt_model'] ?? '当前配置');
+  }
+
   Sakurairo_CSF::createSection( $prefix, array(
-    'parent' => 'others', 
+    'parent' => 'others',
     'title' => __('AI 配置','sakurairo_csf'),
     'icon' => 'fas fa-atom',
     'fields' => array(
@@ -3470,35 +3485,54 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'id' => 'chatgpt_endpoint',
-        'type' => 'text',
-        'title' => __('接口基础地址','sakurairo_csf'),
-        'desc' => __('填写服务的基础地址，例如 https://api.openai.com/v1。系统会自动补充 /chat/completions。','sakurairo_csf'),
-        'default' => 'https://api.openai.com/v1'
+        'id' => 'chatgpt_active_profile',
+        'type' => 'select',
+        'title' => __('当前使用配置','sakurairo_csf'),
+        'options' => $chatgpt_profile_options,
+        'default' => '0',
+        'desc' => __('文章摘要和连接测试都会使用这里选中的配置。','sakurairo_csf'),
       ),
 
       array(
-        'id' => 'chatgpt_model',
-        'type' => 'text',
-        'title' => __('模型','sakurairo_csf'),
-        'descr' => __('填写接口支持的模型名称，默认使用 gpt-4o-mini。','sakurairo_csf'),
-        "default" => "gpt-4o-mini"
+        'id' => 'chatgpt_profiles',
+        'type' => 'repeater',
+        'title' => __('已保存配置','sakurairo_csf'),
+        'button_title' => __('添加配置','sakurairo_csf'),
+        'accordion_title_by' => array('name'),
+        'fields' => array(
+          array(
+            'id' => 'name',
+            'type' => 'text',
+            'title' => __('配置名称','sakurairo_csf'),
+            'desc' => __('例如：Gemini 3.8 Flash。','sakurairo_csf'),
+          ),
+          array(
+            'id' => 'endpoint',
+            'type' => 'text',
+            'title' => __('接口基础地址','sakurairo_csf'),
+            'desc' => __('系统会自动补充 /chat/completions。','sakurairo_csf'),
+          ),
+          array(
+            'id' => 'model',
+            'type' => 'text',
+            'title' => __('模型','sakurairo_csf'),
+          ),
+          array(
+            'id' => 'access_token',
+            'type' => 'text',
+            'title' => __('API 密钥','sakurairo_csf'),
+            'desc' => __('密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
+          ),
+        ),
       ),
 
       array(
-        'id' => 'chatgpt_access_token',
-        'type' => 'text',
-        'title' => __('API 密钥','sakurairo_csf'),
-        'desc' => __('填写服务的 API 密钥。密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
-      ),
-
-      array(
-        'type'     => 'callback',
+        'type' => 'callback',
         'function' => function () {
           ?>
           <div class="koyori-ai-connection-test">
             <div style="display:flex;align-items:center;gap:8px;">
-              <button type="button" class="button" id="koyori-ai-test-connection">测试连接</button>
+              <button type="button" class="button" id="koyori-ai-test-connection">测试当前配置</button>
               <span id="koyori-ai-test-result" aria-live="polite"></span>
             </div>
           </div>
@@ -3509,11 +3543,13 @@ $prefix = 'iro_options';
             if (!button || !result || button.dataset.bound) return;
             button.dataset.bound = '1';
             button.addEventListener('click', function () {
-              const endpoint = document.querySelector('input[name="iro_options[chatgpt_endpoint]"]')?.value || '';
-              const token = document.querySelector('input[name="iro_options[chatgpt_access_token]"]')?.value || '';
-              const model = document.querySelector('input[name="iro_options[chatgpt_model]"]')?.value || '';
+              const index = document.querySelector('select[name="iro_options[chatgpt_active_profile]"]')?.value || '0';
+              const field = (key) => document.querySelector('input[name="iro_options[chatgpt_profiles][' + index + '][' + key + ']"]')?.value || '';
+              const endpoint = field('endpoint');
+              const token = field('access_token');
+              const model = field('model');
               if (!endpoint.trim() || !token.trim() || !model.trim()) {
-                result.textContent = '请先填写接口地址、API 密钥和模型。';
+                result.textContent = '请先填写当前配置的接口地址、API 密钥和模型。';
                 return;
               }
               button.disabled = true;
