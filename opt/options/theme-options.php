@@ -3478,6 +3478,7 @@ $prefix = 'iro_options';
   $chatgpt_profile = is_array($chatgpt_profiles[0] ?? null) ? $chatgpt_profiles[0] : array();
   $chatgpt_profile_endpoint = trim((string)($chatgpt_profile['endpoint'] ?? ($chatgpt_saved_options['chatgpt_endpoint'] ?? '')));
   $chatgpt_profile_model = trim((string)($chatgpt_profile['model'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? 'gpt-4o-mini')));
+  $chatgpt_profile_key = (string)($chatgpt_profile['access_token'] ?? ($chatgpt_saved_options['chatgpt_access_token'] ?? ''));
   $chatgpt_profile_reasoning = trim((string)($chatgpt_profile['reasoning_effort'] ?? ''));
   $chatgpt_profile_timeout = max(5, min(120, (int)($chatgpt_profile['timeout'] ?? 30)));
 
@@ -3507,8 +3508,8 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_profile_access_token',
         'type' => 'text',
         'title' => __('API 密钥','sakurairo_csf'),
-        'default' => '',
-        'desc' => __('已保存密钥时留空表示保持不变；后台不会回显原密钥。','sakurairo_csf'),
+        'default' => $chatgpt_profile_key,
+        'desc' => __('已保存密钥会直接显示在输入框中，修改后保存即可更新。','sakurairo_csf'),
       ),
       array(
         'id' => 'chatgpt_profile_model',
@@ -3572,18 +3573,7 @@ $prefix = 'iro_options';
             const endpoint=()=>value('chatgpt_profile_endpoint');
             const token=()=>value('chatgpt_profile_access_token');
             const keyInput=field('chatgpt_profile_access_token');
-            if(keyInput){
-              const keySaved=root.dataset.keySaved==='1';
-              keyInput.type='password';
-              keyInput.autocomplete='new-password';
-              keyInput.placeholder=keySaved?'••••••••••••':'请输入 API Key';
-              const hideKey=()=>{keyInput.type='password'};
-              const showKey=()=>{if(keyInput.value)keyInput.type='text'};
-              keyInput.addEventListener('mousedown',showKey);
-              keyInput.addEventListener('mouseup',hideKey);
-              keyInput.addEventListener('mouseleave',hideKey);
-              keyInput.addEventListener('blur',hideKey);
-            }
+            if(keyInput){keyInput.type='text';keyInput.autocomplete='off';}
             const model=()=>value('chatgpt_profile_model');
             const reasoning=()=>value('chatgpt_profile_reasoning_effort');
             const timeout=()=>value('chatgpt_profile_timeout')||'30';
