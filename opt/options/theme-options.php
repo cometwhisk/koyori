@@ -3461,7 +3461,7 @@ $prefix = 'iro_options';
     }
     $model = trim((string)($data['chatgpt_profile_model'] ?? ($current['model'] ?? 'gpt-4o-mini')));
     $data['chatgpt_profiles'] = array(array(
-      'name' => sanitize_text_field((string)($data['chatgpt_profile_name'] ?? ($current['name'] ?? $model))),
+      'name' => sanitize_text_field($model !== '' ? $model : (string)($current['name'] ?? '当前配置')),
       'endpoint' => esc_url_raw((string)($data['chatgpt_profile_endpoint'] ?? ($current['endpoint'] ?? ''))),
       'model' => sanitize_text_field($model),
       'reasoning_effort' => sanitize_text_field((string)($data['chatgpt_profile_reasoning_effort'] ?? ($current['reasoning_effort'] ?? ''))),
@@ -3476,7 +3476,6 @@ $prefix = 'iro_options';
   $chatgpt_saved_options = get_option('iro_options', array());
   $chatgpt_profiles = is_array($chatgpt_saved_options) ? ($chatgpt_saved_options['chatgpt_profiles'] ?? array()) : array();
   $chatgpt_profile = is_array($chatgpt_profiles[0] ?? null) ? $chatgpt_profiles[0] : array();
-  $chatgpt_profile_name = trim((string)($chatgpt_profile['name'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? '当前配置')));
   $chatgpt_profile_endpoint = trim((string)($chatgpt_profile['endpoint'] ?? ($chatgpt_saved_options['chatgpt_endpoint'] ?? '')));
   $chatgpt_profile_model = trim((string)($chatgpt_profile['model'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? 'gpt-4o-mini')));
   $chatgpt_profile_reasoning = trim((string)($chatgpt_profile['reasoning_effort'] ?? ''));
@@ -3496,13 +3495,6 @@ $prefix = 'iro_options';
         'type' => 'submessage',
         'style' => 'info',
         'content' => __('使用一个兼容 OpenAI 格式的接口即可。API 密钥不会在后台回显，只会由服务器发送到上面填写的接口。','sakurairo_csf'),
-      ),
-      array(
-        'id' => 'chatgpt_profile_name',
-        'type' => 'text',
-        'title' => __('配置名称','sakurairo_csf'),
-        'default' => $chatgpt_profile_name,
-        'desc' => __('给这套连接起一个便于识别的名称。','sakurairo_csf'),
       ),
       array(
         'id' => 'chatgpt_profile_endpoint',
@@ -3553,8 +3545,12 @@ $prefix = 'iro_options';
           $test_nonce = wp_create_nonce('koyori_test_chatgpt_connection');
           $models_nonce = wp_create_nonce('koyori_fetch_chatgpt_models');
           $ajax_url = admin_url('admin-ajax.php');
+          $saved_options = get_option('iro_options', array());
+          $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? array()) : array();
+          $saved_profile = is_array($saved_profiles[0] ?? null) ? $saved_profiles[0] : array();
+          $saved_key = trim((string)($saved_profile['access_token'] ?? ($saved_options['chatgpt_access_token'] ?? '')));
           ?>
-          <div class="koyori-ai-single-actions">
+          <div class="koyori-ai-single-actions" data-key-saved="<?= $saved_key !== '' ? '1' : '0' ?>">
             <button type="button" class="button" id="koyori-ai-fetch-models">获取模型列表</button>
             <button type="button" class="button button-secondary" id="koyori-ai-test-connection">测试连接</button>
             <span id="koyori-ai-single-status" aria-live="polite"></span>
@@ -3576,7 +3572,18 @@ $prefix = 'iro_options';
             const endpoint=()=>value('chatgpt_profile_endpoint');
             const token=()=>value('chatgpt_profile_access_token');
             const keyInput=field('chatgpt_profile_access_token');
-            if(keyInput){keyInput.type='password';keyInput.autocomplete='new-password';}
+            if(keyInput){
+              const keySaved=root.dataset.keySaved==='1';
+              keyInput.type='password';
+              keyInput.autocomplete='new-password';
+              keyInput.placeholder=keySaved?'••••••••••••':'请输入 API Key';
+              const hideKey=()=>{keyInput.type='password'};
+              const showKey=()=>{if(keyInput.value)keyInput.type='text'};
+              keyInput.addEventListener('mousedown',showKey);
+              keyInput.addEventListener('mouseup',hideKey);
+              keyInput.addEventListener('mouseleave',hideKey);
+              keyInput.addEventListener('blur',hideKey);
+            }
             const model=()=>value('chatgpt_profile_model');
             const reasoning=()=>value('chatgpt_profile_reasoning_effort');
             const timeout=()=>value('chatgpt_profile_timeout')||'30';
