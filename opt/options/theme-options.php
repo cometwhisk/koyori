@@ -3459,7 +3459,7 @@ $prefix = 'iro_options';
     if ($token === '') {
       $token = trim((string)($current['access_token'] ?? ($saved_options['chatgpt_access_token'] ?? '')));
     }
-    $model = trim((string)($data['chatgpt_profile_model'] ?? ($current['model'] ?? 'gpt-4o-mini')));
+    $model = trim((string)($data['chatgpt_profile_model'] ?? ($current['model'] ?? ($saved_options['chatgpt_model'] ?? ''))));
     $data['chatgpt_profiles'] = array(array(
       'name' => sanitize_text_field($model !== '' ? $model : (string)($current['name'] ?? '当前配置')),
       'endpoint' => esc_url_raw((string)($data['chatgpt_profile_endpoint'] ?? ($current['endpoint'] ?? ''))),
@@ -3477,7 +3477,7 @@ $prefix = 'iro_options';
   $chatgpt_profiles = is_array($chatgpt_saved_options) ? ($chatgpt_saved_options['chatgpt_profiles'] ?? array()) : array();
   $chatgpt_profile = is_array($chatgpt_profiles[0] ?? null) ? $chatgpt_profiles[0] : array();
   $chatgpt_profile_endpoint = trim((string)($chatgpt_profile['endpoint'] ?? ($chatgpt_saved_options['chatgpt_endpoint'] ?? '')));
-  $chatgpt_profile_model = trim((string)($chatgpt_profile['model'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? 'gpt-4o-mini')));
+  $chatgpt_profile_model = trim((string)($chatgpt_profile['model'] ?? ($chatgpt_saved_options['chatgpt_model'] ?? '')));
   $chatgpt_profile_key = (string)($chatgpt_profile['access_token'] ?? ($chatgpt_saved_options['chatgpt_access_token'] ?? ''));
   $chatgpt_profile_reasoning = trim((string)($chatgpt_profile['reasoning_effort'] ?? ''));
   $chatgpt_profile_timeout = max(5, min(120, (int)($chatgpt_profile['timeout'] ?? 30)));
@@ -3523,14 +3523,9 @@ $prefix = 'iro_options';
         'id' => 'chatgpt_profile_reasoning_effort',
         'type' => 'select',
         'title' => __('推理级别','sakurairo_csf'),
-        'options' => array(
-          '' => __('跟随模型默认值','sakurairo_csf'),
-          'low' => 'Low',
-          'medium' => 'Medium',
-          'high' => 'High',
-        ),
+        'options' => $chatgpt_profile_reasoning !== '' ? array($chatgpt_profile_reasoning => ucfirst($chatgpt_profile_reasoning)) : array('' => ''),
         'default' => $chatgpt_profile_reasoning,
-        'desc' => __('不确定接口是否支持时请选择“跟随模型默认值”。','sakurairo_csf'),
+        'desc' => __('点击“获取推理级别”后，从接口和模型识别出的列表中选择。','sakurairo_csf'),
       ),
       array(
         'id' => 'chatgpt_profile_timeout',
