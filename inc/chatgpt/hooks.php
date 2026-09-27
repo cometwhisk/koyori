@@ -208,6 +208,39 @@ namespace IROChatGPT {
 
     add_action('wp_ajax_koyori_switch_chatgpt_profile', __NAMESPACE__ . '\\switch_chatgpt_profile');
 
+    function delete_chatgpt_profile()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+        check_ajax_referer('koyori_delete_chatgpt_profile', 'nonce');
+        $index = filter_var(wp_unslash($_POST['profile'] ?? ''), FILTER_VALIDATE_INT);
+        $options = get_option('iro_options', []);
+        $profiles = is_array($options) ? ($options['chatgpt_profiles'] ?? []) : [];
+        $active = is_array($options) ? (int)($options['chatgpt_active_profile'] ?? 0) : 0;
+        if ($index === false || !is_array($profiles) || !array_key_exists($index, $profiles)) {
+            wp_send_json_error(['message' => '配置不存在。'], 404);
+        }
+        if ($active === (int)$index) {
+            wp_send_json_error(['message' => '当前使用配置不能直接删除，请先切换到其他配置。'], 409);
+        }
+        array_splice($profiles, (int)$index, 1);
+        $options['chatgpt_profiles'] = array_values($profiles);
+        if ($profiles && $active > (int)$index) {
+            $active--;
+        }
+        $options['chatgpt_active_profile'] = $profiles ? max(0, min($active, count($profiles) - 1)) : 0;
+        update_option('iro_options', $options);
+        $saved_options = get_option('iro_options', []);
+        $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? []) : [];
+        if (count((array)$saved_profiles) !== count($profiles)) {
+            wp_send_json_error(['message' => '配置删除未成功，请重试。'], 500);
+        }
+        wp_send_json_success(['active_profile' => (int)($saved_options['chatgpt_active_profile'] ?? 0)]);
+    }
+
+    add_action('wp_ajax_koyori_delete_chatgpt_profile', __NAMESPACE__ . '\\delete_chatgpt_profile');
+
     function save_chatgpt_profile()
     {
         if (!current_user_can('manage_options')) {
