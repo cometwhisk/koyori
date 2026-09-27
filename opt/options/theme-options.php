@@ -3545,6 +3545,7 @@ $prefix = 'iro_options';
         'function' => function () {
           $test_nonce = wp_create_nonce('koyori_test_chatgpt_connection');
           $models_nonce = wp_create_nonce('koyori_fetch_chatgpt_models');
+          $reasoning_nonce = wp_create_nonce('koyori_fetch_chatgpt_reasoning_levels');
           $ajax_url = admin_url('admin-ajax.php');
           $saved_options = get_option('iro_options', array());
           $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? array()) : array();
@@ -3553,6 +3554,7 @@ $prefix = 'iro_options';
           ?>
           <div class="koyori-ai-single-actions" data-key-saved="<?= $saved_key !== '' ? '1' : '0' ?>">
             <button type="button" class="button" id="koyori-ai-fetch-models">获取模型列表</button>
+            <button type="button" class="button" id="koyori-ai-fetch-reasoning">获取推理级别</button>
             <button type="button" class="button button-secondary" id="koyori-ai-test-connection">测试连接</button>
             <span id="koyori-ai-single-status" aria-live="polite"></span>
           </div>
@@ -3564,6 +3566,7 @@ $prefix = 'iro_options';
             const ajaxUrl='<?= esc_js($ajax_url) ?>';
             const testNonce='<?= esc_js($test_nonce) ?>';
             const modelsNonce='<?= esc_js($models_nonce) ?>';
+            const reasoningNonce='<?= esc_js($reasoning_nonce) ?>';
             const root=document.querySelector('.koyori-ai-single-actions');
             if(!root||root.dataset.koyoriReady)return;
             root.dataset.koyoriReady='1';
@@ -3588,6 +3591,18 @@ $prefix = 'iro_options';
                 if(select){const selected=select.value;select.innerHTML='<option value="">请选择模型</option>';data.data.models.forEach(id=>{const option=document.createElement('option');option.value=id;option.textContent=id;select.appendChild(option)});if(data.data.models.includes(selected))select.value=selected}
                 status('已获取 '+data.data.count+' 个模型，请选择后保存。',true);
               }).catch(()=>status('网络请求失败，请稍后重试。',false)).finally(()=>{fetchButton.disabled=false});
+            });
+            const reasoningButton=document.querySelector('#koyori-ai-fetch-reasoning');
+            if(reasoningButton)reasoningButton.addEventListener('click',()=>{
+              if(!endpoint()||!model()){status('请先填写接口地址并选择模型。',false);return}
+              reasoningButton.disabled=true;status('获取推理级别中…',true);
+              const body=new URLSearchParams({action:'koyori_fetch_chatgpt_reasoning_levels',nonce:reasoningNonce,endpoint:endpoint(),model:model()});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{
+                if(!data.success){status(data.data?.message||'获取推理级别失败。',false);return}
+                const select=field('chatgpt_profile_reasoning_effort');
+                if(select){const selected=select.value;select.innerHTML='<option value="">跟随模型默认值</option>';data.data.levels.filter(level=>level).forEach(level=>{const option=document.createElement('option');option.value=level;option.textContent=level.charAt(0).toUpperCase()+level.slice(1);select.appendChild(option)});if(data.data.levels.includes(selected))select.value=selected}
+                status(data.data.message||'推理级别已更新。',true);
+              }).catch(()=>status('网络请求失败，请稍后重试。',false)).finally(()=>{reasoningButton.disabled=false});
             });
             const testButton=document.querySelector('#koyori-ai-test-connection');
             if(testButton)testButton.addEventListener('click',()=>{

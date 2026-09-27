@@ -182,6 +182,31 @@ namespace IROChatGPT {
 
     add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
 
+    function fetch_chatgpt_reasoning_levels()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+        check_ajax_referer('koyori_fetch_chatgpt_reasoning_levels', 'nonce');
+        $endpoint = strtolower(rtrim(trim((string) wp_unslash($_POST['endpoint'] ?? '')), '/'));
+        $model = strtolower(trim((string) wp_unslash($_POST['model'] ?? '')));
+        if ($endpoint === '' || $model === '') {
+            wp_send_json_error(['message' => '请先填写接口地址并选择模型。'], 400);
+        }
+
+        $levels = [''];
+        $reason = '未识别到明确的推理级别能力，仅使用模型默认值。';
+        $gemini = str_contains($endpoint, 'generativelanguage.googleapis.com') || str_contains($model, 'gemini-2.5') || str_contains($model, 'gemini-3');
+        $openai_reasoning = str_contains($endpoint, 'api.openai.com') || preg_match('/^(o[1-9]|gpt-5(?:[.-]|$))/', $model);
+        if ($gemini || $openai_reasoning) {
+            $levels = ['', 'low', 'medium', 'high'];
+            $reason = '已根据接口地址和模型 ID 识别可用级别。';
+        }
+        wp_send_json_success(['levels' => $levels, 'message' => $reason]);
+    }
+
+    add_action('wp_ajax_koyori_fetch_chatgpt_reasoning_levels', __NAMESPACE__ . '\\fetch_chatgpt_reasoning_levels');
+
     function fetch_chatgpt_models()
     {
         if (!current_user_can('manage_options')) {
