@@ -3661,7 +3661,27 @@ $prefix = 'iro_options';
             },true);
             const observer=new MutationObserver(()=>setTimeout(refresh,0));
             observer.observe(wrapper,{childList:true,subtree:true});
-            const add=wrapper.parentElement.querySelector('.csf-repeater-add');if(add)add.addEventListener('click',()=>setTimeout(refresh,80));
+            const add=wrapper.parentElement.querySelector('.csf-repeater-add');
+            if(add){
+              add.addEventListener('click',e=>{
+                if(add.dataset.koyoriAdding==='1'){
+                  e.preventDefault();
+                  e.stopImmediatePropagation();
+                  return;
+                }
+                add.dataset.koyoriAdding='1';
+                setTimeout(()=>{
+                  add.dataset.koyoriAdding='0';
+                  refresh();
+                  const items=wrapper.querySelectorAll('.csf-repeater-item:not(.csf-repeater-hidden)');
+                  const item=items[items.length-1];
+                  if(item){
+                    item.classList.add('is-open');
+                    item.scrollIntoView({block:'nearest',behavior:'smooth'});
+                  }
+                },120);
+              },true);
+            }
             refresh();
           }());
           </script>
