@@ -3516,12 +3516,26 @@ $prefix = 'iro_options';
             'id' => 'model',
             'type' => 'text',
             'title' => __('模型','sakurairo_csf'),
+            'desc' => __('填写模型 ID，例如 gemini-3.5-flash；也可以通过“获取模型列表”选择。','sakurairo_csf'),
+          ),
+          array(
+            'id' => 'reasoning_effort',
+            'type' => 'select',
+            'title' => __('推理级别','sakurairo_csf'),
+            'options' => array(
+              '' => __('跟随模型默认值','sakurairo_csf'),
+              'low' => 'Low',
+              'medium' => 'Medium',
+              'high' => 'High',
+            ),
+            'default' => '',
+            'desc' => __('Gemini 3 等思考模型可选择 Low；不支持此参数的服务会忽略它。','sakurairo_csf'),
           ),
           array(
             'id' => 'access_token',
             'type' => 'text',
             'title' => __('API 密钥','sakurairo_csf'),
-            'desc' => __('密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
+            'desc' => __('已保存密钥时留空表示保持不变。密钥只会由服务器发送到上面填写的接口。','sakurairo_csf'),
           ),
         ),
       ),
@@ -3529,50 +3543,74 @@ $prefix = 'iro_options';
       array(
         'type' => 'callback',
         'function' => function () {
+          $test_nonce = wp_create_nonce('koyori_test_chatgpt_connection');
+          $models_nonce = wp_create_nonce('koyori_fetch_chatgpt_models');
+          $ajax_url = admin_url('admin-ajax.php');
           ?>
-          <div class="koyori-ai-connection-test">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <button type="button" class="button" id="koyori-ai-test-connection">测试当前配置</button>
-              <span id="koyori-ai-test-result" aria-live="polite"></span>
-            </div>
+          <div class="koyori-ai-panel-note">
+            <strong>连接管理</strong>
+            <span>配置卡片默认收起；每条配置都可以单独测试或获取模型列表。API Key 仅显示为密码字段。</span>
           </div>
+          <div id="koyori-ai-global-status" class="koyori-ai-global-status" aria-live="polite"></div>
+          <style>
+            .koyori-ai-panel-note{display:flex;gap:10px;align-items:baseline;padding:12px 14px;margin:4px 0 14px;border-left:3px solid #2271b1;background:#f6f7f7;color:#50575e}.koyori-ai-panel-note strong{color:#1d2327;white-space:nowrap}.koyori-ai-global-status{min-height:20px;margin:8px 0;color:#50575e}.koyori-ai-profile-card{border:1px solid #dcdcde;border-radius:8px;background:#fff;margin:10px 0;overflow:hidden}.koyori-ai-profile-summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}.koyori-ai-profile-summary:hover{background:#f6f7f7}.koyori-ai-profile-chevron{color:#646970;transition:transform .18s ease}.koyori-ai-profile-card.is-open .koyori-ai-profile-chevron{transform:rotate(90deg)}.koyori-ai-profile-title{font-weight:600;color:#1d2327;min-width:160px}.koyori-ai-profile-meta{color:#646970;font-size:12px;flex:1}.koyori-ai-profile-current{display:none;padding:3px 7px;border-radius:10px;background:#e7f5ea;color:#116329;font-size:11px}.koyori-ai-profile-card.is-current .koyori-ai-profile-current{display:inline-block}.koyori-ai-profile-actions{display:flex;gap:6px;align-items:center}.koyori-ai-profile-actions button{border:0;background:transparent;color:#2271b1;cursor:pointer;padding:3px 5px}.koyori-ai-profile-actions button:hover{text-decoration:underline}.koyori-ai-profile-actions .koyori-ai-profile-delete{color:#b32d2e}.koyori-ai-profile-status{font-size:12px;color:#646970;margin-left:4px}.koyori-ai-profile-card.is-open .csf-repeater-content{display:block!important}.koyori-ai-profile-card:not(.is-open) .csf-repeater-content{display:none!important}.koyori-ai-profile-card .csf-repeater-content{padding:8px 14px 14px;border-top:1px solid #f0f0f1}.koyori-ai-profile-card .csf-repeater-helper{display:none}.koyori-ai-model-list{margin-top:6px;max-width:360px}.koyori-ai-model-list select{max-width:100%}
+            @media(max-width:782px){.koyori-ai-profile-summary{align-items:flex-start;flex-wrap:wrap}.koyori-ai-profile-title{min-width:120px}.koyori-ai-profile-meta{flex-basis:100%;order:3}.koyori-ai-profile-actions{margin-left:auto}}
+          </style>
           <script>
-          (function () {
-            const button = document.getElementById('koyori-ai-test-connection');
-            const result = document.getElementById('koyori-ai-test-result');
-            if (!button || !result || button.dataset.bound) return;
-            button.dataset.bound = '1';
-            button.addEventListener('click', function () {
-              const index = document.querySelector('select[name="iro_options[chatgpt_active_profile]"]')?.value || '0';
-              const field = (key) => document.querySelector('input[name="iro_options[chatgpt_profiles][' + index + '][' + key + ']"]')?.value || '';
-              const endpoint = field('endpoint');
-              const token = field('access_token');
-              const model = field('model');
-              if (!endpoint.trim() || !token.trim() || !model.trim()) {
-                result.textContent = '请先填写当前配置的接口地址、API 密钥和模型。';
-                return;
-              }
-              button.disabled = true;
-              result.textContent = '正在测试…';
-              const body = new URLSearchParams({
-                action: 'koyori_test_chatgpt_connection',
-                nonce: '<?= esc_js(wp_create_nonce('koyori_test_chatgpt_connection')) ?>',
-                endpoint: endpoint,
-                token: token,
-                model: model
+          (function(){
+            const ajaxUrl='<?= esc_js($ajax_url) ?>';
+            const testNonce='<?= esc_js($test_nonce) ?>';
+            const modelsNonce='<?= esc_js($models_nonce) ?>';
+            const wrapper=document.querySelector('.csf-repeater-wrapper[data-field-id="[chatgpt_profiles]"]');
+            const active=document.querySelector('select[name="iro_options[chatgpt_active_profile]"]');
+            if(!wrapper||wrapper.dataset.koyoriReady)return;
+            wrapper.dataset.koyoriReady='1';
+            const field=key=>item=>item.querySelector('[name$="[chatgpt_profiles]['+item.dataset.koyoriIndex+']['+key+']"]')||item.querySelector('[name*="[chatgpt_profiles]"][name$="['+key+']"]');
+            const value=(item,key)=>{const el=field(key)(item);return el?el.value.trim():''};
+            const status=(item,text,ok)=>{let el=item.querySelector('.koyori-ai-profile-status');if(!el){el=document.createElement('span');el.className='koyori-ai-profile-status';item.querySelector('.koyori-ai-profile-actions').appendChild(el)}el.textContent=text;el.style.color=ok?'#116329':'#b32d2e'};
+            const endpoint=item=>value(item,'endpoint');
+            const token=item=>value(item,'access_token');
+            const model=item=>value(item,'model');
+            function refresh(){
+              let profileIndex=0;
+              wrapper.querySelectorAll('.csf-repeater-item').forEach(item=>{
+                if(item.classList.contains('csf-repeater-hidden'))return;
+                const index=profileIndex++;
+                item.dataset.koyoriIndex=index;
+                item.classList.add('koyori-ai-profile-card');
+                let summary=item.querySelector('.koyori-ai-profile-summary');
+                if(!summary){
+                  summary=document.createElement('div');summary.className='koyori-ai-profile-summary';
+                  summary.innerHTML='<span class="koyori-ai-profile-chevron">▶</span><span class="koyori-ai-profile-title"></span><span class="koyori-ai-profile-meta"></span><span class="koyori-ai-profile-current">当前使用</span><span class="koyori-ai-profile-actions"><button type="button" class="koyori-ai-profile-edit">编辑</button><button type="button" class="koyori-ai-profile-test">测试</button><button type="button" class="koyori-ai-profile-models">获取模型</button></span>';
+                  item.insertBefore(summary,item.firstChild);
+                  summary.addEventListener('click',e=>{if(e.target.closest('button'))return;item.classList.toggle('is-open')});
+                  summary.querySelector('.koyori-ai-profile-edit').addEventListener('click',()=>item.classList.add('is-open'));
+                  summary.querySelector('.koyori-ai-profile-test').addEventListener('click',()=>test(item));
+                  summary.querySelector('.koyori-ai-profile-models').addEventListener('click',()=>fetchModels(item));
+                }
+                const name=value(item,'name')||model(item)||'未命名配置';
+                const keyInput=field('access_token')(item);if(keyInput)keyInput.type='password';
+                summary.querySelector('.koyori-ai-profile-title').textContent=name;
+                summary.querySelector('.koyori-ai-profile-meta').textContent=(model(item)||'未设置模型')+' · '+(endpoint(item)||'未设置接口');
+                item.classList.toggle('is-current',active&&String(active.value)===String(index));
               });
-              fetch('<?= esc_url(admin_url('admin-ajax.php')) ?>', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                body: body.toString()
-              }).then(response => response.json()).then(data => {
-                result.textContent = data.success ? '连接成功。' : (data.data?.message || '连接失败。');
-              }).catch(() => {
-                result.textContent = '连接失败，请检查接口地址和网络。';
-              }).finally(() => {
-                button.disabled = false;
-              });
-            });
+            }
+            function test(item){
+              if(!endpoint(item)||!token(item)||!model(item)){status(item,'请先补全接口、Key 和模型',false);item.classList.add('is-open');return}
+              const button=item.querySelector('.koyori-ai-profile-test');button.disabled=true;status(item,'测试中…',true);
+              const body=new URLSearchParams({action:'koyori_test_chatgpt_connection',nonce:testNonce,endpoint:endpoint(item),token:token(item),model:model(item),reasoning_effort:value(item,'reasoning_effort')});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{status(item,data.success?(data.data?.message||'连接成功'): (data.data?.message||'连接失败'),!!data.success)}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
+            }
+            function fetchModels(item){
+              if(!endpoint(item)||!token(item)){status(item,'请先填写接口和 API Key',false);item.classList.add('is-open');return}
+              const button=item.querySelector('.koyori-ai-profile-models');button.disabled=true;status(item,'获取模型中…',true);
+              const body=new URLSearchParams({action:'koyori_fetch_chatgpt_models',nonce:modelsNonce,endpoint:endpoint(item),token:token(item)});
+              fetch(ajaxUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body}).then(r=>r.json()).then(data=>{if(!data.success){status(item,data.data?.message||'获取模型失败',false);return}const input=field('model')(item);if(input){let list=item.querySelector('datalist');if(!list){list=document.createElement('datalist');list.id='koyori-ai-models-'+item.dataset.koyoriIndex;item.appendChild(list);input.setAttribute('list',list.id)}list.innerHTML='';data.data.models.forEach(id=>{const o=document.createElement('option');o.value=id;list.appendChild(o)});status(item,'已获取 '+data.data.count+' 个模型',true);item.classList.add('is-open')}}).catch(()=>status(item,'网络请求失败，请稍后重试。',false)).finally(()=>{button.disabled=false});
+            }
+            if(active)active.addEventListener('change',refresh);
+            wrapper.addEventListener('click',e=>{const remove=e.target.closest('.csf-repeater-remove');if(!remove)return;const item=remove.closest('.csf-repeater-item');if(item&&active&&String(active.value)===String(item.dataset.koyoriIndex)){e.preventDefault();e.stopImmediatePropagation();alert('当前使用配置不能直接移除，请先切换到其他配置。')}});
+            const add=wrapper.parentElement.querySelector('.csf-repeater-add');if(add)add.addEventListener('click',()=>setTimeout(refresh,80));
+            refresh();
           }());
           </script>
           <?php

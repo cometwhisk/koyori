@@ -85,6 +85,26 @@ namespace IROChatGPT {
         return rtrim($base_url, '/') . '/chat/completions';
     }
 
+    function chatgpt_provider_error_message($status, $decoded = [])
+    {
+        if ((int) $status === 401 || (int) $status === 403) {
+            return '认证失败，请检查 API Key。';
+        }
+        if ((int) $status === 404) {
+            return '接口或模型不存在，请检查基础地址和模型 ID。';
+        }
+        if ((int) $status === 429) {
+            return '请求过于频繁，已触发服务商速率限制。';
+        }
+        if ((int) $status >= 500) {
+            return '服务商暂时不可用（HTTP ' . (int) $status . '）。';
+        }
+        if (is_array($decoded) && !empty($decoded['error'])) {
+            return '服务商返回错误，请检查模型和请求参数。';
+        }
+        return '接口返回异常（HTTP ' . (int) $status . '）。';
+    }
+
     function test_chatgpt_connection()
     {
         if (!current_user_can('manage_options')) {
@@ -96,6 +116,7 @@ namespace IROChatGPT {
         $endpoint = chatgpt_completion_endpoint(wp_unslash($_POST['endpoint'] ?? ''));
         $token = trim((string) wp_unslash($_POST['token'] ?? ''));
         $model = trim((string) wp_unslash($_POST['model'] ?? ''));
+        $reasoning_effort = trim((string) wp_unslash($_POST['reasoning_effort'] ?? ''));
 
         if (!$endpoint || !$token || !$model || !wp_http_validate_url($endpoint)) {
             wp_send_json_error(['message' => '接口地址、API Key 或模型无效。'], 400);
@@ -107,29 +128,81 @@ namespace IROChatGPT {
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
-            'body' => wp_json_encode([
+            'body' => wp_json_encode(array_filter([
                 'model' => $model,
                 'messages' => [
                     ['role' => 'user', 'content' => 'Reply with OK.'],
                 ],
                 'max_tokens' => 64,
-            ], JSON_UNESCAPED_UNICODE),
+                'reasoning_effort' => in_array($reasoning_effort, ['low', 'medium', 'high'], true) ? $reasoning_effort : null,
+            ], static function ($value) {
+                return $value !== null;
+            }), JSON_UNESCAPED_UNICODE),
         ]);
 
         if (is_wp_error($response)) {
-            wp_send_json_error(['message' => '请求失败，请检查接口地址和服务器网络。'], 502);
+            wp_send_json_error(['message' => '网络请求失败，请稍后重试。'], 502);
         }
 
         $status = wp_remote_retrieve_response_code($response);
         $decoded = json_decode(wp_remote_retrieve_body($response), true);
-        if ($status < 200 || $status >= 300 || empty($decoded['choices'][0]['message']['content'])) {
-            wp_send_json_error(['message' => '接口返回异常，请检查 API Key 和模型名称。'], 502);
+        $content = $decoded['choices'][0]['message']['content'] ?? '';
+        if ($status < 200 || $status >= 300 || !is_string($content) || trim($content) === '') {
+            wp_send_json_error([
+                'message' => chatgpt_provider_error_message($status, $decoded),
+                'status' => (int) $status,
+            ], $status >= 400 ? $status : 502);
         }
 
-        wp_send_json_success(['message' => '连接成功。']);
+        wp_send_json_success(['message' => '连接成功（HTTP ' . (int) $status . '）。', 'status' => (int) $status]);
     }
 
     add_action('wp_ajax_koyori_test_chatgpt_connection', __NAMESPACE__ . '\\test_chatgpt_connection');
+
+    function fetch_chatgpt_models()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => '无权执行此操作。'], 403);
+        }
+
+        check_ajax_referer('koyori_fetch_chatgpt_models', 'nonce');
+        $base_url = rtrim(trim((string) wp_unslash($_POST['endpoint'] ?? '')), '/');
+        $token = trim((string) wp_unslash($_POST['token'] ?? ''));
+        if (!$base_url || !$token || !wp_http_validate_url($base_url)) {
+            wp_send_json_error(['message' => '请先填写有效的基础地址和 API Key。'], 400);
+        }
+
+        $response = wp_remote_get($base_url . '/models', [
+            'timeout' => 20,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+            ],
+        ]);
+        if (is_wp_error($response)) {
+            wp_send_json_error(['message' => '获取模型列表失败，请稍后重试。'], 502);
+        }
+
+        $status = wp_remote_retrieve_response_code($response);
+        $decoded = json_decode(wp_remote_retrieve_body($response), true);
+        if ($status < 200 || $status >= 300 || !is_array($decoded)) {
+            wp_send_json_error(['message' => chatgpt_provider_error_message($status, $decoded), 'status' => (int) $status], $status >= 400 ? $status : 502);
+        }
+
+        $models = [];
+        foreach ((array) ($decoded['data'] ?? []) as $model) {
+            $id = is_array($model) ? trim((string) ($model['id'] ?? '')) : '';
+            if ($id !== '') {
+                $models[] = $id;
+            }
+        }
+        sort($models, SORT_NATURAL | SORT_FLAG_CASE);
+        if (!$models) {
+            wp_send_json_error(['message' => '接口没有返回可用模型列表。'], 502);
+        }
+        wp_send_json_success(['models' => array_values(array_unique($models)), 'count' => count($models)]);
+    }
+
+    add_action('wp_ajax_koyori_fetch_chatgpt_models', __NAMESPACE__ . '\\fetch_chatgpt_models');
 
     function apply_chatgpt_hook()
     {
@@ -184,6 +257,7 @@ namespace IROChatGPT {
         $chatGPT_access_token = (string)($config['access_token'] ?? '');
         $chatGPT_prompt_init = iro_opt('chatgpt_init_prompt', DEFAULT_INIT_PROMPT);
         $chatGPT_model = (string)($config['model'] ?? DEFAULT_MODEL);
+        $reasoning_effort = trim((string)($config['reasoning_effort'] ?? ''));
 
         if (empty($chatgpt_endpoint) || empty($chatGPT_access_token) || empty($chatGPT_prompt_init) || empty($chatGPT_model)) {
             throw new Exception("Missing required ChatGPT configuration.");
@@ -213,6 +287,9 @@ namespace IROChatGPT {
                 ],
             ],
         ];
+        if (in_array($reasoning_effort, ['low', 'medium', 'high'], true)) {
+            $payload['reasoning_effort'] = $reasoning_effort;
+        }
 
         // === 替换开始：使用 cURL 发出请求 ===
         $ch = curl_init();
