@@ -3455,7 +3455,7 @@ $prefix = 'iro_options';
     $saved_options = get_option('iro_options', array());
     $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? array()) : array();
     $current = is_array($saved_profiles[0] ?? null) ? $saved_profiles[0] : array();
-    $token = trim((string)($data['chatgpt_profile_access_token'] ?? ''));
+    $token = trim((string)($data['chatgpt_access_token'] ?? ''));
     if ($token === '') {
       $token = trim((string)($current['access_token'] ?? ($saved_options['chatgpt_access_token'] ?? '')));
     }
@@ -3469,7 +3469,7 @@ $prefix = 'iro_options';
       'access_token' => $token,
     ));
     $data['chatgpt_active_profile'] = 0;
-    $data['chatgpt_profile_access_token'] = $token;
+    $data['chatgpt_access_token'] = $token;
     return $data;
   });
 
@@ -3505,7 +3505,7 @@ $prefix = 'iro_options';
         'desc' => __('系统会自动补充 /chat/completions。','sakurairo_csf'),
       ),
       array(
-        'id' => 'chatgpt_profile_access_token',
+        'id' => 'chatgpt_access_token',
         'type' => 'text',
         'title' => __('API 密钥','sakurairo_csf'),
         'default' => $chatgpt_profile_key,
@@ -3571,8 +3571,8 @@ $prefix = 'iro_options';
             const value=id=>{const el=field(id);return el?el.value.trim():''};
             const status=(text,ok)=>{const el=document.querySelector('#koyori-ai-single-status');if(el){el.textContent=text;el.className=ok?'is-ok':'is-error'}};
             const endpoint=()=>value('chatgpt_profile_endpoint');
-            const token=()=>value('chatgpt_profile_access_token');
-            const keyInput=field('chatgpt_profile_access_token');
+            const token=()=>value('chatgpt_access_token');
+            const keyInput=field('chatgpt_access_token');
             if(keyInput){keyInput.type='text';keyInput.autocomplete='off';}
             const model=()=>value('chatgpt_profile_model');
             const reasoning=()=>value('chatgpt_profile_reasoning_effort');
