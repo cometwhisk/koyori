@@ -115,7 +115,6 @@ function koyori_render_rss_preview_stylesheet(): void
 
                     <section class="rss-intro">
                         <div>
-                            <p class="rss-kicker">LATEST NOTES</p>
                             <h2>最近更新</h2>
                         </div>
                         <p class="rss-count"><xsl:value-of select="count(rss/channel/item)" /> 篇文章</p>
