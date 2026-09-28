@@ -3417,7 +3417,7 @@ $prefix = 'iro_options';
       $private = array();
     }
     if (array_key_exists('nikki_client_id', $data) || array_key_exists('nikki_token', $data) || array_key_exists('nikki_openid', $data)) {
-      $client_id = trim((string)($data['nikki_client_id'] ?? ($private['client_id'] ?? '1106')));
+      $client_id = trim((string)($data['nikki_client_id'] ?? ($private['client_id'] ?? '')));
       $token_value = trim((string)($data['nikki_token'] ?? ($private['token'] ?? '')));
       $openid_value = trim((string)($data['nikki_openid'] ?? ($private['openid'] ?? '')));
       if (preg_match('/^[0-9]+$/', $client_id) && $token_value !== '' && $openid_value !== '') {
