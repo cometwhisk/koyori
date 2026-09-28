@@ -2680,7 +2680,7 @@ $prefix = 'iro_options';
   ) );
 
   $nikki_private = get_option('koyori_nikki_private', array());
-  $nikki_client_id_default = is_array($nikki_private) ? (string)($nikki_private['client_id'] ?? '1106') : '1106';
+  $nikki_client_id_default = '';
   $nikki_token_default = is_array($nikki_private) ? (string)($nikki_private['token'] ?? '') : '';
   $nikki_openid_default = is_array($nikki_private) ? (string)($nikki_private['openid'] ?? '') : '';
 
@@ -2857,7 +2857,6 @@ $prefix = 'iro_options';
         'type' => 'text',
         'title' => __('client_id','sakurairo_csf'),
         'default' => $nikki_client_id_default,
-        'desc' => __('通常填写 1106。','sakurairo_csf'),
       ),
       array(
         'id' => 'nikki_token',
