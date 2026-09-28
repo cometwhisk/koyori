@@ -553,7 +553,9 @@ animation: slow-rotate 10s linear infinite;
 }
 
 .post-title {
-    bottom: 6%;
+    top: 86%;
+    bottom: auto;
+    transform: translateY(-50%);
     max-width: 70%;
 }
 
