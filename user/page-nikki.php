@@ -24,14 +24,12 @@ $nikki = array(
     'crown_peak' => '8 / 8 层',
 );
 
-$nikki_saved = iro_opt('nikki_profile_data', array());
-if (!is_array($nikki_saved)) {
-    $nikki_saved = array();
-}
-$nikki['nickname'] = (string) ($nikki_saved['nickname'] ?? $nikki['nickname']);
-$nikki['uid'] = (string) ($nikki_saved['uid'] ?? $nikki['uid']);
-$nikki['avatar'] = (string) ($nikki_saved['avatar'] ?? $nikki['avatar']);
-$nikki['level'] = (string) ($nikki_saved['level'] ?? $nikki['level']);
+$nikki_private = get_option('koyori_nikki_private', array());
+$nikki_saved = is_array($nikki_private) && is_array($nikki_private['profile_data'] ?? null) ? $nikki_private['profile_data'] : array();
+$nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['nickname'] : $nikki['nickname'];
+$nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];
+$nikki['avatar'] = !empty($nikki_saved['avatar']) ? (string) $nikki_saved['avatar'] : $nikki['avatar'];
+$nikki['level'] = !empty($nikki_saved['level']) ? (string) $nikki_saved['level'] : $nikki['level'];
 
 $nikki_stats = array(
     array('icon' => 'fa-calendar-days', 'label' => '登录天数', 'value' => $nikki['login_days'] . ' 天'),

@@ -6,20 +6,25 @@
 if (!function_exists('koyori_nikki_parse_bundle')) {
     function koyori_nikki_parse_bundle($bundle) {
         $bundle = trim((string) $bundle);
-        if (strpos($bundle, 'NIKKI1.') === 0) {
-            $encoded = strtr(substr($bundle, 7), '-_', '+/');
-            $encoded .= str_repeat('=', (4 - strlen($encoded) % 4) % 4);
-            $decoded = base64_decode($encoded, true);
-            $bundle = $decoded !== false ? $decoded : '';
+        if (strlen($bundle) < 16 || strlen($bundle) > 20000 || strpos($bundle, 'NIKKI1.') !== 0) {
+            return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
         }
-        $data = json_decode($bundle, true);
+        $encoded = strtr(substr($bundle, 7), '-_', '+/');
+        $encoded .= str_repeat('=', (4 - strlen($encoded) % 4) % 4);
+        $decoded = base64_decode($encoded, true);
+        $data = $decoded === false ? null : json_decode($decoded, true);
         if (!is_array($data)) {
             return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
         }
+        foreach (array('cookie', 'token', 'openid') as $key) {
+            if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '' || strlen($data[$key]) > 12000) {
+                return new WP_Error('nikki_invalid_bundle', '登录态文本缺少必要字段。');
+            }
+        }
         return array(
-            'cookie' => trim((string) ($data['cookie'] ?? '')),
-            'token' => trim((string) ($data['token'] ?? '')),
-            'openid' => trim((string) ($data['openid'] ?? '')),
+            'cookie' => trim($data['cookie']),
+            'token' => trim($data['token']),
+            'openid' => trim($data['openid']),
         );
     }
 }
@@ -62,25 +67,31 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         if ($status !== 200 || (int) ($payload['code'] ?? -1) !== 0 || empty($role)) {
             return new WP_Error('nikki_auth_failed', '登录态无效或已过期，请更新登录态字段。');
         }
+        foreach (array('uid', 'nickname', 'avatar', 'level') as $key) {
+            if (!isset($role[$key]) || (!is_string($role[$key]) && !is_int($role[$key])) || trim((string) $role[$key]) === '') {
+                return new WP_Error('nikki_invalid_profile', '官方资料返回不完整，未更新现有资料。');
+            }
+        }
 
         $profile = array(
-            'uid' => (string) ($role['uid'] ?? ''),
-            'nickname' => sanitize_text_field($role['nickname'] ?? ''),
-            'avatar' => esc_url_raw($role['avatar'] ?? ''),
-            'level' => (string) ($role['level'] ?? ''),
-            'updated_at' => sanitize_text_field($role['updated_at'] ?? ''),
+            'uid' => sanitize_text_field((string) $role['uid']),
+            'nickname' => sanitize_text_field((string) $role['nickname']),
+            'avatar' => esc_url_raw((string) $role['avatar']),
+            'level' => sanitize_text_field((string) $role['level']),
+            'updated_at' => sanitize_text_field((string) ($role['updated_at'] ?? '')),
             'synced_at' => current_time('mysql'),
         );
-        $options = get_option('iro_options', array());
-        if (!is_array($options)) {
-            $options = array();
+        $private = get_option('koyori_nikki_private', array());
+        if (!is_array($private)) {
+            $private = array();
         }
-        $options['nikki_session_bundle'] = trim((string) $bundle);
-        $options['nikki_cookie'] = $cookie;
-        $options['nikki_token'] = $token;
-        $options['nikki_openid'] = $openid;
-        $options['nikki_profile_data'] = $profile;
-        update_option('iro_options', $options);
+        $private['session_bundle'] = trim((string) $bundle);
+        $private['profile_data'] = $profile;
+        update_option('koyori_nikki_private', $private, false);
+        $saved = get_option('koyori_nikki_private', array());
+        if (!is_array($saved) || $saved['session_bundle'] !== $private['session_bundle'] || ($saved['profile_data']['uid'] ?? '') !== $profile['uid']) {
+            return new WP_Error('nikki_save_failed', '资料写入失败，现有资料未更新。');
+        }
         return $profile;
     }
 }

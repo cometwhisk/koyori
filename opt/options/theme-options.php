@@ -3321,6 +3321,8 @@ $prefix = 'iro_options';
     )
   ) );
 
+  require_once get_template_directory() . '/inc/nikki-sync.php';
+
   add_filter('csf_iro_options_save', function ($data) {
     $saved_options = get_option('iro_options', array());
     $saved_profiles = is_array($saved_options) ? ($saved_options['chatgpt_profiles'] ?? array()) : array();
@@ -3339,6 +3341,20 @@ $prefix = 'iro_options';
     ));
     $data['chatgpt_active_profile'] = 0;
     $data['chatgpt_access_token'] = $token;
+    $private = get_option('koyori_nikki_private', array());
+    if (!is_array($private)) {
+      $private = array();
+    }
+    if (array_key_exists('nikki_session_bundle', $data)) {
+      $bundle = trim((string) $data['nikki_session_bundle']);
+      if ($bundle === '') {
+        unset($private['session_bundle']);
+      } elseif (!is_wp_error(koyori_nikki_parse_bundle($bundle))) {
+        $private['session_bundle'] = $bundle;
+      }
+      update_option('koyori_nikki_private', $private, false);
+    }
+    unset($data['nikki_session_bundle'], $data['nikki_profile_data']);
     return $data;
   });
 
@@ -3350,7 +3366,8 @@ $prefix = 'iro_options';
   $chatgpt_profile_key = (string)($chatgpt_profile['access_token'] ?? ($chatgpt_saved_options['chatgpt_access_token'] ?? ''));
   $chatgpt_profile_timeout = max(5, min(120, (int)($chatgpt_profile['timeout'] ?? 30)));
 
-  require_once get_template_directory() . '/inc/nikki-sync.php';
+  $nikki_private = get_option('koyori_nikki_private', array());
+  $nikki_bundle_default = is_array($nikki_private) ? (string)($nikki_private['session_bundle'] ?? '') : '';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'others',
@@ -3367,6 +3384,7 @@ $prefix = 'iro_options';
         'type' => 'textarea',
         'title' => __('奇想手账登录态','sakurairo_csf'),
         'desc' => __('粘贴生成的 NIKKI1 登录态文本。它包含 Cookie、Token 和 OpenID，Cookie 过期后重新生成并替换这里的内容即可。','sakurairo_csf'),
+        'default' => $nikki_bundle_default,
         'sanitize' => false,
       ),
       array(
