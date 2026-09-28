@@ -110,6 +110,7 @@ a { color: inherit; text-decoration: none; }
 .rss-avatar { display: block; width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background: #f1e6f5; }
 .rss-profile-copy { min-width: 0; }
 .rss-eyebrow, .rss-kicker { margin: 0 0 4px; color: var(--pink); font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+.rss-kicker { color: #17121b; }
 .rss-profile h1 { margin: 0; color: #432d50; font-size: clamp(24px, 4vw, 38px); line-height: 1.15; letter-spacing: -.04em; }
 .rss-description { max-width: 620px; margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 .rss-site-link { flex: 0 0 auto; padding: 10px 17px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--lavender); background: rgba(255,255,255,.42); font-size: 13px; transition: .25s ease; }
