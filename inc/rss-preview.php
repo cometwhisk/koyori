@@ -73,6 +73,11 @@ function koyori_render_rss_preview_stylesheet(): void
             ?: iro_opt('favicon_link')
             ?: get_site_icon_url(160)
     );
+    $desktop_background = esc_url(iro_opt('random_graphs_link', ''));
+    $mobile_background = esc_url(iro_opt('random_graphs_link_mobile', $desktop_background));
+    $background_split = iro_opt('random_graphs_mts') ? '1' : '0';
+    $darkmode_auto = iro_opt('theme_darkmode_auto') ? '1' : '0';
+    $darkmode_strategy = esc_attr(iro_opt('theme_darkmode_strategy', 'time'));
     $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss2'));
 
     $xsl = <<<'XSL'
@@ -89,7 +94,7 @@ function koyori_render_rss_preview_stylesheet(): void
                 <title>__SITE_TITLE__ · RSS</title>
                 <link rel="stylesheet" href="__CSS_URL__" />
             </head>
-            <body>
+            <body data-desktop-background="__DESKTOP_BACKGROUND__" data-mobile-background="__MOBILE_BACKGROUND__" data-background-split="__BACKGROUND_SPLIT__" data-darkmode-auto="__DARKMODE_AUTO__" data-darkmode-strategy="__DARKMODE_STRATEGY__">
                 <div class="rss-orbit orbit-one"></div>
                 <div class="rss-orbit orbit-two"></div>
                 <div class="rss-orbit orbit-three"></div>
@@ -150,6 +155,50 @@ function koyori_render_rss_preview_stylesheet(): void
                         <a href="{rss/channel/atom:link/@href}">订阅 RSS</a>
                     </footer>
                 </main>
+                <script>
+                <![CDATA[
+                (function () {
+                    var body = document.body;
+                    var root = document.documentElement;
+                    var mobileQuery = window.matchMedia('(max-width: 720px)');
+                    var systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                    var hasSplitBackground = body.dataset.backgroundSplit === '1';
+                    var desktopBackground = body.dataset.desktopBackground;
+                    var mobileBackground = body.dataset.mobileBackground || desktopBackground;
+
+                    function setBackground() {
+                        var image = hasSplitBackground && mobileQuery.matches ? mobileBackground : desktopBackground;
+                        if (image) {
+                            root.style.setProperty('--rss-bg-image', 'url("' + image.replace(/"/g, '\\"') + '")');
+                        }
+                    }
+
+                    function isDark() {
+                        var saved = localStorage.getItem('dark');
+                        if (saved === '1') return true;
+                        if (saved === '0') return false;
+                        if (body.dataset.darkmodeAuto !== '1') return false;
+                        if (body.dataset.darkmodeStrategy === 'client') return systemQuery.matches;
+                        if (body.dataset.darkmodeStrategy === 'eien') return true;
+                        var hour = new Date().getHours();
+                        return hour > 21 || hour < 7;
+                    }
+
+                    function setTheme() {
+                        root.dataset.rssTheme = isDark() ? 'dark' : 'light';
+                    }
+
+                    setBackground();
+                    setTheme();
+                    mobileQuery.addEventListener && mobileQuery.addEventListener('change', setBackground);
+                    systemQuery.addEventListener && systemQuery.addEventListener('change', setTheme);
+                    window.addEventListener('storage', function (event) {
+                        if (event.key === 'dark') setTheme();
+                    });
+                    window.setInterval(setTheme, 60000);
+                }());
+                ]]>
+                </script>
             </body>
         </html>
     </xsl:template>
@@ -164,6 +213,11 @@ XSL;
         '__SITE_URL__' => $site_url,
         '__AVATAR__' => $avatar,
         '__CSS_URL__' => $css_url,
+        '__DESKTOP_BACKGROUND__' => $desktop_background,
+        '__MOBILE_BACKGROUND__' => $mobile_background,
+        '__BACKGROUND_SPLIT__' => $background_split,
+        '__DARKMODE_AUTO__' => $darkmode_auto,
+        '__DARKMODE_STRATEGY__' => $darkmode_strategy,
     ));
 
     status_header(200);
