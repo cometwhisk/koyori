@@ -175,21 +175,21 @@ class Captcha
         } elseif (!preg_match('/^(?:(?!199)(?:[1-9]\d?|1\d{2}|0))$/', $captcha)) {
             //匹配非0 ~ 198
             $code = 3;
-            $msg = __("Look like you forgot to enter the captcha.","sakurairo");//请输入正确的验证码!
+            $msg = __("请输入正确的验证码。","sakurairo");
         } elseif ($timestamp < $timeThreshold) {
             $code = 2;
-            $msg =  __("Captcha timeout.","sakurairo");//超时!
+            $msg =  __("验证码已过期。","sakurairo");
         } elseif ($timestamp >= $timeThreshold && $timestamp <= $currentTime) {
             if ($this->verify_captcha($captcha . $timestamp, $id)) {
                 $code = 5;
-                $msg = __("Captcha check passed.","sakurairo");//'验证码正确!'
+                $msg = __("验证码验证通过。","sakurairo");
             } else {
                 $code = 1;
-                $msg = __("Captcha incorrect.","sakurairo");//'验证码错误!'
+                $msg = __("验证码错误。","sakurairo");
             }
         } else {
             $code = 1;
-            $msg = __("An error has occurred.","sakurairo");//'错误!'
+            $msg = __("验证码校验发生错误。","sakurairo");
         }
         return [
             'code' => $code,

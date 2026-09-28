@@ -3175,7 +3175,7 @@ $prefix = 'iro_options';
       array(
         'id' => 'img_upload_max_size',
         'type' => 'slider',
-        'title' => __('Maximum image upload size', 'sakurairo_csf'),
+        'title' => __('图片上传大小上限', 'sakurairo_csf'),
         'step' => '1',
         'min' => '1',
         'max' => '10',
@@ -3826,8 +3826,8 @@ $prefix = 'iro_options';
       array(
         'id' => 'enable_theme_mathjax',
         'type' => 'switcher',
-        'title' => __('Enable Built-in MathJax','sakurairo_csf'),
-        'label' => __('Disable this option if MathJax is provided by other methods.','sakurairo_csf'),
+        'title' => __('启用内置 MathJax','sakurairo_csf'),
+        'label' => __('如果通过其他方式提供 MathJax，请关闭此选项。','sakurairo_csf'),
         'default' => true
       ),
 

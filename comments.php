@@ -127,7 +127,7 @@ function get_smilies_panel() {
 
 				$captcha_url = rest_url('sakura/v1/captcha/create');
 
-                $captcha_placeholder = __("Click here to show captcha", "sakurairo");
+                $captcha_placeholder = __("点击此处显示验证码", "sakurairo");
 			
 				$comment_captcha = '
 					<label for="captcha" class="comment-captcha">
