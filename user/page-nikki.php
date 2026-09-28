@@ -25,6 +25,10 @@ $nikki = array(
 );
 
 $nikki_private = get_option('koyori_nikki_private', array());
+if (function_exists('koyori_nikki_maybe_auto_sync_profile')) {
+    koyori_nikki_maybe_auto_sync_profile();
+    $nikki_private = get_option('koyori_nikki_private', array());
+}
 $nikki_saved = is_array($nikki_private) && is_array($nikki_private['profile_data'] ?? null) ? $nikki_private['profile_data'] : array();
 $nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['nickname'] : $nikki['nickname'];
 $nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];

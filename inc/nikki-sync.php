@@ -77,7 +77,25 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         if (!is_array($saved) || $saved['client_id'] !== $auth['client_id'] || $saved['token'] !== $auth['token'] || $saved['openid'] !== $auth['openid'] || ($saved['profile_data']['uid'] ?? '') !== $profile['uid']) {
             return new WP_Error('nikki_save_failed', '资料写入失败，现有资料未更新。');
         }
+        set_transient('koyori_nikki_auto_sync_lock', 1, HOUR_IN_SECONDS);
         return $profile;
+    }
+}
+
+if (!function_exists('koyori_nikki_maybe_auto_sync_profile')) {
+    function koyori_nikki_maybe_auto_sync_profile() {
+        if (false !== get_transient('koyori_nikki_auto_sync_lock')) {
+            return null;
+        }
+        $private = get_option('koyori_nikki_private', array());
+        if (!is_array($private) || empty($private['client_id']) || empty($private['token']) || empty($private['openid'])) {
+            return null;
+        }
+        $result = koyori_nikki_sync_profile($private['client_id'], $private['token'], $private['openid']);
+        if (is_wp_error($result)) {
+            set_transient('koyori_nikki_auto_sync_lock', 1, HOUR_IN_SECONDS);
+        }
+        return $result;
     }
 }
 
