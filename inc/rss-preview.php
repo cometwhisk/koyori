@@ -30,13 +30,30 @@ function koyori_keep_rss_preview_url($redirect_url, $requested_url)
 }
 add_filter('redirect_canonical', 'koyori_keep_rss_preview_url', 10, 2);
 
-function koyori_rss_stylesheet_instruction(): void
+function koyori_add_rss_stylesheet_instruction(string $feed): string
 {
     $href = esc_url(get_home_url(null, '/rss/feed.xsl'));
-    echo "<?xml-stylesheet type=\"text/xsl\" href=\"{$href}\"?>\n";
+    $instruction = "<?xml-stylesheet type=\"text/xsl\" href=\"{$href}\"?>\n";
+
+    if (strpos($feed, 'xml-stylesheet') !== false) {
+        return $feed;
+    }
+
+    return preg_replace(
+        '/^(<\?xml[^>]*\?>\s*)/s',
+        '$1' . $instruction,
+        $feed,
+        1
+    ) ?: $feed;
 }
-add_action('rss2_head', 'koyori_rss_stylesheet_instruction', 1);
-add_action('atom_head', 'koyori_rss_stylesheet_instruction', 1);
+
+function koyori_start_rss_stylesheet_buffer(): void
+{
+    if (is_feed()) {
+        ob_start('koyori_add_rss_stylesheet_instruction');
+    }
+}
+add_action('template_redirect', 'koyori_start_rss_stylesheet_buffer', 0);
 
 function koyori_render_rss_preview_stylesheet(): void
 {
