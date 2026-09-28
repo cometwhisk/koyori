@@ -6,12 +6,11 @@
  *
  * @package Sakurairo
  */
-$legacy_ai_excerpt = (string) get_post_meta($post_id, 'ai_summon_excerpt', true);
 $native_excerpt = trim((string) get_post_field('post_excerpt', $post_id));
 $ai_excerpt_hash = trim((string) get_post_meta($post_id, '_koyori_ai_excerpt_hash', true));
 $is_ai_excerpt = $native_excerpt !== '' && $ai_excerpt_hash !== ''
     && hash_equals($ai_excerpt_hash, hash('sha256', $native_excerpt));
-$display_ai_excerpt = $is_ai_excerpt ? $native_excerpt : ($native_excerpt === '' ? $legacy_ai_excerpt : '');
+$display_ai_excerpt = $is_ai_excerpt ? $native_excerpt : '';
 ?>
 
 <?php

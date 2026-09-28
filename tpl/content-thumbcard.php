@@ -141,7 +141,6 @@ if (!function_exists('get_post_cover_html')) {
             $cover_html = get_post_cover_html();
 
             // 摘要来源：原生摘要优先，AI 标识由生成哈希判断
-            $legacy_ai_excerpt = (string) get_post_meta($post->ID, 'ai_summon_excerpt', true);
             $native_excerpt = trim((string) get_post_field('post_excerpt', $post->ID));
             $ai_excerpt_hash = trim((string) get_post_meta($post->ID, '_koyori_ai_excerpt_hash', true));
             $is_ai_excerpt = $native_excerpt !== '' && $ai_excerpt_hash !== ''
@@ -170,7 +169,7 @@ if (!function_exists('get_post_cover_html')) {
                     </a>
                 </div>
                 <div class="post-excerpt">
-                    <?php if ($is_ai_excerpt || (!$has_excerpt && $legacy_ai_excerpt !== '')) { ?>
+                    <?php if ($is_ai_excerpt) { ?>
                         <div class="ai-excerpt-tip"><i class="fa-solid fa-atom"></i><?php _e("AI Excerpt", "sakurairo") ?></div>
                     <?php } elseif (!$has_excerpt) { ?>
                         <div class="ai-excerpt-tip"><i class="fa-solid fa-bars-staggered"></i><?php _e("Excerpt", "sakurairo") ?></div>

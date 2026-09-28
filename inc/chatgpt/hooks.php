@@ -287,21 +287,16 @@ namespace IROChatGPT {
                 }
 
                 $native_excerpt = trim((string) get_post_field('post_excerpt', $post_id));
-                $legacy_ai_excerpt = trim((string) get_post_meta($post_id, 'ai_summon_excerpt', true));
                 $stored_ai_hash = trim((string) get_post_meta($post_id, '_koyori_ai_excerpt_hash', true));
                 if ($native_excerpt !== '') {
                     if ($stored_ai_hash !== '' && !hash_equals($stored_ai_hash, ai_excerpt_hash($native_excerpt))) {
                         delete_post_meta($post_id, '_koyori_ai_excerpt_hash');
-                        delete_post_meta($post_id, 'ai_summon_excerpt');
                     }
                     return;
                 }
 
                 if ($stored_ai_hash !== '') {
                     delete_post_meta($post_id, '_koyori_ai_excerpt_hash');
-                }
-                if ($legacy_ai_excerpt !== '') {
-                    return;
                 }
                 if (!iro_opt('chatgpt_auto_article_summarize')) {
                     return;
@@ -322,7 +317,6 @@ namespace IROChatGPT {
                 $excerpt = trim($excerpt);
                 update_post_meta($post_id, '_koyori_ai_excerpt_hash', ai_excerpt_hash($excerpt));
                 delete_post_meta($post_id, '_koyori_ai_excerpt_attempt_hash');
-                update_post_meta($post_id, 'ai_summon_excerpt', $excerpt);
 
                 $updating_excerpt = true;
                 wp_update_post([
@@ -332,14 +326,6 @@ namespace IROChatGPT {
                 $updating_excerpt = false;
             }, 10, 3);
 
-        add_filter('the_excerpt', function (string $post_excerpt) {
-            global $post;
-            if (has_excerpt($post)) {
-                return $post_excerpt;
-            }
-            $ai_excerpt = get_post_meta($post->ID, 'ai_summon_excerpt', true);
-            return $ai_excerpt ? $ai_excerpt : $post_excerpt;
-        });
     }
 
     function summon_article_excerpt(WP_Post $post)
