@@ -33,7 +33,7 @@ add_filter('redirect_canonical', 'koyori_keep_rss_preview_url', 10, 2);
 function koyori_add_rss_stylesheet_instruction(string $feed): string
 {
     $href = esc_url(get_home_url(null, '/rss/feed.xsl'));
-    $instruction = "<?xml-stylesheet type=\"text/xsl\" href=\"{$href}\"?>\n";
+    $instruction = "\n<?xml-stylesheet type=\"text/xsl\" href=\"{$href}\"?>\n";
 
     if (strpos($feed, 'xml-stylesheet') !== false) {
         return $feed;
@@ -50,6 +50,8 @@ function koyori_add_rss_stylesheet_instruction(string $feed): string
 function koyori_start_rss_stylesheet_buffer(): void
 {
     if (is_feed()) {
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
         ob_start('koyori_add_rss_stylesheet_instruction');
     }
 }
@@ -152,8 +154,9 @@ XSL;
     ));
 
     status_header(200);
-    header('Content-Type: application/xslt+xml; charset=utf-8');
-    header('Cache-Control: public, max-age=3600');
+    header('Content-Type: text/xsl; charset=utf-8');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
     echo $xsl;
     exit;
 }
