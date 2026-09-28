@@ -3350,6 +3350,63 @@ $prefix = 'iro_options';
   $chatgpt_profile_key = (string)($chatgpt_profile['access_token'] ?? ($chatgpt_saved_options['chatgpt_access_token'] ?? ''));
   $chatgpt_profile_timeout = max(5, min(120, (int)($chatgpt_profile['timeout'] ?? 30)));
 
+  require_once get_template_directory() . '/inc/nikki-sync.php';
+
+  Sakurairo_CSF::createSection( $prefix, array(
+    'parent' => 'others',
+    'title' => __('无限暖暖资料同步','sakurairo_csf'),
+    'icon' => 'fas fa-wand-magic-sparkles',
+    'fields' => array(
+      array(
+        'type' => 'submessage',
+        'style' => 'warning',
+        'content' => __('登录态属于敏感信息，只会在服务器端使用，不会输出到博客前台或提交到 Git。','sakurairo_csf'),
+      ),
+      array(
+        'id' => 'nikki_session_bundle',
+        'type' => 'textarea',
+        'title' => __('奇想手账登录态','sakurairo_csf'),
+        'desc' => __('粘贴生成的 NIKKI1 登录态文本。它包含 Cookie、Token 和 OpenID，Cookie 过期后重新生成并替换这里的内容即可。','sakurairo_csf'),
+        'sanitize' => false,
+      ),
+      array(
+        'type' => 'callback',
+        'function' => function () {
+          $nonce = wp_create_nonce('koyori_nikki_sync');
+          $ajax_url = admin_url('admin-ajax.php');
+          ?>
+          <div class="koyori-nikki-actions">
+            <button type="button" class="button button-primary" id="koyori-nikki-sync">测试并同步资料</button>
+            <span id="koyori-nikki-status" aria-live="polite"></span>
+          </div>
+          <style>
+            .koyori-nikki-actions{display:flex;align-items:center;gap:10px;margin:4px 0 12px}.koyori-nikki-actions span{color:#646970}.koyori-nikki-actions .is-error{color:#b32d2e}.koyori-nikki-actions .is-ok{color:#116329}
+          </style>
+          <script>
+          (function(){
+            const button=document.querySelector('#koyori-nikki-sync');
+            const field=document.querySelector('[name="iro_options[nikki_session_bundle]"]');
+            const status=document.querySelector('#koyori-nikki-status');
+            if(!button||!field||button.dataset.ready)return;
+            button.dataset.ready='1';
+            button.addEventListener('click',function(){
+              const bundle=field.value.trim();
+              if(!bundle){status.textContent='请先粘贴登录态文本。';status.className='is-error';return;}
+              button.disabled=true;status.textContent='同步中…';status.className='';
+              const body=new URLSearchParams({action:'koyori_nikki_sync_profile',nonce:'<?= esc_js($nonce) ?>',bundle:bundle});
+              fetch('<?= esc_url($ajax_url) ?>',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body:body}).then(r=>r.json()).then(data=>{
+                status.textContent=data.success ? (data.data.message+' '+data.data.profile.nickname+' / Lv.'+data.data.profile.level) : (data.data?.message||'同步失败。');
+                status.className=data.success?'is-ok':'is-error';
+              }).catch(()=>{status.textContent='网络请求失败，请稍后重试。';status.className='is-error'}).finally(()=>{button.disabled=false});
+            });
+          }());
+          </script>
+          <?php
+        },
+      ),
+    ),
+  ) );
+
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'others',
     'title' => __('AI 配置','sakurairo_csf'),

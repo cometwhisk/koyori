@@ -24,6 +24,15 @@ $nikki = array(
     'crown_peak' => '8 / 8 层',
 );
 
+$nikki_saved = iro_opt('nikki_profile_data', array());
+if (!is_array($nikki_saved)) {
+    $nikki_saved = array();
+}
+$nikki['nickname'] = (string) ($nikki_saved['nickname'] ?? $nikki['nickname']);
+$nikki['uid'] = (string) ($nikki_saved['uid'] ?? $nikki['uid']);
+$nikki['avatar'] = (string) ($nikki_saved['avatar'] ?? $nikki['avatar']);
+$nikki['level'] = (string) ($nikki_saved['level'] ?? $nikki['level']);
+
 $nikki_stats = array(
     array('icon' => 'fa-calendar-days', 'label' => '登录天数', 'value' => $nikki['login_days'] . ' 天'),
     array('icon' => 'fa-clock', 'label' => '游戏时长', 'value' => $nikki['play_time']),
