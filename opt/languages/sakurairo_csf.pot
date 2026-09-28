@@ -3256,32 +3256,8 @@ msgstr ""
 msgid "Theme Built in Captcha"
 msgstr ""
 
-#: options/theme-options.php:3337
-msgid "Vaptcha"
-msgstr ""
-
 #: options/theme-options.php:3338
 msgid "Cloudflare Turnstile"
-msgstr ""
-
-#: options/theme-options.php:3346
-msgid "Vaptcha VID"
-msgstr ""
-
-#: options/theme-options.php:3348
-msgid "Fill in your Vaptcha VID"
-msgstr ""
-
-#: options/theme-options.php:3354
-msgid "Vaptcha KEY"
-msgstr ""
-
-#: options/theme-options.php:3356
-msgid "Fill in your Vaptcha KEY"
-msgstr ""
-
-#: options/theme-options.php:3362
-msgid "Vaptcha Scene"
 msgstr ""
 
 #: options/theme-options.php:3378

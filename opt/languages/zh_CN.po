@@ -3632,29 +3632,6 @@ msgstr "设置你的登录界面Logo"
 msgid "Captcha Selection"
 msgstr "验证码选项"
 
-#: options/theme-options.php:3342
-msgid "Vaptcha"
-msgstr "Vaptcha 验证码"
-
-#: options/theme-options.php:3351
-msgid "Vaptcha VID"
-msgstr ""
-
-#: options/theme-options.php:3353
-msgid "Fill in your Vaptcha VID"
-msgstr "填写你的 Vaptcha VID"
-
-#: options/theme-options.php:3359
-msgid "Vaptcha KEY"
-msgstr ""
-
-#: options/theme-options.php:3361
-msgid "Fill in your Vaptcha KEY"
-msgstr "填写你的 Vaptcha KEY"
-
-#: options/theme-options.php:3367
-msgid "Vaptcha Scene"
-msgstr "Vaptcha场景"
 
 #: options/theme-options.php:3383
 msgid "Turnstile Site Key"

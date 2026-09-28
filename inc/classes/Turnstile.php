@@ -26,8 +26,8 @@ class Turnstile
     $site_key = esc_attr(iro_opt('turnstile_site_key'));
     $theme = esc_attr(iro_opt('turnstile_theme') ?: 'light');
     return <<<HTML
-        <div id="vaptchaContainer" class="vaptchaContainer">
-            <div class="vaptcha-init-main">
+        <div id="turnstileContainer" class="turnstileContainer">
+            <div class="turnstile-init-main">
                 <div class="cf-turnstile"></div>
             </div>
         </div>

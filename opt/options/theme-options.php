@@ -3321,42 +3321,9 @@ $prefix = 'iro_options';
         'options' => array(
           'off' => __('Off','sakurairo_csf'),
           'iro_captcha' => __('Theme Built in Captcha','sakurairo_csf'),
-          'vaptcha' => __('Vaptcha','sakurairo_csf'),
           'turnstile' => __('Cloudflare Turnstile',"sakurairo_csf")
         ),
         'default' => 'off',
-      ),
-      
-      array(
-        'id' => 'vaptcha_vid',
-        'type' => 'text',
-        'title' => __('Vaptcha VID','sakurairo_csf'),
-        'dependency' => array( 'captcha_select', '==', 'vaptcha', '', 'true' ),
-        'desc' => __('Fill in your Vaptcha VID','sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'vaptcha_key',
-        'type' => 'text',
-        'title' => __('Vaptcha KEY','sakurairo_csf'),
-        'dependency' => array( 'captcha_select', '==', 'vaptcha', '', 'true' ),
-        'desc' => __('Fill in your Vaptcha KEY','sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'vaptcha_scene',
-        'type' => 'select',
-        'title' => __('Vaptcha Scene','sakurairo_csf'),
-        'dependency' => array( 'captcha_select', '==', 'vaptcha', '', 'true' ),
-        'options' => array(
-          '1' => __(1,'sakurairo_csf'),
-          '2' => __(2,'sakurairo_csf'),
-          '3' => __(3,'sakurairo_csf'),
-          '4' => __(4,'sakurairo_csf'),
-          '5' => __(5,'sakurairo_csf'),
-          '6' => __(6,'sakurairo_csf'),
-        ),
-        'default' => 1,
       ),
 
       array(

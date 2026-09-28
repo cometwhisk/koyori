@@ -3788,29 +3788,6 @@ msgstr "ログイン画面のロゴを設定する"
 msgid "Captcha Selection"
 msgstr "セクションをリセット"
 
-#: options/theme-options.php:3342
-msgid "Vaptcha"
-msgstr "Vaptcha"
-
-#: options/theme-options.php:3351
-msgid "Vaptcha VID"
-msgstr "Vaptcha VID"
-
-#: options/theme-options.php:3353
-msgid "Fill in your Vaptcha VID"
-msgstr "あなたのVaptcha VIDを記入してください"
-
-#: options/theme-options.php:3359
-msgid "Vaptcha KEY"
-msgstr "Vaptcha KEY"
-
-#: options/theme-options.php:3361
-msgid "Fill in your Vaptcha KEY"
-msgstr "Vaptcha KEYを入力する"
-
-#: options/theme-options.php:3367
-msgid "Vaptcha Scene"
-msgstr "Vaptchaシーン"
 
 #: options/theme-options.php:3383
 msgid "Turnstile Site Key"
