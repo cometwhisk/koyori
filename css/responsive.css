@@ -555,7 +555,7 @@
   blockquote:before {
     content: "\f10d" !important;
     top: 10px;
-    left: -5px;
+    left: 10px;
   }
 
   blockquote:after {
