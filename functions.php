@@ -9,6 +9,7 @@
  */
 
 include_once('inc/classes/IpLocation.php');
+require_once get_template_directory() . '/inc/rss-preview.php';
 
 define('IRO_VERSION', wp_get_theme()->get('Version'));
 define('BUILD_VERSION', '3');
