@@ -31,6 +31,8 @@ add_filter('redirect_canonical', static function ($redirect_url, $requested_url)
 
 add_action('template_redirect', static function (): void {
     if (get_query_var('koyori_login')) {
+        $user_login = '';
+        $error = '';
         require ABSPATH . 'wp-login.php';
         exit;
     }
