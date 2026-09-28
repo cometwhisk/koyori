@@ -226,50 +226,120 @@ namespace IROChatGPT {
 
     add_action('wp_ajax_koyori_fetch_chatgpt_models', __NAMESPACE__ . '\\fetch_chatgpt_models');
 
+    function ai_excerpt_hash($excerpt)
+    {
+        return hash('sha256', trim((string) $excerpt));
+    }
+
+    function generate_chatgpt_excerpt_ajax()
+    {
+        $post_id = absint($_POST['post_id'] ?? 0);
+        if (!$post_id || !current_user_can('edit_post', $post_id)) {
+            wp_send_json_error(['message' => '无权编辑此文章。'], 403);
+        }
+
+        check_ajax_referer('koyori_generate_chatgpt_excerpt', 'nonce');
+        $post = get_post($post_id);
+        if (!$post || $post->post_type !== 'post') {
+            wp_send_json_error(['message' => '文章不存在或类型不支持。'], 400);
+        }
+
+        $draft = clone $post;
+        if (isset($_POST['title'])) {
+            $draft->post_title = wp_unslash((string) $_POST['title']);
+        }
+        if (isset($_POST['content'])) {
+            $draft->post_content = wp_unslash((string) $_POST['content']);
+        }
+
+        try {
+            $excerpt = summon_article_excerpt($draft);
+        } catch (\Throwable $th) {
+            error_log('ChatGPT-excerpt-err:' . $th);
+            wp_send_json_error(['message' => 'AI 摘要生成失败，请检查配置或稍后重试。'], 502);
+        }
+
+        if (!is_string($excerpt) || trim($excerpt) === '') {
+            wp_send_json_error(['message' => 'AI 没有返回有效摘要。'], 502);
+        }
+
+        $excerpt = trim($excerpt);
+        wp_send_json_success([
+            'excerpt' => $excerpt,
+            'hash' => ai_excerpt_hash($excerpt),
+        ]);
+    }
+
+    add_action('wp_ajax_koyori_generate_chatgpt_excerpt', __NAMESPACE__ . '\\generate_chatgpt_excerpt_ajax');
+
     function apply_chatgpt_hook()
     {
-        if (iro_opt('chatgpt_auto_article_summarize')) {
-            $exclude_ids = iro_opt('chatgpt_exclude_ids', '');
-            add_action('save_post_post', function (int $post_id, WP_Post $post, bool $update) use ($exclude_ids) {
-                // Prevent duplicate execution during autosaves
-                if (wp_is_post_autosave($post_id)) {
+        $exclude_ids = iro_opt('chatgpt_exclude_ids', '');
+        add_action('save_post_post', function (int $post_id, WP_Post $post, bool $update) use ($exclude_ids) {
+                static $updating_excerpt = false;
+
+                if ($updating_excerpt || wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
                     return;
                 }
-                
-                // Check if this execution is already in progress using a transient
-                $transient_key = 'chatgpt_excerpt_generating_' . $post_id;
-                if (get_transient($transient_key)) {
-                    // Already processing this post, skip
+
+                if (in_array($post_id, explode(',', $exclude_ids), false)) {
                     return;
                 }
-                
-                if (!has_excerpt($post_id) && !in_array($post_id, explode(",", $exclude_ids), false)) {
-                    // Set transient to prevent duplicate calls (expires in 60 seconds)
-                    set_transient($transient_key, true, 60);
-                    
-                    try {
-                        $excerpt = generate_post_summary($post);
-                        update_post_meta($post_id, "ai_summon_excerpt", $excerpt);
-                    } catch (\Throwable $th) {
-                        error_log('ChatGPT-excerpt-err:' . $th);
-                    } finally {
-                        // Clean up transient after execution
-                        delete_transient($transient_key);
+
+                $native_excerpt = trim((string) get_post_field('post_excerpt', $post_id));
+                $legacy_ai_excerpt = trim((string) get_post_meta($post_id, 'ai_summon_excerpt', true));
+                $stored_ai_hash = trim((string) get_post_meta($post_id, '_koyori_ai_excerpt_hash', true));
+                if ($native_excerpt !== '') {
+                    if ($stored_ai_hash !== '' && !hash_equals($stored_ai_hash, ai_excerpt_hash($native_excerpt))) {
+                        delete_post_meta($post_id, '_koyori_ai_excerpt_hash');
+                        delete_post_meta($post_id, 'ai_summon_excerpt');
                     }
+                    return;
                 }
+
+                if ($stored_ai_hash !== '') {
+                    delete_post_meta($post_id, '_koyori_ai_excerpt_hash');
+                }
+                if ($legacy_ai_excerpt !== '') {
+                    return;
+                }
+                if (!iro_opt('chatgpt_auto_article_summarize')) {
+                    return;
+                }
+
+                $attempt_hash = trim((string) get_post_meta($post_id, '_koyori_ai_excerpt_attempt_hash', true));
+                $source_hash = hash('sha256', $post->post_title . "\\n" . $post->post_content);
+                if ($attempt_hash === $source_hash) {
+                    return;
+                }
+                update_post_meta($post_id, '_koyori_ai_excerpt_attempt_hash', $source_hash);
+
+                $excerpt = generate_post_summary($post);
+                if (!is_string($excerpt) || trim($excerpt) === '') {
+                    return;
+                }
+
+                $excerpt = trim($excerpt);
+                update_post_meta($post_id, '_koyori_ai_excerpt_hash', ai_excerpt_hash($excerpt));
+                delete_post_meta($post_id, '_koyori_ai_excerpt_attempt_hash');
+                update_post_meta($post_id, 'ai_summon_excerpt', $excerpt);
+
+                $updating_excerpt = true;
+                wp_update_post([
+                    'ID' => $post_id,
+                    'post_excerpt' => $excerpt,
+                ]);
+                $updating_excerpt = false;
             }, 10, 3);
-        }
 
         add_filter('the_excerpt', function (string $post_excerpt) {
             global $post;
             if (has_excerpt($post)) {
                 return $post_excerpt;
-            } else {
-                $ai_excerpt =  get_post_meta($post->ID, "ai_summon_excerpt", true);
-                return $ai_excerpt ? $ai_excerpt : $post_excerpt;
             }
+            $ai_excerpt = get_post_meta($post->ID, 'ai_summon_excerpt', true);
+            return $ai_excerpt ? $ai_excerpt : $post_excerpt;
         });
-        
     }
 
     function summon_article_excerpt(WP_Post $post)

@@ -274,6 +274,20 @@ function koyori_register_external_cover_meta() {
 }
 add_action('init', 'koyori_register_external_cover_meta');
 
+function koyori_register_ai_excerpt_meta() {
+    register_post_meta('post', '_koyori_ai_excerpt_hash', array(
+        'type'              => 'string',
+        'single'            => true,
+        'default'           => '',
+        'show_in_rest'      => true,
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback'     => function ($allowed, $meta_key, $post_id) {
+            return current_user_can('edit_post', $post_id);
+        },
+    ));
+}
+add_action('init', 'koyori_register_ai_excerpt_meta');
+
 function koyori_enqueue_cover_editor_assets() {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
     if (!$screen || !in_array($screen->post_type, array('post', 'page', 'shuoshuo'), true)) {
@@ -293,6 +307,20 @@ function koyori_enqueue_cover_editor_assets() {
         array('wp-edit-post'),
         '1.0.2'
     );
+
+    if ($screen->post_type === 'post') {
+        wp_enqueue_script(
+            'koyori-ai-excerpt-editor',
+            get_template_directory_uri() . '/js/koyori-ai-excerpt-editor.js',
+            array('wp-data'),
+            '1.0.1',
+            true
+        );
+        wp_localize_script('koyori-ai-excerpt-editor', 'koyoriAIExcerptData', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('koyori_generate_chatgpt_excerpt'),
+        ));
+    }
 }
 add_action('enqueue_block_editor_assets', 'koyori_enqueue_cover_editor_assets');
 
