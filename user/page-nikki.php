@@ -214,11 +214,11 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
 
 <div class="nikki-page">
     <header class="nikki-heading">
-        <h1>无限暖暖 · 个人资料</h1>
+        <h1><?php the_title(); ?></h1>
         <p>Whim-Log profile</p>
     </header>
 
-    <section class="nikki-profile" aria-label="无限暖暖个人资料卡">
+    <section class="nikki-profile" aria-label="<?php echo esc_attr(get_the_title()); ?>个人资料卡">
         <div class="nikki-identity">
             <img class="nikki-avatar" src="<?php echo esc_url($nikki['avatar']); ?>" alt="<?php echo esc_attr($nikki['nickname']); ?> 的头像" loading="lazy">
             <h2 class="nikki-name"><?php echo esc_html($nikki['nickname']); ?></h2>
