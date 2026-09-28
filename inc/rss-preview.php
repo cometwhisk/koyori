@@ -78,7 +78,7 @@ function koyori_render_rss_preview_stylesheet(): void
     $background_split = iro_opt('random_graphs_mts') ? '1' : '0';
     $darkmode_auto = iro_opt('theme_darkmode_auto') ? '1' : '0';
     $darkmode_strategy = esc_attr(iro_opt('theme_darkmode_strategy', 'time'));
-    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss6'));
+    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss7'));
 
     $xsl = <<<'XSL'
 <?xml version="1.0" encoding="utf-8"?>
@@ -95,6 +95,8 @@ function koyori_render_rss_preview_stylesheet(): void
                 <link rel="stylesheet" href="__CSS_URL__" />
             </head>
             <body data-desktop-background="__DESKTOP_BACKGROUND__" data-mobile-background="__MOBILE_BACKGROUND__" data-background-split="__BACKGROUND_SPLIT__" data-darkmode-auto="__DARKMODE_AUTO__" data-darkmode-strategy="__DARKMODE_STRATEGY__">
+                <img class="rss-background" src="__DESKTOP_BACKGROUND__" alt="" aria-hidden="true" />
+                <div class="rss-background-shade" aria-hidden="true"></div>
                 <div class="rss-orbit orbit-one"></div>
                 <div class="rss-orbit orbit-two"></div>
                 <div class="rss-orbit orbit-three"></div>
@@ -164,12 +166,11 @@ function koyori_render_rss_preview_stylesheet(): void
                     var hasSplitBackground = body.dataset.backgroundSplit === '1';
                     var desktopBackground = body.dataset.desktopBackground;
                     var mobileBackground = body.dataset.mobileBackground || desktopBackground;
+                    var background = document.querySelector('.rss-background');
 
                     function setBackground() {
                         var image = hasSplitBackground && mobileQuery.matches ? mobileBackground : desktopBackground;
-                        if (image) {
-                            root.style.setProperty('--rss-bg-image', 'url("' + image.replace(/"/g, '\\"') + '")');
-                        }
+                        if (image && background && background.src !== image) background.src = image;
                     }
 
                     function isDark() {
