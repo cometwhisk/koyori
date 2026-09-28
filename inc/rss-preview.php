@@ -78,7 +78,7 @@ function koyori_render_rss_preview_stylesheet(): void
     $background_split = iro_opt('random_graphs_mts') ? '1' : '0';
     $darkmode_auto = iro_opt('theme_darkmode_auto') ? '1' : '0';
     $darkmode_strategy = esc_attr(iro_opt('theme_darkmode_strategy', 'time'));
-    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss3'));
+    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss4'));
 
     $xsl = <<<'XSL'
 <?xml version="1.0" encoding="utf-8"?>
@@ -151,8 +151,7 @@ function koyori_render_rss_preview_stylesheet(): void
                     </section>
 
                     <footer class="rss-footer">
-                        <span>保持好奇，持续记录</span>
-                        <a href="{rss/channel/atom:link/@href}">订阅 RSS</a>
+                        <a href="https://github.com/yusixian" target="_blank" rel="noopener noreferrer">RSS Preview based on yusixian</a>
                     </footer>
                 </main>
                 <script>
