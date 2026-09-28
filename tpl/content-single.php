@@ -6,6 +6,7 @@
  *
  * @package Sakurairo
  */
+$post_id = get_the_ID();
 $native_excerpt = trim((string) get_post_field('post_excerpt', $post_id));
 $ai_excerpt_hash = trim((string) get_post_meta($post_id, '_koyori_ai_excerpt_hash', true));
 $is_ai_excerpt = $native_excerpt !== '' && $ai_excerpt_hash !== ''
