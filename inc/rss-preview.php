@@ -67,7 +67,12 @@ function koyori_render_rss_preview_stylesheet(): void
     $site_title = esc_html(get_bloginfo('name'));
     $site_description = esc_html(get_bloginfo('description'));
     $site_url = esc_url(home_url('/'));
-    $avatar = esc_url(get_site_icon_url(160));
+    $avatar = esc_url(
+        iro_opt('personal_avatar')
+            ?: iro_opt('iro_logo')
+            ?: iro_opt('favicon_link')
+            ?: get_site_icon_url(160)
+    );
     $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION));
 
     $xsl = <<<'XSL'
