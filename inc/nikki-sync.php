@@ -36,13 +36,16 @@ if (!function_exists('koyori_nikki_parse_bundle')) {
         if (!is_array($data)) {
             return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
         }
-        foreach (array('cookie', 'token', 'openid') as $key) {
+        foreach (array('token', 'openid') as $key) {
             if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '' || strlen($data[$key]) > 12000) {
                 return new WP_Error('nikki_invalid_bundle', '登录态文本缺少必要字段。');
             }
         }
+        if (isset($data['cookie']) && !is_string($data['cookie'])) {
+            return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
+        }
         return array(
-            'cookie' => trim($data['cookie']),
+            'cookie' => trim((string) ($data['cookie'] ?? '')),
             'token' => trim($data['token']),
             'openid' => trim($data['openid']),
         );
@@ -58,19 +61,22 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         $cookie = $auth['cookie'];
         $token = $auth['token'];
         $openid = $auth['openid'];
-        if ($cookie === '' || $token === '' || $openid === '') {
-            return new WP_Error('nikki_missing_auth', '请完整填写 Cookie、Token 和 OpenID。');
+        if ($token === '' || $openid === '') {
+            return new WP_Error('nikki_missing_auth', '登录态文本缺少 Token 或 OpenID。');
+        }
+        $headers = array(
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Origin' => 'https://myl.nuanpaper.com',
+            'Referer' => 'https://myl.nuanpaper.com/tools/journal',
+        );
+        if ($cookie !== '') {
+            $headers['Cookie'] = $cookie;
         }
 
         $response = wp_remote_post('https://myl-api.nuanpaper.com/v1/strategy/user/info/get', array(
             'timeout' => 20,
-            'headers' => array(
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Origin' => 'https://myl.nuanpaper.com',
-                'Referer' => 'https://myl.nuanpaper.com/tools/journal',
-                'Cookie' => $cookie,
-            ),
+            'headers' => $headers,
             'body' => wp_json_encode(array(
                 'client_id' => 1106,
                 'token' => $token,
