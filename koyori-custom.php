@@ -9,6 +9,59 @@ add_action('wp_head', static function (): void {
     echo '<style id="koyori-nav-alignment">.nav-search-wrapper nav{height:100%;align-items:center}.nav-search-wrapper nav ul{height:100%;align-items:center}.nav-search-wrapper nav ul li{padding:0;display:flex;align-items:center}.nav-search-wrapper nav ul li a{height:auto}</style>', PHP_EOL;
 }, 99);
 
+add_action('init', static function (): void {
+    add_rewrite_rule('^login/?$', 'index.php?koyori_login=1', 'top');
+    if (get_option('koyori_login_rewrite_version') !== '2') {
+        flush_rewrite_rules(false);
+        update_option('koyori_login_rewrite_version', '2', false);
+    }
+});
+
+add_filter('query_vars', static function (array $vars): array {
+    $vars[] = 'koyori_login';
+    return $vars;
+});
+
+add_filter('redirect_canonical', static function ($redirect_url, $requested_url) {
+    if (get_query_var('koyori_login')) {
+        return false;
+    }
+    return $redirect_url;
+}, 10, 2);
+
+add_action('template_redirect', static function (): void {
+    if (get_query_var('koyori_login')) {
+        require ABSPATH . 'wp-login.php';
+        exit;
+    }
+}, 0);
+
+add_filter('site_url', static function ($url, $path, $scheme, $blog_id) {
+    if (is_string($path) && preg_match('#^wp-login\\.php(?:\\?|$)#', $path)) {
+        $parts = explode('?', $path, 2);
+        $login_url = home_url('/login');
+        return isset($parts[1]) && $parts[1] !== '' ? $login_url . '?' . $parts[1] : $login_url;
+    }
+    return $url;
+}, 10, 4);
+
+add_action('login_init', static function (): void {
+    if (is_user_logged_in() || strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+        return;
+    }
+    $path = parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
+    if (untrailingslashit((string)$path) !== '/wp-login.php') {
+        return;
+    }
+    $target = home_url('/login');
+    $query = (string)($_SERVER['QUERY_STRING'] ?? '');
+    if ($query !== '') {
+        $target .= '?' . $query;
+    }
+    wp_safe_redirect($target, 302);
+    exit;
+});
+
 add_action('login_footer', static function (): void {
     echo '<style id="koyori-login-fixes">body.login #loginform .cf-turnstile{width:300px!important;max-width:none!important;transform:scale(.9)!important;transform-origin:left top!important}body.login #loginform iframe{max-width:none!important}body.login #loginform #rememberme{appearance:auto!important;-webkit-appearance:checkbox!important;width:16px!important;height:16px!important;margin:0 6px 0 0!important;accent-color:#666;cursor:pointer;vertical-align:middle}body.login #loginform .forgetmenot{display:flex!important;align-items:center!important;float:left!important;margin:6px 0 0!important}body.login #nav{clear:both!important;width:auto!important;margin:14px 0 24px!important;padding:0!important;text-align:center!important;background:transparent!important;background-image:none!important;background-color:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border:none!important;box-shadow:none!important}body.login #nav a{display:inline-block!important;padding:6px 10px!important;line-height:18px!important;background:rgba(255,255,255,.7)!important;border-radius:8px!important}</style>', PHP_EOL;
 });
