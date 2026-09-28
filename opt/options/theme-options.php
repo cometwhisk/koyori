@@ -3972,11 +3972,6 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'type'    => 'content',
-        'content' => __('<img src="https://s.nmxc.ltd/sakurairo_vision/@3.0/series/headlogo.webp"  alt="Theme Information" />','sakurairo_csf'),
-      ),
-
-      array(
         'type'    => 'submessage',
         'style'   => 'normal',
         'content' => sprintf(__('Theme Koyori Version %s | Internal Version %s | <a href="https://github.com/cometwhisk/koyori">Project Address</a> | Based on Sakurairo','sakurairo_csf'), IRO_VERSION, INT_VERSION), 
