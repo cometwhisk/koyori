@@ -3486,16 +3486,6 @@ $prefix = 'iro_options';
     'icon' => 'fas fa-atom',
     'fields' => array(
       array(
-        'type' => 'submessage',
-        'style' => 'info',
-        'content' => __('本页面用于配置文章摘要功能。当前仅保留一套 AI 连接配置。','sakurairo_csf'),
-      ),
-      array(
-        'type' => 'submessage',
-        'style' => 'info',
-        'content' => __('使用一个兼容 OpenAI 格式的接口即可。API 密钥不会在后台回显，只会由服务器发送到上面填写的接口。','sakurairo_csf'),
-      ),
-      array(
         'id' => 'chatgpt_profile_endpoint',
         'type' => 'text',
         'title' => __('接口基础地址','sakurairo_csf'),
