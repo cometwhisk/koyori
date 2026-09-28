@@ -56,22 +56,6 @@ get_header();
     padding: 30px 18px 0;
 }
 .nikki-page * { box-sizing: border-box; }
-.nikki-heading {
-    margin: 20px 0 28px;
-    text-align: center;
-}
-.nikki-heading h1 {
-    margin: 0;
-    color: var(--global-font-color);
-    font-size: clamp(26px, 4vw, 38px);
-    font-weight: 600;
-    letter-spacing: .08em;
-}
-.nikki-heading p {
-    margin: 10px 0 0;
-    color: var(--nikki-muted);
-    font-size: 13px;
-}
 .nikki-profile {
     display: grid;
     grid-template-columns: minmax(260px, .8fr) minmax(0, 1.7fr);
@@ -196,7 +180,6 @@ body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: r
 body.dark .nikki-stat,
 body.dark .nikki-detail { background: rgba(255,255,255,.06); border-color: rgba(100,100,100,.28); }
 body.dark .nikki-name,
-body.dark .nikki-heading h1,
 body.dark .nikki-section-title,
 body.dark .nikki-stat-value,
 body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
@@ -213,10 +196,6 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
 </style>
 
 <div class="nikki-page">
-    <header class="nikki-heading">
-        <h1><?php the_title(); ?></h1>
-    </header>
-
     <section class="nikki-profile" aria-label="<?php echo esc_attr(get_the_title()); ?>个人资料卡">
         <div class="nikki-identity">
             <img class="nikki-avatar" src="<?php echo esc_url($nikki['avatar']); ?>" alt="<?php echo esc_attr($nikki['nickname']); ?> 的头像" loading="lazy">
