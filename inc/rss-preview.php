@@ -131,7 +131,7 @@ function koyori_render_rss_preview_stylesheet(): void
                                         <span class="rss-date"><xsl:value-of select="substring(pubDate, 5, 12)" /></span>
                                     </div>
                                     <h3><a href="{link}"><xsl:value-of select="title" /></a></h3>
-                                    <p class="rss-summary"><xsl:value-of select="description" /></p>
+                                    <p class="rss-summary"><xsl:apply-templates select="description/node()" mode="rss-summary" /></p>
                                 </div>
                                 <footer class="rss-card-footer">
                                     <a href="{link}">阅读全文 <span>↗</span></a>
@@ -148,6 +148,8 @@ function koyori_render_rss_preview_stylesheet(): void
             </body>
         </html>
     </xsl:template>
+    <xsl:template match="text()" mode="rss-summary"><xsl:value-of select="normalize-space(.)" /><xsl:text> </xsl:text></xsl:template>
+    <xsl:template match="*" mode="rss-summary"><xsl:apply-templates select="node()" mode="rss-summary" /></xsl:template>
 </xsl:stylesheet>
 XSL;
 
