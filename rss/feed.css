@@ -46,6 +46,7 @@ body {
     linear-gradient(180deg, #fbf6fd 0%, var(--bg) 58%, #f2e8f8 100%);
   background-attachment: fixed;
   background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
   font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   line-height: 1.65;
