@@ -24,11 +24,11 @@ html[data-rss-theme="dark"] {
   --line: rgba(232, 207, 244, .16);
   --line-strong: rgba(220, 169, 222, .38);
   --text: #f5edf8;
-  --muted: #c3b2c9;
+  --muted: #d5c7da;
   --pink: #ef9ac9;
   --pink-soft: #744f72;
   --mint: #8dd6cc;
-  --lavender: #c2a6eb;
+  --lavender: #d4b8f5;
   --shadow: 0 20px 58px rgba(0, 0, 0, .28);
 }
 
@@ -129,6 +129,7 @@ html[data-rss-theme="dark"] .rss-header,
 html[data-rss-theme="dark"] .rss-card { border-color: var(--line); }
 html[data-rss-theme="dark"] .rss-avatar-wrap { background: rgba(255,255,255,.08); }
 html[data-rss-theme="dark"] .rss-avatar-wrap::after { border-color: #211828; }
+html[data-rss-theme="dark"] .rss-site-link { color: #f0dcff; border-color: rgba(240, 220, 255, .42); background: rgba(255,255,255,.16); }
 
 @media (max-width: 720px) {
   .rss-shell { width: min(100% - 24px, 560px); padding-top: 18px; }
