@@ -4033,36 +4033,6 @@ $prefix = 'iro_options';
 
       array(
         'type' => 'subheading',
-        'content' => __('Theme Contributors','sakurairo_csf'),
-      ),
-
-      array(
-        'type'    => 'content',
-        'content' => __('<img src="https://fuukei-api.nyat.icu/api/contributors" alt="Theme Contributors" width="100%" height="100%" />','sakurairo_csf'),
-      ),
-
-      array(
-        'type' => 'subheading',
-        'content' => __('Privacy information','sakurairo_csf'),
-      ),
-
-      array(
-        'type'    => 'content',
-        'content' => __('<p>The theme respects your privacy</p>
-        <p>However, when you use a service provider pre-populated by the theme to provide relevant services in mainland China, the service provider may collect data about your visitors and compile statistics</p>
-        <p>You can reduce the amount of information sent to third parties by localising the theme-related resources, which are pre-configured with options for you to modify</p>','sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'send_theme_version',
-        'type' => 'switcher',
-        'title' => __('Send Theme Version to Fuukei','sakurairo_csf'),
-        'label' => __('The theme will only send time and version information to Fuukei officials and the data will be cleaned regularly and used only to count version updates.','sakurairo_csf'),
-        'default' => false
-      ),
-
-      array(
-        'type' => 'subheading',
         'content' => __('Reference Information','sakurairo_csf'),
       ),
 
@@ -4082,11 +4052,6 @@ $prefix = 'iro_options';
         'content' => __('<p>Options Framework Relies on the Codestar Open Source <a href="https://github.com/Codestar/codestar-framework">Codestar Framework</a> Project</p>
         <p>Update Function Relies on YahnisElsts Open Source <a href="https://github.com/YahnisElsts/plugin-update-checker">Plugin Update Checker</a> Project</p>
         <p>Visual Editor Related Functions Relies on Themeum Open Source <a href="https://github.com/themeum/kirki">Kirki</a> Project</p>','sakurairo_csf'),
-      ),
-
-      array(
-        'type'    => 'content',
-        'content' => __('<img src="https://img.shields.io/github/v/release/mirai-mamori/Sakurairo.svg?style=flat-square"  alt="Theme latest version" style="border-radius: 3px;" />  <img src="https://img.shields.io/github/release-date/mirai-mamori/Sakurairo?style=flat-square"  alt="Theme latest version release date" style="border-radius: 3px;" />  <img src="https://data.jsdelivr.com/v1/package/gh/mirai-mamori/Sakurairo/badge"  alt="Theme CDN resource access" style="border-radius: 3px;" />','sakurairo_csf'),
       ),
 
     )

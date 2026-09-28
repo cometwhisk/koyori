@@ -13,7 +13,6 @@ include_once('inc/classes/IpLocation.php');
 define('IRO_VERSION', wp_get_theme()->get('Version'));
 define('BUILD_VERSION', '3');
 define('INT_VERSION', '20.0.10');
-define('SSU_URL', 'https://api.fuukei.org/update/ssu.json');
 
 function check_php_version($preset_version)
 {
@@ -1951,98 +1950,6 @@ add_action('admin_enqueue_scripts', 'admin_ini');
 /*
  * 后台通知
  */
-/**
- * 在提供权限的情况下，为管理员用户显示通知并更新 meta 值
- */
-function theme_admin_notice_callback()
-{
-    // 判断当前用户是否为管理员
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    // 读取 meta 值
-    $meta_value = get_user_meta(get_current_user_id(), 'theme_admin_notice', true);
-
-    // 判断 meta 值是否存在
-    if ($meta_value) {
-        return; // 如果存在，退出函数，避免重复加载通知
-    }
-
-    // 显示通知
-    $theme_name = 'Sakurairo';
-    switch (get_user_locale()) {
-        case 'zh_CN':
-            $thankyou = '感谢你使用 ' . $theme_name . ' 主题！这里有一些需要你的许可的东西(*/ω＼*)';
-            $dislike = '不，谢谢';
-            $allow_send = '允许发送你的主题版本数据以便官方统计';
-            break;
-
-        case 'zh_TW':
-            $thankyou = '感謝你使用 ' . $theme_name . ' 主題！以下是一些需要你許可的內容。';
-            $dislike = '謝謝，不用了';
-            $allow_send = '允許出於統計目的發送主題版本数据';
-            break;
-
-        case 'ja':
-        case 'ja_JP':
-            $thankyou = 'ご使用いただきありがとうございます！以下は、あなたの許可が必要なコンテンツです。';
-            $dislike = 'いいえ、結構です';
-            $allow_send = '統計目的のためにあなたのテーマバージョンを送信することを許可する';
-            break;
-
-        default:
-            $thankyou = 'Thank you for using the ' . $theme_name . ' theme! There is something that needs your approval.';
-            $dislike = 'No, thanks';
-            $allow_send = 'Allow sending your theme version for statistical purposes';
-            break;
-    }
-    ?>
-                                <div class="notice notice-success" id="send-ver-tip">
-                                    <p><?php echo $thankyou; ?></p>
-                                    <button class="button" onclick="dismiss_notice()"><?php echo $dislike; ?></button>
-                                    <button class="button" onclick="update_option()"><?php echo $allow_send; ?></button>
-                                </div>
-                                <script>
-                                    function dismiss_notice() {
-                                        // 隐藏通知
-                                        document.getElementById( "send-ver-tip" ).style.display = "none";
-                                        // 写入 1 到 meta
-                                        var data = new FormData();
-                                        data.append( 'action', 'update_theme_admin_notice_meta' );
-                                        data.append( 'user_id', '<?php echo get_current_user_id(); ?>' );
-                                        data.append( 'meta_key', 'theme_admin_notice' );
-                                        data.append( 'meta_value', '1' );
-                                        fetch( '<?php echo admin_url('admin-ajax.php'); ?>', {
-                                            method: 'POST',
-                                            body: data
-                                        } );
-                                    }
-
-                                    function update_option() {
-                                        // 隐藏通知
-                                        document.getElementById( "send-ver-tip" ).style.display = "none";
-                                        // 发送 AJAX 请求
-                                        var xhr = new XMLHttpRequest();
-                                        xhr.open( "POST", "<?php echo admin_url('admin-ajax.php'); ?>", true );
-                                        xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
-                                        xhr.send( "action=update_theme_option&option=send_theme_version&value=true" );
-
-                                        // 写入 1 到 meta
-                                        var data = new FormData();
-                                        data.append( 'action', 'update_theme_admin_notice_meta' );
-                                        data.append( 'user_id', '<?php echo get_current_user_id(); ?>' );
-                                        data.append( 'meta_key', 'theme_admin_notice' );
-                                        data.append( 'meta_value', '1' );
-                                        fetch( '<?php echo admin_url('admin-ajax.php'); ?>', {
-                                            method: 'POST',
-                                            body: data
-                                        } );
-                                    }
-                                </script>
-                                <?php
-}
-add_action('admin_notices', 'theme_admin_notice_callback');
 
 /**
  * 检查父主题文件夹名称是否正确
@@ -2194,35 +2101,6 @@ function theme_folder_check_on_admin_init() {
 
 // 在后台初始化时执行检查
 add_action('admin_init', 'theme_folder_check_on_admin_init');
-
-// AJAX 处理函数 - 更新主题选项
-add_action('wp_ajax_update_theme_option', 'update_theme_option');
-function update_theme_option()
-{
-    if (!isset($_POST['option']) || !isset($_POST['value'])) {
-        wp_die('Missing required parameters');
-    }
-
-    $option = $_POST['option'];
-    $value = sanitize_text_field($_POST['value']);
-    iro_opt_update($option, $value);
-    wp_die();
-}
-
-// AJAX 处理函数 - 写入 theme_admin_notice 元值
-add_action('wp_ajax_update_theme_admin_notice_meta', 'update_theme_admin_notice_meta');
-function update_theme_admin_notice_meta()
-{
-    if (!isset($_POST['user_id']) || !isset($_POST['meta_key']) || !isset($_POST['meta_value'])) {
-        wp_die('Missing required parameters');
-    }
-
-    $user_id = $_POST['user_id'];
-    $meta_key = $_POST['meta_key'];
-    $meta_value = sanitize_text_field($_POST['meta_value']);
-    update_user_meta($user_id, $meta_key, $meta_value);
-    wp_die();
-}
 
 // 主动resize触发wp_scripts后台排版修正，防止左侧导航栏飞出
 add_action('admin_footer',function() {
@@ -2787,34 +2665,6 @@ function permalink_tip()
 }
 add_action('admin_notices', 'permalink_tip');
 //code end
-
-//发送主题版本号 
-function send_theme_version()
-{
-    $theme = wp_get_theme();
-    $version = $theme->get('Version');
-    $data = array(
-        'date' => date('Y-m-d H:i:s'),
-        'version' => $version
-    );
-    $args = array(
-        'body' => $data,
-        'timeout' => '5',
-        'redirection' => '5',
-        'httpversion' => '1.0',
-        'blocking' => true,
-        'headers' => array(),
-        'cookies' => array()
-    );
-    wp_remote_post('https://api.fuukei.org/version-stat/index.php', $args);
-}
-
-if (iro_opt('send_theme_version') == '1') {
-    if (!wp_next_scheduled('daily_event')) {
-        wp_schedule_event(time(), 'daily', 'daily_event');
-    }
-    add_action('daily_event', 'send_theme_version');
-}
 
 //解析短代码  
 function register_shortcodes() {
