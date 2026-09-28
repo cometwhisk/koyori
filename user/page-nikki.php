@@ -215,7 +215,6 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
 <div class="nikki-page">
     <header class="nikki-heading">
         <h1><?php the_title(); ?></h1>
-        <p>Whim-Log profile</p>
     </header>
 
     <section class="nikki-profile" aria-label="<?php echo esc_attr(get_the_title()); ?>个人资料卡">
