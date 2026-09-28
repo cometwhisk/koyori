@@ -2681,8 +2681,8 @@ $prefix = 'iro_options';
 
   $nikki_private = get_option('koyori_nikki_private', array());
   $nikki_client_id_default = '';
-  $nikki_token_default = is_array($nikki_private) ? (string)($nikki_private['token'] ?? '') : '';
-  $nikki_openid_default = is_array($nikki_private) ? (string)($nikki_private['openid'] ?? '') : '';
+  $nikki_token_default = '';
+  $nikki_openid_default = '';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'page', 
