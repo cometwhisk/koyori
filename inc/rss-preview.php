@@ -151,7 +151,7 @@ function koyori_render_rss_preview_stylesheet(): void
                     </section>
 
                     <footer class="rss-footer">
-                        <a href="https://github.com/yusixian" target="_blank" rel="noopener noreferrer">RSS Preview based on yusixian</a>
+                        <a href="https://github.com/cosZone/astro-koharu" target="_blank" rel="noopener noreferrer">RSS Preview based on yusixian</a>
                     </footer>
                 </main>
                 <script>
