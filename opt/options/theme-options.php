@@ -2680,7 +2680,9 @@ $prefix = 'iro_options';
   ) );
 
   $nikki_private = get_option('koyori_nikki_private', array());
-  $nikki_bundle_default = is_array($nikki_private) ? (string)($nikki_private['session_bundle'] ?? '') : '';
+  $nikki_client_id_default = is_array($nikki_private) ? (string)($nikki_private['client_id'] ?? '1106') : '1106';
+  $nikki_token_default = is_array($nikki_private) ? (string)($nikki_private['token'] ?? '') : '';
+  $nikki_openid_default = is_array($nikki_private) ? (string)($nikki_private['openid'] ?? '') : '';
 
   Sakurairo_CSF::createSection( $prefix, array(
     'parent' => 'page', 
@@ -2851,11 +2853,24 @@ $prefix = 'iro_options';
         'content' => __('登录态属于敏感信息，只会在服务器端使用，不会输出到博客前台或提交到 Git。','sakurairo_csf'),
       ),
       array(
-        'id' => 'nikki_session_bundle',
-        'type' => 'textarea',
-        'title' => __('奇想手账登录态','sakurairo_csf'),
-        'desc' => __('粘贴 Chrome「Copy as cURL (bash)」复制的整段请求，或粘贴 NIKKI1 登录态文本。','sakurairo_csf'),
-        'default' => $nikki_bundle_default,
+        'id' => 'nikki_client_id',
+        'type' => 'text',
+        'title' => __('client_id','sakurairo_csf'),
+        'default' => $nikki_client_id_default,
+        'desc' => __('通常填写 1106。','sakurairo_csf'),
+      ),
+      array(
+        'id' => 'nikki_token',
+        'type' => 'text',
+        'title' => __('Token','sakurairo_csf'),
+        'default' => $nikki_token_default,
+        'sanitize' => false,
+      ),
+      array(
+        'id' => 'nikki_openid',
+        'type' => 'text',
+        'title' => __('OpenID','sakurairo_csf'),
+        'default' => $nikki_openid_default,
         'sanitize' => false,
       ),
       array(
@@ -2874,15 +2889,16 @@ $prefix = 'iro_options';
           <script>
           (function(){
             const button=document.querySelector('#koyori-nikki-sync');
-            const field=document.querySelector('[name="iro_options[nikki_session_bundle]"]');
+            const fields=['nikki_client_id','nikki_token','nikki_openid'];
             const status=document.querySelector('#koyori-nikki-status');
-            if(!button||!field||button.dataset.ready)return;
+            const field=id=>document.querySelector('[name="iro_options['+id+']"]');
+            if(!button||!field(fields[0])||button.dataset.ready)return;
             button.dataset.ready='1';
             button.addEventListener('click',function(){
-              const bundle=field.value.trim();
-              if(!bundle){status.textContent='请先粘贴登录态文本。';status.className='is-error';return;}
+              const values=Object.fromEntries(fields.map(id=>[id,field(id).value.trim()]));
+              if(!values.nikki_client_id||!values.nikki_token||!values.nikki_openid){status.textContent='请填写完整的三个字段。';status.className='is-error';return;}
               button.disabled=true;status.textContent='同步中…';status.className='';
-              const body=new URLSearchParams({action:'koyori_nikki_sync_profile',nonce:'<?= esc_js($nonce) ?>',bundle:bundle});
+              const body=new URLSearchParams({action:'koyori_nikki_sync_profile',nonce:'<?= esc_js($nonce) ?>',client_id:values.nikki_client_id,token:values.nikki_token,openid:values.nikki_openid});
               fetch('<?= esc_url($ajax_url) ?>',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body:body}).then(r=>r.json()).then(data=>{
                 status.textContent=data.success ? (data.data.message+' '+data.data.profile.nickname+' / Lv.'+data.data.profile.level) : (data.data?.message||'同步失败。');
                 status.className=data.success?'is-ok':'is-error';
@@ -3401,16 +3417,18 @@ $prefix = 'iro_options';
     if (!is_array($private)) {
       $private = array();
     }
-    if (array_key_exists('nikki_session_bundle', $data)) {
-      $bundle = trim((string) $data['nikki_session_bundle']);
-      if ($bundle === '') {
-        unset($private['session_bundle']);
-      } elseif (!is_wp_error(koyori_nikki_parse_bundle($bundle))) {
-        $private['session_bundle'] = $bundle;
+    if (array_key_exists('nikki_client_id', $data) || array_key_exists('nikki_token', $data) || array_key_exists('nikki_openid', $data)) {
+      $client_id = trim((string)($data['nikki_client_id'] ?? ($private['client_id'] ?? '1106')));
+      $token_value = trim((string)($data['nikki_token'] ?? ($private['token'] ?? '')));
+      $openid_value = trim((string)($data['nikki_openid'] ?? ($private['openid'] ?? '')));
+      if (preg_match('/^[0-9]+$/', $client_id) && $token_value !== '' && $openid_value !== '') {
+        $private['client_id'] = $client_id;
+        $private['token'] = $token_value;
+        $private['openid'] = $openid_value;
       }
       update_option('koyori_nikki_private', $private, false);
     }
-    unset($data['nikki_session_bundle'], $data['nikki_profile_data']);
+    unset($data['nikki_client_id'], $data['nikki_token'], $data['nikki_openid'], $data['nikki_session_bundle'], $data['nikki_profile_data']);
     return $data;
   });
 

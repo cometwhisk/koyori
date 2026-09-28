@@ -3,84 +3,40 @@
  * Nikki Whim-Log authenticated profile sync.
  */
 
-if (!function_exists('koyori_nikki_parse_bundle')) {
-    function koyori_nikki_parse_bundle($bundle) {
-        $bundle = trim((string) $bundle);
-        if (strlen($bundle) < 16 || strlen($bundle) > 100000) {
-            return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
+if (!function_exists('koyori_nikki_normalize_fields')) {
+    function koyori_nikki_normalize_fields($client_id, $token, $openid) {
+        $client_id = trim((string) $client_id);
+        $token = trim((string) $token);
+        $openid = trim((string) $openid);
+        if ($client_id === '' || !preg_match('/^[0-9]+$/', $client_id) || strlen($client_id) > 20) {
+            return new WP_Error('nikki_invalid_client_id', 'client_id 格式不正确。');
         }
-        if (strpos($bundle, 'NIKKI1.') === 0) {
-            $encoded = strtr(substr($bundle, 7), '-_', '+/');
-            $encoded .= str_repeat('=', (4 - strlen($encoded) % 4) % 4);
-            $decoded = base64_decode($encoded, true);
-            $data = $decoded === false ? null : json_decode($decoded, true);
-        } else {
-            $data = null;
-            $cookie = '';
-            $body = '';
-            if (preg_match("/-H\\s+\\$?'cookie:\\s*([^']+)'/i", $bundle, $match)) {
-                $cookie = trim($match[1]);
-            } elseif (preg_match('/-H\\s+\\$?"cookie:\\s*([^"]+)"/i', $bundle, $match)) {
-                $cookie = trim($match[1]);
-            }
-            if (preg_match("/(?:--data-raw|--data|--data-binary)\\s+\\$?'([^']+)'/s", $bundle, $match)) {
-                $body = $match[1];
-            } elseif (preg_match('/(?:--data-raw|--data|--data-binary)\\s+\\$?"([^"]+)"/s', $bundle, $match)) {
-                $body = stripcslashes($match[1]);
-            }
-            $data = json_decode($body, true);
-            if (is_array($data)) {
-                $data['cookie'] = $cookie;
-            }
+        if ($token === '' || strlen($token) > 12000 || $openid === '' || strlen($openid) > 12000) {
+            return new WP_Error('nikki_missing_auth', '请填写完整的 Token 和 OpenID。');
         }
-        if (!is_array($data)) {
-            return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
-        }
-        foreach (array('token', 'openid') as $key) {
-            if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '' || strlen($data[$key]) > 12000) {
-                return new WP_Error('nikki_invalid_bundle', '登录态文本缺少必要字段。');
-            }
-        }
-        if (isset($data['cookie']) && !is_string($data['cookie'])) {
-            return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
-        }
-        return array(
-            'cookie' => trim((string) ($data['cookie'] ?? '')),
-            'token' => trim($data['token']),
-            'openid' => trim($data['openid']),
-        );
+        return array('client_id' => $client_id, 'token' => $token, 'openid' => $openid);
     }
 }
 
 if (!function_exists('koyori_nikki_sync_profile')) {
-    function koyori_nikki_sync_profile($bundle) {
-        $auth = koyori_nikki_parse_bundle($bundle);
+    function koyori_nikki_sync_profile($client_id, $token, $openid) {
+        $auth = koyori_nikki_normalize_fields($client_id, $token, $openid);
         if (is_wp_error($auth)) {
             return $auth;
-        }
-        $cookie = $auth['cookie'];
-        $token = $auth['token'];
-        $openid = $auth['openid'];
-        if ($token === '' || $openid === '') {
-            return new WP_Error('nikki_missing_auth', '登录态文本缺少 Token 或 OpenID。');
-        }
-        $headers = array(
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Origin' => 'https://myl.nuanpaper.com',
-            'Referer' => 'https://myl.nuanpaper.com/tools/journal',
-        );
-        if ($cookie !== '') {
-            $headers['Cookie'] = $cookie;
         }
 
         $response = wp_remote_post('https://myl-api.nuanpaper.com/v1/strategy/user/info/get', array(
             'timeout' => 20,
-            'headers' => $headers,
+            'headers' => array(
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Origin' => 'https://myl.nuanpaper.com',
+                'Referer' => 'https://myl.nuanpaper.com/tools/journal',
+            ),
             'body' => wp_json_encode(array(
-                'client_id' => 1106,
-                'token' => $token,
-                'openid' => $openid,
+                'client_id' => (int) $auth['client_id'],
+                'token' => $auth['token'],
+                'openid' => $auth['openid'],
             )),
         ));
 
@@ -111,11 +67,14 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         if (!is_array($private)) {
             $private = array();
         }
-        $private['session_bundle'] = trim((string) $bundle);
+        unset($private['session_bundle']);
+        $private['client_id'] = $auth['client_id'];
+        $private['token'] = $auth['token'];
+        $private['openid'] = $auth['openid'];
         $private['profile_data'] = $profile;
         update_option('koyori_nikki_private', $private, false);
         $saved = get_option('koyori_nikki_private', array());
-        if (!is_array($saved) || $saved['session_bundle'] !== $private['session_bundle'] || ($saved['profile_data']['uid'] ?? '') !== $profile['uid']) {
+        if (!is_array($saved) || $saved['client_id'] !== $auth['client_id'] || $saved['token'] !== $auth['token'] || $saved['openid'] !== $auth['openid'] || ($saved['profile_data']['uid'] ?? '') !== $profile['uid']) {
             return new WP_Error('nikki_save_failed', '资料写入失败，现有资料未更新。');
         }
         return $profile;
@@ -128,7 +87,11 @@ if (!function_exists('koyori_nikki_sync_ajax')) {
             wp_send_json_error(array('message' => '没有权限执行此操作。'), 403);
         }
         check_ajax_referer('koyori_nikki_sync', 'nonce');
-        $profile = koyori_nikki_sync_profile(wp_unslash($_POST['bundle'] ?? ''));
+        $profile = koyori_nikki_sync_profile(
+            wp_unslash($_POST['client_id'] ?? ''),
+            wp_unslash($_POST['token'] ?? ''),
+            wp_unslash($_POST['openid'] ?? '')
+        );
         if (is_wp_error($profile)) {
             wp_send_json_error(array('message' => $profile->get_error_message()), 400);
         }
