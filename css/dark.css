@@ -608,7 +608,8 @@ body.dark .top-social .inner img:hover {
 
 body.dark #banner_wave_1,
 body.dark #banner_wave_2 {
-  display: none;
+  display: block;
+  opacity: .35;
 }
 
 body.dark .comment-respond :where(textarea,input):where(:focus,:active){
