@@ -73,7 +73,7 @@ function koyori_render_rss_preview_stylesheet(): void
             ?: iro_opt('favicon_link')
             ?: get_site_icon_url(160)
     );
-    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION));
+    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss2'));
 
     $xsl = <<<'XSL'
 <?xml version="1.0" encoding="utf-8"?>
@@ -131,7 +131,12 @@ function koyori_render_rss_preview_stylesheet(): void
                                         <span class="rss-date"><xsl:value-of select="substring(pubDate, 5, 12)" /></span>
                                     </div>
                                     <h3><a href="{link}"><xsl:value-of select="title" /></a></h3>
-                                    <p class="rss-summary"><xsl:apply-templates select="description/node()" mode="rss-summary" /></p>
+                                    <p class="rss-summary">
+                                        <xsl:choose>
+                                            <xsl:when test="contains(description, '&lt;/div&gt;')"><xsl:value-of select="normalize-space(substring-after(description, '&lt;/div&gt;'))" /></xsl:when>
+                                            <xsl:otherwise><xsl:value-of select="normalize-space(description)" /></xsl:otherwise>
+                                        </xsl:choose>
+                                    </p>
                                 </div>
                                 <footer class="rss-card-footer">
                                     <a href="{link}">阅读全文 <span>↗</span></a>
