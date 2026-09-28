@@ -78,7 +78,7 @@ function koyori_render_rss_preview_stylesheet(): void
     $background_split = iro_opt('random_graphs_mts') ? '1' : '0';
     $darkmode_auto = iro_opt('theme_darkmode_auto') ? '1' : '0';
     $darkmode_strategy = esc_attr(iro_opt('theme_darkmode_strategy', 'time'));
-    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss9'));
+    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss10'));
 
     $xsl = <<<'XSL'
 <?xml version="1.0" encoding="utf-8"?>
@@ -110,7 +110,7 @@ function koyori_render_rss_preview_stylesheet(): void
                                 <p class="rss-description">__SITE_DESCRIPTION__</p>
                             </div>
                         </div>
-                        <a class="rss-site-link" href="__SITE_URL__">访问博客 <span>→</span></a>
+                        <a class="rss-site-link" href="__SITE_URL__" target="_blank" rel="noopener noreferrer">访问博客 <span>→</span></a>
                     </header>
 
                     <section class="rss-intro">
@@ -135,7 +135,7 @@ function koyori_render_rss_preview_stylesheet(): void
                                         </span>
                                         <span class="rss-date"><xsl:value-of select="substring(pubDate, 5, 12)" /></span>
                                     </div>
-                                    <h3><a href="{link}"><xsl:value-of select="title" /></a></h3>
+                                    <h3><a href="{link}" target="_blank" rel="noopener noreferrer"><xsl:value-of select="title" /></a></h3>
                                     <p class="rss-summary">
                                         <xsl:choose>
                                             <xsl:when test="contains(description, '&lt;/div&gt;')"><xsl:value-of select="normalize-space(substring-after(description, '&lt;/div&gt;'))" /></xsl:when>
@@ -144,7 +144,7 @@ function koyori_render_rss_preview_stylesheet(): void
                                     </p>
                                 </div>
                                 <footer class="rss-card-footer">
-                                    <a href="{link}">阅读全文 <span>↗</span></a>
+                                    <a href="{link}" target="_blank" rel="noopener noreferrer">阅读全文 <span>↗</span></a>
                                 </footer>
                             </article>
                         </xsl:for-each>
