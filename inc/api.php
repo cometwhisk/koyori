@@ -10,7 +10,7 @@
 /**
  * Classes
  */
-include_once('classes/Aplayer.php');
+
 include_once('classes/Bilibili.php');
 include_once('classes/Cache.php');
 include_once('classes/Images.php');
@@ -102,12 +102,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true'
     )
     );
-    register_rest_route('sakura/v1', '/meting/aplayer', array(
-        'methods' => 'GET',
-        'callback' => 'meting_aplayer',
-        'permission_callback' => '__return_true'
-    )
-    );
+
     register_rest_route('sakura/v1', '/captcha/create', array(
         'methods' => 'GET',
         'callback' => 'create_CAPTCHA',
@@ -490,41 +485,6 @@ function favlist_bilibili_folders(WP_REST_Request $request)
         );
         return new WP_REST_Response($output, 500);
     }
-}
-
-function meting_aplayer()
-{
-    $type = $_GET['type'];
-    $id = $_GET['id'];
-    if (in_array('_wpnonce', $_GET))
-        $wpnonce = $_GET['_wpnonce'];
-    if (in_array('meting_nonce', $_GET))
-        $meting_nonce = $_GET['meting_nonce'];
-    if ((isset($wpnonce) && !check_ajax_referer('wp_rest', $wpnonce, false)) || (isset($meting_nonce) && !wp_verify_nonce($meting_nonce, $type . '#:' . $id))) {
-        $output = array(
-            'status' => 403,
-            'success' => false,
-            'message' => 'Unauthorized client.'
-        );
-        $response = new WP_REST_Response($output, 403);
-    } else {
-        $Meting_API = new \Sakura\API\Aplayer();
-        $data = $Meting_API->get_data($type, $id);
-        if ($type === 'playlist') {
-            $response = new WP_REST_Response($data, 200);
-            $response->set_headers(array('cache-control' => 'max-age=3600'));
-        } elseif ($type === 'lyric') {
-            $response = new WP_REST_Response();
-            $response->set_headers(array('cache-control' => 'max-age=3600'));
-            $response->set_headers(array('Content-Type' => 'text/plain; charset=utf-8'));
-            $response->set_data($data);
-        } else {
-            $response = new WP_REST_Response();
-            $response->set_status(301);
-            $response->header('Location', $data);
-        }
-    }
-    return $response;
 }
 
 function create_CAPTCHA()

@@ -246,12 +246,6 @@ body.dark input[type=submit]
 body.dark .headertop-down svg path 
 {fill: <?=iro_opt('drop_down_arrow_dark_color'); ?> !important;transition: all 0.6s ease-in-out;}
 
-body.dark img,
-body.dark .highlight-wrap,
-body.dark iframe,
-body.dark .entry-content .aplayer,
-body.dark .post-thumb video
-{filter:brightness(<?=iro_opt('theme_darkmode_img_bright'); ?>);}
 
 body.dark .headertop {backdrop-filter:brightness(<?=iro_opt('theme_darkmode_img_bright'); ?>);}
 
