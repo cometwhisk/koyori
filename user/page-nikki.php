@@ -201,7 +201,7 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
             <img class="nikki-avatar" src="<?php echo esc_url($nikki['avatar']); ?>" alt="<?php echo esc_attr($nikki['nickname']); ?> 的头像" loading="lazy">
             <h2 class="nikki-name"><?php echo esc_html($nikki['nickname']); ?></h2>
             <p class="nikki-uid">UID <?php echo esc_html($nikki['uid']); ?></p>
-            <span class="nikki-level"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Mira Lv. <?php echo esc_html($nikki['level']); ?></span>
+            <span class="nikki-level"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> 搭配师等级 <?php echo esc_html($nikki['level']); ?></span>
         </div>
 
         <div class="nikki-stats">
