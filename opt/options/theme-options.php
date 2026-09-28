@@ -2850,7 +2850,7 @@ $prefix = 'iro_options';
       array(
         'type' => 'submessage',
         'style' => 'warning',
-        'content' => __('登录态属于敏感信息，只会在服务器端使用，不会输出到博客前台或提交到 Git。','sakurairo_csf'),
+        'content' => __('登录态属于敏感信息，只会在服务器端使用，不会输出到博客前台或提交到 Git。<br><a href="https://myl.nuanpaper.com/tools/journal" target="_blank" rel="noopener noreferrer">前往奇想手账获取登录信息</a>','sakurairo_csf'),
       ),
       array(
         'id' => 'nikki_client_id',
