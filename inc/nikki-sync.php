@@ -6,13 +6,33 @@
 if (!function_exists('koyori_nikki_parse_bundle')) {
     function koyori_nikki_parse_bundle($bundle) {
         $bundle = trim((string) $bundle);
-        if (strlen($bundle) < 16 || strlen($bundle) > 20000 || strpos($bundle, 'NIKKI1.') !== 0) {
+        if (strlen($bundle) < 16 || strlen($bundle) > 100000) {
             return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
         }
-        $encoded = strtr(substr($bundle, 7), '-_', '+/');
-        $encoded .= str_repeat('=', (4 - strlen($encoded) % 4) % 4);
-        $decoded = base64_decode($encoded, true);
-        $data = $decoded === false ? null : json_decode($decoded, true);
+        if (strpos($bundle, 'NIKKI1.') === 0) {
+            $encoded = strtr(substr($bundle, 7), '-_', '+/');
+            $encoded .= str_repeat('=', (4 - strlen($encoded) % 4) % 4);
+            $decoded = base64_decode($encoded, true);
+            $data = $decoded === false ? null : json_decode($decoded, true);
+        } else {
+            $data = null;
+            $cookie = '';
+            $body = '';
+            if (preg_match("/-H\\s+'cookie:\\s*([^']+)'/i", $bundle, $match)) {
+                $cookie = trim($match[1]);
+            } elseif (preg_match('/-H\\s+"cookie:\\s*([^"]+)"/i', $bundle, $match)) {
+                $cookie = trim($match[1]);
+            }
+            if (preg_match("/(?:--data-raw|--data|--data-binary)\\s+'([^']+)'/s", $bundle, $match)) {
+                $body = $match[1];
+            } elseif (preg_match('/(?:--data-raw|--data|--data-binary)\\s+"([^"]+)"/s', $bundle, $match)) {
+                $body = stripcslashes($match[1]);
+            }
+            $data = json_decode($body, true);
+            if (is_array($data)) {
+                $data['cookie'] = $cookie;
+            }
+        }
         if (!is_array($data)) {
             return new WP_Error('nikki_invalid_bundle', '登录态文本格式不正确。');
         }

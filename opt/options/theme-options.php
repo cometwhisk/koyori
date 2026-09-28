@@ -2854,7 +2854,7 @@ $prefix = 'iro_options';
         'id' => 'nikki_session_bundle',
         'type' => 'textarea',
         'title' => __('奇想手账登录态','sakurairo_csf'),
-        'desc' => __('粘贴生成的 NIKKI1 登录态文本。它包含 Cookie、Token 和 OpenID，Cookie 过期后重新生成并替换这里的内容即可。','sakurairo_csf'),
+        'desc' => __('粘贴 Chrome「Copy as cURL (bash)」复制的整段请求，或粘贴 NIKKI1 登录态文本。','sakurairo_csf'),
         'default' => $nikki_bundle_default,
         'sanitize' => false,
       ),
