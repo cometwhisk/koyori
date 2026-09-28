@@ -1,6 +1,6 @@
 <?php
 /*
-  Template Name: Nikki Profile Template
+  Template Name: 无限暖暖模板
 */
 
 $nikki = array(
