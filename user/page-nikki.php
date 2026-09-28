@@ -181,6 +181,12 @@ get_header();
 body.dark .nikki-identity,
 body.dark .nikki-stats,
 body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: rgba(100,100,100,.35); box-shadow: var(--dark-shadow-normal); }
+body.dark .nikki-level {
+    color: #d8d2dc;
+    background: linear-gradient(135deg, rgba(103, 78, 119, .72), rgba(112, 72, 87, .72));
+    border: 1px solid rgba(210, 190, 215, .2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .28);
+}
 body.dark .nikki-stat,
 body.dark .nikki-detail { background: rgba(255,255,255,.06); border-color: rgba(100,100,100,.28); }
 body.dark .nikki-name,
