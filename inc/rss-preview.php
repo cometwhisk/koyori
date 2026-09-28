@@ -32,6 +32,7 @@ add_filter('redirect_canonical', 'koyori_keep_rss_preview_url', 10, 2);
 
 function koyori_add_rss_stylesheet_instruction(string $feed): string
 {
+    header('Content-Type: application/xml; charset=UTF-8');
     $href = esc_url(get_home_url(null, '/rss/feed.xsl'));
     $instruction = "\n<?xml-stylesheet type=\"text/xsl\" href=\"{$href}\"?>\n";
 
