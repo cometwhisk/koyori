@@ -3983,55 +3983,6 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'type'    => 'subheading',
-        'content' => __('Update Related','sakurairo_csf'),
-      ),
-
-      array(
-        'id'          => 'iro_update_source',
-        'type'        => 'image_select',
-        'title' => __('Theme Update Source','sakurairo_csf'),
-        'options'     => array(
-          'github'  => $vision_resource_basepath . 'options/update_source_github.webp',
-          'upyun'  => $vision_resource_basepath . 'options/update_source_wafpro.webp',
-          'official_building'  => $vision_resource_basepath . 'options/update_source_iro.webp',
-        ),
-        'desc' => __('If you are using a server set up in mainland China, please use the Upyun source or the official theme source as your theme update source','sakurairo_csf'),
-        'default'     => 'github'
-      ),
-
-      array(
-        'id' => 'channel_validate_value',
-        'type' => 'text',
-        'title' => __('Theme Update Test Channel Disclaimer','sakurairo_csf'),
-        'dependency' => array(
-          array( 'core_library_basepath', '==', 'true', '', 'true' ),
-          array( 'shared_library_basepath', '==', 'true' ),
-          array( 'iro_update_source', '==', 'official_building' ),
-        ),
-        'desc' => __('Please copy the text in quotes after <strong>ensure that you have carefully understood the risks associated with participating in the test and are willing to assume all consequences at your own risk</strong> (including but not limited to possible data loss) into the options text box <strong> "I agree and am willing to bear all unexpected consequences"</strong>','sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'iro_update_channel',
-        'type' => 'radio',
-        'title' => __('Theme Update Channel','sakurairo_csf'),
-        'dependency' => array(
-          array( 'channel_validate_value', '==', 'I agree and am willing to bear all unexpected consequences' ),
-          array( 'core_library_basepath', '==', 'true', '', 'true' ),
-          array( 'shared_library_basepath', '==', 'true' ),
-          array( 'iro_update_source', '==', 'official_building' ),
-        ),
-        'desc' => __('You can toggle the update channel here to participate in the testing of the new version','sakurairo_csf'),
-        'options' => array(
-          'stable' => __('Stable Channel','sakurairo_csf'),
-          'beta' => __('Beta Channel','sakurairo_csf'),
-          'preview' => __('Preview Channel','sakurairo_csf'),
-        ),
-        'default' => 'stable'
-      ),
-
-      array(
         'type' => 'subheading',
         'content' => __('Resource Control','sakurairo_csf'),
       ),
