@@ -112,8 +112,8 @@ get_header();
     padding: 8px 15px;
     border-radius: 999px;
     color: #fff;
-    background: linear-gradient(135deg, #b58bd2, #e39aae);
-    box-shadow: 0 6px 16px rgba(181, 139, 210, .28);
+    background: var(--theme-skin-matching, #b58bd2);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--theme-skin-matching, #b58bd2) 28%, transparent);
     font-size: 14px;
     font-weight: 600;
 }
@@ -182,10 +182,10 @@ body.dark .nikki-identity,
 body.dark .nikki-stats,
 body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: rgba(100,100,100,.35); box-shadow: var(--dark-shadow-normal); }
 body.dark .nikki-level {
-    color: #d8d2dc;
-    background: linear-gradient(135deg, rgba(103, 78, 119, .72), rgba(112, 72, 87, .72));
-    border: 1px solid rgba(210, 190, 215, .2);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, .28);
+    color: var(--dark-bg-secondary);
+    background: var(--theme-skin-dark, var(--theme-skin-matching, #b58bd2));
+    border: 1px solid color-mix(in srgb, var(--theme-skin-dark, var(--theme-skin-matching, #b58bd2)) 45%, #fff);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--theme-skin-dark, var(--theme-skin-matching, #b58bd2)) 28%, transparent);
 }
 body.dark .nikki-stat,
 body.dark .nikki-detail { background: rgba(255,255,255,.06); border-color: rgba(100,100,100,.28); }
