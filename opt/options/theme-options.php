@@ -2879,7 +2879,7 @@ $prefix = 'iro_options';
           $ajax_url = admin_url('admin-ajax.php');
           ?>
           <div class="koyori-nikki-actions">
-            <button type="button" class="button button-primary" id="koyori-nikki-sync">测试并同步资料</button>
+            <button type="button" class="button button-primary" id="koyori-nikki-sync">同步资料</button>
             <span id="koyori-nikki-status" aria-live="polite"></span>
           </div>
           <style>
