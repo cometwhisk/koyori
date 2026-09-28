@@ -18,14 +18,14 @@ if (!function_exists('koyori_nikki_parse_bundle')) {
             $data = null;
             $cookie = '';
             $body = '';
-            if (preg_match("/-H\\s+'cookie:\\s*([^']+)'/i", $bundle, $match)) {
+            if (preg_match("/-H\\s+\\$?'cookie:\\s*([^']+)'/i", $bundle, $match)) {
                 $cookie = trim($match[1]);
-            } elseif (preg_match('/-H\\s+"cookie:\\s*([^"]+)"/i', $bundle, $match)) {
+            } elseif (preg_match('/-H\\s+\\$?"cookie:\\s*([^"]+)"/i', $bundle, $match)) {
                 $cookie = trim($match[1]);
             }
-            if (preg_match("/(?:--data-raw|--data|--data-binary)\\s+'([^']+)'/s", $bundle, $match)) {
+            if (preg_match("/(?:--data-raw|--data|--data-binary)\\s+\\$?'([^']+)'/s", $bundle, $match)) {
                 $body = $match[1];
-            } elseif (preg_match('/(?:--data-raw|--data|--data-binary)\\s+"([^"]+)"/s', $bundle, $match)) {
+            } elseif (preg_match('/(?:--data-raw|--data|--data-binary)\\s+\\$?"([^"]+)"/s', $bundle, $match)) {
                 $body = stripcslashes($match[1]);
             }
             $data = json_decode($body, true);
