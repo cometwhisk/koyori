@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         $login_url = wp_login_url( iro_opt( 'login_urlskip' ) ? '' : add_query_arg( $wp->query_vars, home_url( $wp->request ) ) );
                         ?>
 
-                        <a id="login-link" href="<?php echo esc_url($login_url); ?>" style="font-weight:bold;text-decoration:none">
+                        <a id="login-link" href="<?php echo esc_url( $login_url ); ?>" data-no-pjax style="font-weight:bold;text-decoration:none">
                             <?php _e( 'Log in', 'sakurairo' ); ?>
                         </a>
 

@@ -416,7 +416,7 @@ function header_user_menu()
         </a>
         <div class="header-user-menu">
           <div class="header-user-name no-logged">
-            <a id="login-link" href="<?= $login_url ?>" style="font-weight:bold;text-decoration:none"><?php _e('Log in', 'sakurairo')/*登录*/ ?></a>
+            <a id="login-link" href="<?= $login_url ?>" data-no-pjax style="font-weight:bold;text-decoration:none"><?php _e('Log in', 'sakurairo')/*登录*/ ?></a>
           </div>
         </div>
       </div>
