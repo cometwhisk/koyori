@@ -179,7 +179,7 @@ get_header();
 .nikki-detail-label { display:block; color:var(--nikki-muted); font-size:12px; }
 .nikki-detail-value { display:block; margin-top:6px; color:var(--global-font-color); font-size:18px; font-weight:600; }
 .nikki-detail small { display:block; margin-top:8px; color:var(--nikki-muted); font-size:12px; }
-.nikki-resonance-total { display:flex; align-items:baseline; justify-content:center; gap:12px; margin:0 0 18px; color:var(--nikki-muted); }
+.nikki-resonance-total { display:flex; align-items:baseline; justify-content:flex-start; gap:12px; margin:0 0 18px; color:var(--nikki-muted); }
 .nikki-resonance-total strong { color:var(--theme-skin-matching); font-size:32px; line-height:1; }
 body.dark .nikki-identity,
 body.dark .nikki-stats,
