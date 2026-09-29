@@ -121,16 +121,6 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $payload = json_decode($decoded, true);
         $gm = is_array($payload['info_from_gm'] ?? null) ? $payload['info_from_gm'] : array();
         $self = is_array($payload['info_from_self'] ?? null) ? $payload['info_from_self'] : array();
-        $owned_clothes = array();
-        $draw_by_result = array();
-        foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
-            if (!empty($draw['result'])) {
-                $owned_clothes[(string) $draw['result']] = true;
-                $rarity = (string) ($draw['rarity'] ?? '');
-                $draw_field = $rarity === '5' ? 'times_from_last_five_stars' : 'times_from_last_four_stars';
-                $draw_by_result[(string) $draw['result']] = (int) ($draw[$draw_field] ?? 0) + 1;
-            }
-        }
         $limited_five = 0;
         $limited_four = 0;
         $standard_five = 0;
@@ -138,6 +128,31 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $wish_total = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $wish_owned = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $wish_draws = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
+        $gacha_by_pool_rarity_result = array();
+        foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
+            $pool_id = (string) ($draw['card_pool_id'] ?? '');
+            $rarity = (string) ($draw['rarity'] ?? '');
+            $result_id = (string) ($draw['result'] ?? '');
+            if ($pool_id === '' || $rarity === '' || $result_id === '') {
+                continue;
+            }
+            $gacha_by_pool_rarity_result[$pool_id][$rarity][$result_id][] = $draw;
+        }
+        $draw_by_pool_rarity = array();
+        foreach ($gacha_by_pool_rarity_result as $pool_id => $rarities) {
+            foreach ($rarities as $rarity => $results) {
+                $draw_field = (string) $rarity === '5' ? 'times_from_last_five_stars' : 'times_from_last_four_stars';
+                foreach ($results as $result_id => $draws) {
+                    usort($draws, function ($left, $right) {
+                        return (int) ($left['pool_cnt'] ?? 0) <=> (int) ($right['pool_cnt'] ?? 0);
+                    });
+                    foreach (array_slice($draws, 0, 2) as $index => $draw) {
+                        $group = $index === 0 ? 'first' : 'second';
+                        $draw_by_pool_rarity[$pool_id][$rarity][$group][$result_id] = (int) ($draw[$draw_field] ?? 0) + 1;
+                    }
+                }
+            }
+        }
         $suit_response = wp_remote_post('https://myl-api.nuanpaper.com/v1/strategy/main/suit/list', array(
             'timeout' => 20,
             'headers' => array('Accept' => 'application/json', 'Content-Type' => 'application/json', 'Origin' => 'https://myl.nuanpaper.com', 'Referer' => 'https://myl.nuanpaper.com/tools/journal'),
@@ -150,15 +165,19 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             $wish_key = $type === 2 && $level === 5 ? 'periodic5' : ($type === 2 && $level === 4 ? 'periodic4' : ($type === 1 && $level === 5 ? 'permanent5' : ''));
             $cloths = is_string($suit['cloths'] ?? null) ? json_decode($suit['cloths'], true) : ($suit['cloths'] ?? array());
             if ($wish_key !== '') {
-                $wish_total[$wish_key] += is_array($cloths) ? count($cloths) : 0;
+                $wish_total[$wish_key] += $level === 5 ? 4 : 2;
             }
             $owned = 0;
             $draws = 0;
-            foreach (is_array($cloths) ? $cloths : array() as $cloth) {
-                $cloth_id = (string) ($cloth['cloth_id'] ?? '');
-                if (!empty($owned_clothes[$cloth_id])) {
-                    $owned++;
-                    $draws += (int) ($draw_by_result[$cloth_id] ?? 0);
+            foreach (array('first', 'second') as $group) {
+                $draw_map = $draw_by_pool_rarity[(string) ($suit['card_pool_id'] ?? '')][(string) $level][$group] ?? array();
+                foreach (is_array($cloths) ? $cloths : array() as $cloth) {
+                    $cloth_id = (string) ($cloth['cloth_id'] ?? '');
+                    $draw_num = (int) ($draw_map[$cloth_id] ?? 0);
+                    if ($draw_num > 0) {
+                        $owned++;
+                        $draws += $draw_num;
+                    }
                 }
             }
             if ($wish_key !== '') {
