@@ -119,8 +119,11 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             return $decoded;
         }
         $payload = json_decode($decoded, true);
-        $gm = is_array($payload['info_from_gm'] ?? null) ? $payload['info_from_gm'] : array();
-        $self = is_array($payload['info_from_self'] ?? null) ? $payload['info_from_self'] : array();
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($payload) || !is_array($payload['info_from_gm'] ?? null) || !is_array($payload['info_from_self'] ?? null) || !is_array($payload['info_from_self']['gacha_list'] ?? null) || !is_array($payload['info_from_self']['suit_list'] ?? null)) {
+            return new WP_Error('nikki_invalid_stats', '统计数据返回不完整，未更新现有资料。');
+        }
+        $gm = $payload['info_from_gm'];
+        $self = $payload['info_from_self'];
         $limited_five = 0;
         $limited_four = 0;
         $standard_five = 0;
@@ -160,7 +163,14 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             'headers' => array('Accept' => 'application/json', 'Content-Type' => 'application/json', 'Origin' => 'https://myl.nuanpaper.com', 'Referer' => 'https://myl.nuanpaper.com/tools/journal'),
             'body' => wp_json_encode(array('client_id' => (int) $auth['client_id'], 'token' => $auth['token'], 'openid' => $auth['openid'])),
         ));
-        $suit_list = !is_wp_error($suit_response) ? json_decode(wp_remote_retrieve_body($suit_response), true) : array();
+        if (is_wp_error($suit_response) || wp_remote_retrieve_response_code($suit_response) !== 200) {
+            return new WP_Error('nikki_suit_request_failed', '套装目录请求失败，未更新现有资料。');
+        }
+        $suit_payload = json_decode(wp_remote_retrieve_body($suit_response), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($suit_payload) || (int) ($suit_payload['code'] ?? -1) !== 0 || !is_array($suit_payload['data']['list'] ?? null) || count($suit_payload['data']['list']) === 0) {
+            return new WP_Error('nikki_suit_invalid', '套装目录返回不完整，未更新现有资料。');
+        }
+        $suit_list = $suit_payload;
         foreach (is_array($suit_list['data']['list'] ?? null) ? $suit_list['data']['list'] : array() as $suit) {
             $type = (int) ($suit['card_type'] ?? 0);
             $level = (int) ($suit['level'] ?? 0);
@@ -217,7 +227,7 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
                 $dewdrop = (int) ($currency['count'] ?? 0);
             }
         }
-        foreach (array('login_days' => $self, 'total_play_time' => $self, 'cloth_num' => $gm, 'momo_num' => $gm, 'designdrawing_num' => $gm) as $field => $source) {
+        foreach (array('login_days' => $self, 'total_play_time' => $self, 'cloth_num' => $gm, 'momo_num' => $gm, 'designdrawing_num' => $gm, 'draw_num' => $gm) as $field => $source) {
             if (!isset($source[$field]) || !is_numeric($source[$field])) {
                 return new WP_Error('nikki_invalid_stats', '统计数据返回不完整。');
             }
@@ -228,21 +238,21 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             'clothes' => (string) $gm['cloth_num'],
             'designs' => (string) $gm['designdrawing_num'],
             'momo' => (string) $gm['momo_num'],
-            'dewdrop' => (string) $dewdrop . ' / 3203',
-            'pillar' => (string) ($gm['pillar_num'] ?? 0) . ' / 240',
+            'dewdrop' => (string) $dewdrop,
+            'pillar' => (string) ($gm['pillar_num'] ?? 0),
             'limited_five' => (string) $limited_five,
             'limited_four' => (string) $limited_four,
             'standard_five' => (string) $standard_five,
             'four_star' => (string) ($limited_four + $four_star),
             'resonance' => (string) ($gm['draw_num'] ?? 0),
-            'suits' => (string) (is_array($self['suit_list'] ?? null) ? count($self['suit_list']) : 0) . ' / 128',
+            'suits' => (string) (is_array($self['suit_list'] ?? null) ? count($self['suit_list']) : 0),
             'wish_resonance' => array(
                 'periodic5' => array('owned' => $wish_owned['periodic5'], 'total' => $wish_total['periodic5'], 'collected' => $wish_collected['periodic5'], 'average' => $wish_owned['periodic5'] > 0 ? number_format($wish_draws['periodic5'] / $wish_owned['periodic5'], 1, '.', '') : '0'),
                 'periodic4' => array('owned' => $wish_owned['periodic4'], 'total' => $wish_total['periodic4'], 'collected' => $wish_collected['periodic4'], 'average' => $wish_owned['periodic4'] > 0 ? number_format($wish_draws['periodic4'] / $wish_owned['periodic4'], 1, '.', '') : '0'),
                 'permanent5' => array('owned' => $wish_owned['permanent5'], 'total' => $wish_total['permanent5'], 'collected' => $wish_collected['permanent5'], 'four_star_owned' => $standard_four_owned, 'average' => $wish_owned['permanent5'] > 0 ? number_format($wish_draws['permanent5'] / $wish_owned['permanent5'], 1, '.', '') : '0'),
             ),
-            'crown' => (string) ($gm['permanent_tower'] ?? 0) . ' / 15 层',
-            'crown_peak' => (string) ($gm['periodic_tower'] ?? 0) . ' / 8 层',
+            'crown' => (string) ($gm['permanent_tower'] ?? 0) . ' 层',
+            'crown_peak' => (string) ($gm['periodic_tower'] ?? 0) . ' 层',
             'stats_synced_at' => current_time('mysql'),
         );
     }
@@ -293,6 +303,10 @@ if (!function_exists('koyori_nikki_sync_profile')) {
             'updated_at' => sanitize_text_field((string) ($role['updated_at'] ?? '')),
             'synced_at' => current_time('mysql'),
         );
+        $stats = koyori_nikki_fetch_stats($auth);
+        if (is_wp_error($stats)) {
+            return $stats;
+        }
         $private = get_option('koyori_nikki_private', array());
         if (!is_array($private)) {
             $private = array();
@@ -302,10 +316,7 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         $private['token'] = $auth['token'];
         $private['openid'] = $auth['openid'];
         $private['profile_data'] = $profile;
-        $stats = koyori_nikki_fetch_stats($auth);
-        if (!is_wp_error($stats)) {
-            $private['stats_data'] = $stats;
-        }
+        $private['stats_data'] = $stats;
         update_option('koyori_nikki_private', $private, false);
         $saved = get_option('koyori_nikki_private', array());
         if (!is_array($saved) || $saved['client_id'] !== $auth['client_id'] || $saved['token'] !== $auth['token'] || $saved['openid'] !== $auth['openid'] || ($saved['profile_data']['uid'] ?? '') !== $profile['uid']) {
@@ -316,22 +327,42 @@ if (!function_exists('koyori_nikki_sync_profile')) {
     }
 }
 
+if (!function_exists('koyori_nikki_run_auto_sync_event')) {
+    function koyori_nikki_run_auto_sync_event() {
+        $running_key = 'koyori_nikki_auto_sync_running';
+        if (!add_option($running_key, time(), '', 'no')) {
+            return;
+        }
+        try {
+            $private = get_option('koyori_nikki_private', array());
+            if (!is_array($private) || empty($private['client_id']) || empty($private['token']) || empty($private['openid'])) {
+                return;
+            }
+            $result = koyori_nikki_sync_profile($private['client_id'], $private['token'], $private['openid']);
+            if (is_wp_error($result)) {
+                set_transient('koyori_nikki_auto_sync_lock', 1, HOUR_IN_SECONDS);
+            }
+        } finally {
+            delete_option($running_key);
+        }
+    }
+}
+
 if (!function_exists('koyori_nikki_maybe_auto_sync_profile')) {
     function koyori_nikki_maybe_auto_sync_profile() {
-        if (false !== get_transient('koyori_nikki_auto_sync_lock')) {
+        if (false !== get_transient('koyori_nikki_auto_sync_lock') || wp_next_scheduled('koyori_nikki_auto_sync_event')) {
             return null;
         }
         $private = get_option('koyori_nikki_private', array());
         if (!is_array($private) || empty($private['client_id']) || empty($private['token']) || empty($private['openid'])) {
             return null;
         }
-        $result = koyori_nikki_sync_profile($private['client_id'], $private['token'], $private['openid']);
-        if (is_wp_error($result)) {
-            set_transient('koyori_nikki_auto_sync_lock', 1, HOUR_IN_SECONDS);
-        }
-        return $result;
+        wp_schedule_single_event(time() + 1, 'koyori_nikki_auto_sync_event');
+        set_transient('koyori_nikki_auto_sync_lock', 1, HOUR_IN_SECONDS);
+        return null;
     }
 }
+add_action('koyori_nikki_auto_sync_event', 'koyori_nikki_run_auto_sync_event');
 
 if (!function_exists('koyori_nikki_sync_ajax')) {
     function koyori_nikki_sync_ajax() {

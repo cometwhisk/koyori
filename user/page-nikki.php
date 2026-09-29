@@ -4,24 +4,24 @@
 */
 
 $nikki = array(
-    'nickname' => '小枫叶',
-    'uid' => '115344663',
-    'avatar' => 'https://tds-cdn.papegames.com/o/103/t/111-72c52430d5ebd91bad78c39c4a12b52c.jpg',
-    'level' => '53',
-    'login_days' => '42',
-    'play_time' => '179.20h',
-    'clothes' => '879',
-    'designs' => '507',
-    'dewdrop' => '676 / 3203',
-    'pillar' => '221 / 240',
-    'resonance' => '671',
-    'limited_five' => '20',
-    'limited_four' => '19',
-    'standard_five' => '16',
-    'four_star' => '53',
-    'suits' => '4 / 128',
-    'crown' => '15 / 15 层',
-    'crown_peak' => '8 / 8 层',
+    'nickname' => '暂无同步资料',
+    'uid' => '',
+    'avatar' => '',
+    'level' => '',
+    'login_days' => '',
+    'play_time' => '',
+    'clothes' => '',
+    'designs' => '',
+    'dewdrop' => '',
+    'pillar' => '',
+    'resonance' => '',
+    'limited_five' => '',
+    'limited_four' => '',
+    'standard_five' => '',
+    'four_star' => '',
+    'suits' => '',
+    'crown' => '',
+    'crown_peak' => '',
 );
 
 $nikki_private = get_option('koyori_nikki_private', array());
@@ -219,7 +219,11 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
 <div class="nikki-page">
     <section class="nikki-profile" aria-label="<?php echo esc_attr(get_the_title()); ?>个人资料卡">
         <div class="nikki-identity">
-            <img class="nikki-avatar" src="<?php echo esc_url($nikki['avatar']); ?>" alt="<?php echo esc_attr($nikki['nickname']); ?> 的头像" loading="lazy">
+            <?php if (!empty($nikki['avatar'])): ?>
+                <img class="nikki-avatar" src="<?php echo esc_url($nikki['avatar']); ?>" alt="<?php echo esc_attr($nikki['nickname']); ?> 的头像" loading="lazy">
+            <?php else: ?>
+                <div class="nikki-avatar nikki-avatar-empty" aria-hidden="true"></div>
+            <?php endif; ?>
             <h2 class="nikki-name"><?php echo esc_html($nikki['nickname']); ?></h2>
             <p class="nikki-uid">UID <?php echo esc_html($nikki['uid']); ?></p>
             <span class="nikki-level"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> 搭配师等级. <?php echo esc_html($nikki['level']); ?></span>
