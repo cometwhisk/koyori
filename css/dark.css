@@ -170,6 +170,16 @@ body.dark .entry-content a {
   color: var(--dark-text-primary);
 }
 
+body.dark .entry-content p a,
+body.dark .entry-content li a {
+  color: var(--theme-skin-dark) !important;
+}
+
+body.dark .entry-content p a:hover,
+body.dark .entry-content li a:hover {
+  color: var(--theme-skin-matching) !important;
+}
+
 body.dark .entry-content blockquote,
 body.dark .entry-content blockquote p,
 body.dark .entry-content cite,
