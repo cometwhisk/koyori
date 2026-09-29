@@ -146,12 +146,6 @@ add_action('wp_enqueue_scripts', static function (): void {
     markLoginLinksNoPjax();
     document.addEventListener('pjax:complete', markLoginLinksNoPjax);
 
-    document.addEventListener('submit', function (event) {
-        if (event.target && event.target.matches('form#loginform')) {
-            event.stopImmediatePropagation();
-        }
-    }, true);
-
     document.addEventListener('click', function (event) {
         var tiledBackground = event.target.closest('#diy1-bg, #diy2-bg, #diy3-bg, #diy4-bg');
         var regularBackground = event.target.closest('#white-bg, #dark-bg');
