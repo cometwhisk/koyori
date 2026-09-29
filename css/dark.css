@@ -160,6 +160,34 @@ body.dark .post-list p {
   color: var(--dark-text-secondary) !important;
 }
 
+body.dark .entry-content p,
+body.dark .entry-content ul,
+body.dark .entry-content ol {
+  color: var(--dark-text-primary) !important;
+}
+
+body.dark .entry-content a {
+  color: var(--dark-text-primary);
+}
+
+body.dark .entry-content blockquote,
+body.dark .entry-content blockquote p,
+body.dark .entry-content cite,
+body.dark .entry-content figcaption,
+body.dark .entry-content caption {
+  color: var(--dark-text-primary);
+}
+
+body.dark .entry-content th,
+body.dark .entry-content td {
+  color: var(--dark-text-primary);
+  border-color: var(--dark-border-color);
+}
+
+body.dark .entry-content tr:nth-child(even) {
+  background-color: var(--dark-bg-secondary);
+}
+
 /* 合并标题和链接文字颜色 */
 body.dark .entry-title a,
 body.dark .menhera-container .emoji-item,
@@ -659,6 +687,18 @@ body.dark #banner_wave_2 {
 
 body.dark .comment-respond :where(textarea,input):where(:focus,:active){
   border: 1px solid var(--article-theme-highlight,var(--theme-skin-dark)); 
+}
+
+body.dark .comment-respond input::-webkit-input-placeholder,
+body.dark .comment-respond textarea::-webkit-input-placeholder,
+body.dark .comment-respond input:-ms-input-placeholder,
+body.dark .comment-respond textarea:-ms-input-placeholder,
+body.dark .comment-respond input:-moz-placeholder,
+body.dark .comment-respond textarea:-moz-placeholder,
+body.dark .comment-respond input::-moz-placeholder,
+body.dark .comment-respond textarea::-moz-placeholder {
+  color: var(--dark-text-tertiary);
+  opacity: 1;
 }
 
 body.dark span.page-numbers.current {
