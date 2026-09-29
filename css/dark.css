@@ -442,22 +442,6 @@ body.dark .pattern-center h1.entry-title {
   color: #FFFFFF;
 }
 
-body.dark .unified-cover-wave-track-back {
-  fill: rgba(51, 51, 51, .22);
-}
-
-body.dark .unified-cover-wave-track-middle {
-  fill: rgba(51, 51, 51, .34);
-}
-
-body.dark .unified-cover-wave-track-front {
-  fill: rgba(51, 51, 51, .8);
-}
-
-body.dark .site.wrapper.unified-cover-background {
-  border-top-color: transparent;
-}
-
 /* 旧的展示区样式已移除 */
 
 body.dark h3#comments-list-title{
