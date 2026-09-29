@@ -175,6 +175,7 @@ get_header();
     padding: 14px 15px;
     border-radius: 14px;
     background: rgba(255,255,255,.46);
+    text-align: center;
 }
 .nikki-detail-label { display:block; color:var(--nikki-muted); font-size:12px; }
 .nikki-detail-value { display:block; margin-top:6px; color:var(--global-font-color); font-size:18px; font-weight:600; }
