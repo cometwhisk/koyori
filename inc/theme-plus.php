@@ -288,9 +288,10 @@ function the_headPattern(){
     $t .= '<h1 class="entry-title search-title"> '.sprintf( __( "Search results for \" %s \"","sakurairo" ), get_search_query()) ./*关于“ '.get_search_query().' ”的搜索结果*/'</h1>';
   }
   if(!iro_opt('patternimg')) $full_image_url = false;
+  $post_cover_as_background = is_singular() && iro_opt('post_cover_as_bg', false) && iro_opt('site_bg_as_cover', true) && $full_image_url;
   if(!is_home() && $full_image_url) : ?>
   <div class="pattern-center-blank"></div>
-  <div class="pattern-center <?php if(is_single()){echo $center;} ?>">
+  <div class="pattern-center <?php if(is_single()){echo $center;} ?><?php echo $post_cover_as_background ? ' post-cover-background' : ''; ?>">
     <div class="pattern-attachment bg lazyload" style="background-image: url(<?php echo iro_opt('load_out_svg'); ?>)" data-src="<?php echo $full_image_url; ?>"> </div>
     <header class="pattern-header <?php if(is_single()){echo $header;} ?>"><?php echo $t; ?></header>
   </div>
