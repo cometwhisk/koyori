@@ -111,7 +111,7 @@ add_action('wp_enqueue_scripts', static function (): void {
         document.querySelectorAll('a[href]').forEach(function (link) {
             try {
                 var url = new URL(link.href, document.baseURI);
-                if (url.origin === window.location.origin && url.pathname === '/wp-login.php') {
+                if (url.origin === window.location.origin && (url.pathname === '/wp-login.php' || url.pathname === '/login')) {
                     link.setAttribute('data-no-pjax', '');
                 }
             } catch (error) {
@@ -123,18 +123,6 @@ add_action('wp_enqueue_scripts', static function (): void {
     document.addEventListener('pjax:complete', markLoginLinksNoPjax);
 
     document.addEventListener('click', function (event) {
-        var loginLink = event.target.closest('a[href]');
-        if (loginLink) {
-            try {
-                var loginUrl = new URL(loginLink.href, document.baseURI);
-                if (loginUrl.origin === window.location.origin && loginUrl.pathname === '/login') {
-                    window.addEventListener('unload', function () {}, { once: true });
-                }
-            } catch (error) {
-                // Ignore malformed URLs; the browser will handle them normally.
-            }
-        }
-
         var tiledBackground = event.target.closest('#diy1-bg, #diy2-bg, #diy3-bg, #diy4-bg');
         var regularBackground = event.target.closest('#white-bg, #dark-bg');
         if (tiledBackground) {
@@ -145,7 +133,6 @@ add_action('wp_enqueue_scripts', static function (): void {
             document.body.style.backgroundSize = '';
         }
     }, true);
-
 }());
 JS;
     wp_add_inline_script('app', $script, 'before');
