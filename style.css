@@ -6,7 +6,7 @@ Theme URI: https://github.com/cometwhisk/koyori
 Author: Smallmaple
 Author URI: https://www.smallmaple.com/
 Description: A personal derivative theme based on Sakurairo, customized for Smallmaple.
-Version: 1.0.44
+Version: 1.0.45
 Tested up to: 6.8
 Requires at least: 6.0
 Requires PHP: 8.0
@@ -436,21 +436,23 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
   background-color: rgba(255, 255, 255, .5);
 }
 
-.unified-cover-wave {
-  position: absolute;
-  z-index: 1;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: clamp(36px, 7vw, 72px);
-  overflow: hidden;
+.unified-cover-boundary {
+  position: relative;
+  z-index: 2;
+  height: 0;
   pointer-events: none;
 }
 
-.unified-cover-wave svg {
+.unified-cover-boundary svg {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: block;
   width: 100%;
-  height: 100%;
+  height: clamp(36px, 7vw, 72px);
+  overflow: visible;
+  animation: unified-cover-boundary-rise .9s ease-out both;
 }
 
 .unified-cover-wave-track {
@@ -475,8 +477,17 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
 }
 
 .unified-cover-wave-track-front {
-  fill: rgba(255, 255, 255, .26);
+  fill: rgba(255, 255, 255, .5);
   animation-duration: 7s;
+}
+
+@keyframes unified-cover-boundary-rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes unified-cover-wave-slide {
@@ -489,12 +500,13 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
 }
 
 @media (max-width: 860px) {
-  .unified-cover-wave {
+  .unified-cover-boundary svg {
     height: clamp(32px, 9vw, 44px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .unified-cover-boundary svg,
   .unified-cover-wave-track {
     animation: none;
   }
@@ -510,7 +522,7 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
   left: 0;
   right: 0;
   color: #FFF;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;

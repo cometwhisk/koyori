@@ -293,24 +293,6 @@ function the_headPattern(){
   <div class="pattern-center-blank"></div>
   <div class="pattern-center <?php if(is_single()){echo $center;} ?><?php echo $post_cover_as_background ? ' post-cover-background' : ''; ?>">
     <div class="pattern-attachment bg lazyload" style="background-image: url(<?php echo iro_opt('load_out_svg'); ?>)" data-src="<?php echo $full_image_url; ?>"> </div>
-    <?php if ($post_cover_as_background) : ?>
-    <div class="unified-cover-wave" aria-hidden="true">
-      <svg viewBox="0 0 1200 80" preserveAspectRatio="none" focusable="false">
-        <g class="unified-cover-wave-track unified-cover-wave-track-back">
-          <path d="M0 44 C150 12 300 12 450 44 S750 76 900 44 S1050 12 1200 44 V80 H0 Z"></path>
-          <path transform="translate(1200 0)" d="M0 44 C150 12 300 12 450 44 S750 76 900 44 S1050 12 1200 44 V80 H0 Z"></path>
-        </g>
-        <g class="unified-cover-wave-track unified-cover-wave-track-middle">
-          <path d="M0 50 C150 20 300 20 450 50 S750 80 900 50 S1050 20 1200 50 V80 H0 Z"></path>
-          <path transform="translate(1200 0)" d="M0 50 C150 20 300 20 450 50 S750 80 900 50 S1050 20 1200 50 V80 H0 Z"></path>
-        </g>
-        <g class="unified-cover-wave-track unified-cover-wave-track-front">
-          <path d="M0 56 C150 32 300 32 450 56 S750 80 900 56 S1050 32 1200 56 V80 H0 Z"></path>
-          <path transform="translate(1200 0)" d="M0 56 C150 32 300 32 450 56 S750 80 900 56 S1050 32 1200 56 V80 H0 Z"></path>
-        </g>
-      </svg>
-    </div>
-    <?php endif; ?>
     <header class="pattern-header <?php if(is_single()){echo $header;} ?>"><?php echo $t; ?></header>
   </div>
   <?php else :
