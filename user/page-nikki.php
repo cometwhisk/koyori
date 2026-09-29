@@ -35,6 +35,12 @@ $nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['n
 $nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];
 $nikki['avatar'] = !empty($nikki_saved['avatar']) ? (string) $nikki_saved['avatar'] : $nikki['avatar'];
 $nikki['level'] = !empty($nikki_saved['level']) ? (string) $nikki_saved['level'] : $nikki['level'];
+$nikki_stat_keys = array('login_days', 'play_time', 'clothes', 'designs', 'dewdrop', 'pillar', 'resonance', 'limited_five', 'limited_four', 'standard_five', 'four_star', 'suits', 'crown', 'crown_peak');
+foreach ($nikki_stat_keys as $stat_key) {
+    if (array_key_exists($stat_key, $nikki_stats_saved) && $nikki_stats_saved[$stat_key] !== '') {
+        $nikki[$stat_key] = (string) $nikki_stats_saved[$stat_key];
+    }
+}
 $nikki_wish = is_array($nikki_stats_saved['wish_resonance'] ?? null) ? $nikki_stats_saved['wish_resonance'] : array();
 $nikki_total_resonance = (string) ($nikki_stats_saved['resonance'] ?? '0');
 $nikki_stats = array(
