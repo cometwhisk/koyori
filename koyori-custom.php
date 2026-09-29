@@ -135,14 +135,10 @@ add_action('wp_enqueue_scripts', static function (): void {
         }
     }, true);
 
-    window.addEventListener('pageshow', function (event) {
+    window.addEventListener('pageshow', function () {
         try {
             var key = 'koyori_login_full_back';
             var markedAt = Number(sessionStorage.getItem(key) || 0);
-            if (!event.persisted) {
-                sessionStorage.removeItem(key);
-                return;
-            }
             if (markedAt > 0 && Date.now() - markedAt < 300000) {
                 sessionStorage.removeItem(key);
                 window.location.reload();
