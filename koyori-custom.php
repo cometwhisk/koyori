@@ -30,12 +30,20 @@ add_filter('redirect_canonical', static function ($redirect_url, $requested_url)
 }, 10, 2);
 
 add_action('template_redirect', static function (): void {
-    if (get_query_var('koyori_login')) {
+    if (!get_query_var('koyori_login')) {
+        return;
+    }
+
+    $action = sanitize_key((string)($_REQUEST['action'] ?? 'login'));
+    if (strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' || $action !== 'login') {
         $user_login = '';
         $error = '';
         require ABSPATH . 'wp-login.php';
         exit;
     }
+
+    include get_template_directory() . '/user/page-login.php';
+    exit;
 }, 0);
 
 add_filter('site_url', static function ($url, $path, $scheme, $blog_id) {
@@ -111,7 +119,7 @@ add_action('wp_enqueue_scripts', static function (): void {
         document.querySelectorAll('a[href]').forEach(function (link) {
             try {
                 var url = new URL(link.href, document.baseURI);
-                if (url.origin === window.location.origin && (url.pathname === '/wp-login.php' || url.pathname === '/login')) {
+                if (url.origin === window.location.origin && url.pathname === '/wp-login.php') {
                     link.setAttribute('data-no-pjax', '');
                 }
             } catch (error) {
