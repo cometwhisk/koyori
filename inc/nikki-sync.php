@@ -128,7 +128,9 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $wish_total = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $wish_owned = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $wish_draws = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
-        $gacha_by_pool_rarity_result = array();
+        $wish_collected = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
+        $standard_four_owned = 0;
+        $owned_suit_ids = array_fill_keys(array_map('strval', is_array($self['suit_list'] ?? null) ? $self['suit_list'] : array()), true);
         foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
             $pool_id = (string) ($draw['card_pool_id'] ?? '');
             $rarity = (string) ($draw['rarity'] ?? '');
@@ -166,6 +168,18 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             $cloths = is_string($suit['cloths'] ?? null) ? json_decode($suit['cloths'], true) : ($suit['cloths'] ?? array());
             if ($wish_key !== '') {
                 $wish_total[$wish_key] += $level === 5 ? 4 : 2;
+                $suit_ids = array((string) ($suit['suit_id'] ?? ''));
+                foreach (array('evolutions1', 'evolutions2', 'evolutions3') as $evolution_key) {
+                    $evolution = is_string($suit[$evolution_key] ?? null) ? json_decode($suit[$evolution_key], true) : array();
+                    if (!empty($evolution['evolution_suit_id'])) {
+                        $suit_ids[] = (string) $evolution['evolution_suit_id'];
+                    }
+                }
+                foreach ($suit_ids as $suit_id) {
+                    if (!empty($owned_suit_ids[$suit_id])) {
+                        $wish_collected[$wish_key]++;
+                    }
+                }
             }
             $owned = 0;
             $draws = 0;
@@ -183,6 +197,9 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             if ($wish_key !== '') {
                 $wish_owned[$wish_key] += $owned;
                 $wish_draws[$wish_key] += $draws;
+            }
+            if ($level === 4) {
+                $standard_four_owned += $owned;
             }
             if ($type === 2 && $level === 5) {
                 $limited_five += $owned;
@@ -220,9 +237,9 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             'resonance' => (string) ($gm['draw_num'] ?? 0),
             'suits' => (string) (is_array($self['suit_list'] ?? null) ? count($self['suit_list']) : 0) . ' / 128',
             'wish_resonance' => array(
-                'periodic5' => array('owned' => $wish_owned['periodic5'], 'total' => $wish_total['periodic5'], 'average' => $wish_owned['periodic5'] > 0 ? number_format($wish_draws['periodic5'] / $wish_owned['periodic5'], 1, '.', '') : '0'),
-                'periodic4' => array('owned' => $wish_owned['periodic4'], 'total' => $wish_total['periodic4'], 'average' => $wish_owned['periodic4'] > 0 ? number_format($wish_draws['periodic4'] / $wish_owned['periodic4'], 1, '.', '') : '0'),
-                'permanent5' => array('owned' => $wish_owned['permanent5'], 'total' => $wish_total['permanent5'], 'average' => $wish_owned['permanent5'] > 0 ? number_format($wish_draws['permanent5'] / $wish_owned['permanent5'], 1, '.', '') : '0'),
+                'periodic5' => array('owned' => $wish_owned['periodic5'], 'total' => $wish_total['periodic5'], 'collected' => $wish_collected['periodic5'], 'average' => $wish_owned['periodic5'] > 0 ? number_format($wish_draws['periodic5'] / $wish_owned['periodic5'], 1, '.', '') : '0'),
+                'periodic4' => array('owned' => $wish_owned['periodic4'], 'total' => $wish_total['periodic4'], 'collected' => $wish_collected['periodic4'], 'average' => $wish_owned['periodic4'] > 0 ? number_format($wish_draws['periodic4'] / $wish_owned['periodic4'], 1, '.', '') : '0'),
+                'permanent5' => array('owned' => $wish_owned['permanent5'], 'total' => $wish_total['permanent5'], 'collected' => $wish_collected['permanent5'], 'four_star_owned' => $standard_four_owned, 'average' => $wish_owned['permanent5'] > 0 ? number_format($wish_draws['permanent5'] / $wish_owned['permanent5'], 1, '.', '') : '0'),
             ),
             'crown' => (string) ($gm['permanent_tower'] ?? 0) . ' / 15 层',
             'crown_peak' => (string) ($gm['periodic_tower'] ?? 0) . ' / 8 层',

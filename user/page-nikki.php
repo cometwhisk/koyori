@@ -242,8 +242,13 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
             ?>
                 <div class="nikki-detail">
                     <span class="nikki-detail-label"><?php echo esc_html($label); ?></span>
-                    <span class="nikki-detail-value"><?php echo esc_html((string) ($wish['owned'] ?? '0')); ?> / <?php echo esc_html((string) ($wish['total'] ?? '0')); ?> 件</span>
-                    <small>平均共鸣 <?php echo esc_html((string) ($wish['average'] ?? '0')); ?> 次</small>
+                    <span class="nikki-detail-value"><?php echo esc_html((string) ($wish['owned'] ?? '0')); ?> 件</span>
+                    <small>每件 <strong><?php echo esc_html((string) ($wish['average'] ?? '0')); ?></strong></small>
+                    <?php if ($key === 'permanent5'): ?>
+                        <small>四星数 <strong><?php echo esc_html((string) ($wish['four_star_owned'] ?? '0')); ?></strong></small>
+                    <?php else: ?>
+                        <small>集齐/套装 <strong><?php echo esc_html((string) ($wish['collected'] ?? '0')); ?>/<?php echo esc_html((string) ($wish['total'] ?? '0')); ?></strong></small>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
