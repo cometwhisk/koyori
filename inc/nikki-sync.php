@@ -121,6 +121,48 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $payload = json_decode($decoded, true);
         $gm = is_array($payload['info_from_gm'] ?? null) ? $payload['info_from_gm'] : array();
         $self = is_array($payload['info_from_self'] ?? null) ? $payload['info_from_self'] : array();
+        $owned_clothes = array();
+        foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
+            if (!empty($draw['result'])) {
+                $owned_clothes[(string) $draw['result']] = true;
+            }
+        }
+        $limited_five = 0;
+        $limited_four = 0;
+        $standard_five = 0;
+        $four_star = 0;
+        $suit_response = wp_remote_post('https://myl-api.nuanpaper.com/v1/strategy/main/suit/list', array(
+            'timeout' => 20,
+            'headers' => array('Accept' => 'application/json', 'Content-Type' => 'application/json', 'Origin' => 'https://myl.nuanpaper.com', 'Referer' => 'https://myl.nuanpaper.com/tools/journal'),
+            'body' => wp_json_encode(array('client_id' => (int) $auth['client_id'], 'token' => $auth['token'], 'openid' => $auth['openid'])),
+        ));
+        $suit_list = !is_wp_error($suit_response) ? json_decode(wp_remote_retrieve_body($suit_response), true) : array();
+        foreach (is_array($suit_list['data']['list'] ?? null) ? $suit_list['data']['list'] : array() as $suit) {
+            $type = (int) ($suit['card_type'] ?? 0);
+            $level = (int) ($suit['level'] ?? 0);
+            $cloths = is_string($suit['cloths'] ?? null) ? json_decode($suit['cloths'], true) : ($suit['cloths'] ?? array());
+            $owned = 0;
+            foreach (is_array($cloths) ? $cloths : array() as $cloth) {
+                if (!empty($owned_clothes[(string) ($cloth['cloth_id'] ?? '')])) {
+                    $owned++;
+                }
+            }
+            if ($type === 2 && $level === 5) {
+                $limited_five += $owned;
+            } elseif ($type === 2 && $level === 4) {
+                $limited_four += $owned;
+            } elseif ($type === 1 && $level === 5) {
+                $standard_five += $owned;
+            } elseif ($type === 1 && $level === 4) {
+                $four_star += $owned;
+            }
+        }
+        $dewdrop = 0;
+        foreach (is_array($gm['currency_count'] ?? null) ? $gm['currency_count'] : array() as $currency) {
+            if ((int) ($currency['item_id'] ?? 0) === 24) {
+                $dewdrop = (int) ($currency['count'] ?? 0);
+            }
+        }
         foreach (array('login_days' => $self, 'total_play_time' => $self, 'cloth_num' => $gm, 'momo_num' => $gm, 'designdrawing_num' => $gm) as $field => $source) {
             if (!isset($source[$field]) || !is_numeric($source[$field])) {
                 return new WP_Error('nikki_invalid_stats', '统计数据返回不完整。');
@@ -132,6 +174,12 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             'clothes' => (string) $gm['cloth_num'],
             'designs' => (string) $gm['designdrawing_num'],
             'momo' => (string) $gm['momo_num'],
+            'dewdrop' => (string) $dewdrop . ' / 3203',
+            'pillar' => (string) ($gm['pillar_num'] ?? 0) . ' / 240',
+            'limited_five' => (string) $limited_five,
+            'limited_four' => (string) $limited_four,
+            'standard_five' => (string) $standard_five,
+            'four_star' => (string) ($limited_four + $four_star),
             'resonance' => (string) ($gm['draw_num'] ?? 0),
             'suits' => (string) (is_array($self['suit_list'] ?? null) ? count($self['suit_list']) : 0) . ' / 128',
             'crown' => (string) ($gm['permanent_tower'] ?? 0) . ' / 15 层',

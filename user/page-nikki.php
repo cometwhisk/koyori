@@ -35,7 +35,7 @@ $nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['n
 $nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];
 $nikki['avatar'] = !empty($nikki_saved['avatar']) ? (string) $nikki_saved['avatar'] : $nikki['avatar'];
 $nikki['level'] = !empty($nikki_saved['level']) ? (string) $nikki_saved['level'] : $nikki['level'];
-foreach (array('login_days', 'play_time', 'clothes', 'designs', 'momo', 'resonance', 'suits', 'crown', 'crown_peak') as $key) {
+foreach (array('login_days', 'play_time', 'clothes', 'designs', 'momo', 'dewdrop', 'pillar', 'limited_five', 'limited_four', 'standard_five', 'four_star', 'resonance', 'suits', 'crown', 'crown_peak') as $key) {
     if (!empty($nikki_stats_saved[$key])) {
         $nikki[$key] = (string) $nikki_stats_saved[$key];
     }
