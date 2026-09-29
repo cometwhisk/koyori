@@ -66,7 +66,6 @@ add_action('login_init', static function (): void {
 
 add_action('login_footer', static function (): void {
     echo '<style id="koyori-login-fixes">body.login #loginform .cf-turnstile{width:300px!important;max-width:none!important;transform:scale(.9)!important;transform-origin:left top!important}body.login #loginform iframe{max-width:none!important}body.login #loginform #rememberme{appearance:auto!important;-webkit-appearance:checkbox!important;width:16px!important;height:16px!important;margin:0 6px 0 0!important;accent-color:#666;cursor:pointer;vertical-align:middle}body.login #loginform .forgetmenot{display:flex!important;align-items:center!important;float:left!important;margin:6px 0 0!important}body.login #nav{clear:both!important;width:auto!important;margin:14px 0 24px!important;padding:0!important;text-align:center!important;background:transparent!important;background-image:none!important;background-color:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border:none!important;box-shadow:none!important}body.login #nav a{display:inline-block!important;padding:6px 10px!important;line-height:18px!important;background:rgba(255,255,255,.7)!important;border-radius:8px!important}</style>', PHP_EOL;
-    echo '<script id="koyori-login-full-back">(function(){try{sessionStorage.setItem("koyori_login_full_back",String(Date.now()));var form=document.getElementById("loginform");if(form){form.addEventListener("submit",function(){sessionStorage.removeItem("koyori_login_full_back");});}}catch(error){}}());</script>', PHP_EOL;
 });
 
 add_action('wp_footer', static function (): void {
@@ -124,6 +123,18 @@ add_action('wp_enqueue_scripts', static function (): void {
     document.addEventListener('pjax:complete', markLoginLinksNoPjax);
 
     document.addEventListener('click', function (event) {
+        var loginLink = event.target.closest('a[href]');
+        if (loginLink) {
+            try {
+                var loginUrl = new URL(loginLink.href, document.baseURI);
+                if (loginUrl.origin === window.location.origin && loginUrl.pathname === '/login') {
+                    window.addEventListener('unload', function () {}, { once: true });
+                }
+            } catch (error) {
+                // Ignore malformed URLs; the browser will handle them normally.
+            }
+        }
+
         var tiledBackground = event.target.closest('#diy1-bg, #diy2-bg, #diy3-bg, #diy4-bg');
         var regularBackground = event.target.closest('#white-bg, #dark-bg');
         if (tiledBackground) {
@@ -135,18 +146,6 @@ add_action('wp_enqueue_scripts', static function (): void {
         }
     }, true);
 
-    window.addEventListener('pageshow', function () {
-        try {
-            var key = 'koyori_login_full_back';
-            var markedAt = Number(sessionStorage.getItem(key) || 0);
-            if (markedAt > 0 && Date.now() - markedAt < 300000) {
-                sessionStorage.removeItem(key);
-                window.location.reload();
-            }
-        } catch (error) {
-            // Ignore browsers that block sessionStorage.
-        }
-    });
 }());
 JS;
     wp_add_inline_script('app', $script, 'before');
