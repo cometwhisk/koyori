@@ -179,8 +179,9 @@ get_header();
 .nikki-detail-label { display:block; color:var(--nikki-muted); font-size:12px; }
 .nikki-detail-value { display:block; margin-top:6px; color:var(--global-font-color); font-size:18px; font-weight:600; }
 .nikki-detail small { display:block; margin-top:8px; color:var(--nikki-muted); font-size:12px; }
-.nikki-resonance-total { display:flex; align-items:baseline; justify-content:flex-start; gap:12px; margin:0 0 18px; color:var(--nikki-muted); }
-.nikki-resonance-total strong { color:var(--theme-skin-matching); font-size:32px; line-height:1; }
+.nikki-resonance-total { display:flex; align-items:baseline; justify-content:center; gap:12px; margin:0 0 24px; color:var(--nikki-muted); }
+.nikki-resonance-total span { font-size:16px; }
+.nikki-resonance-total strong { color:var(--theme-skin-matching); font-size:36px; line-height:1; }
 body.dark .nikki-identity,
 body.dark .nikki-stats,
 body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: rgba(100,100,100,.35); box-shadow: var(--dark-shadow-normal); }
@@ -231,7 +232,6 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
     </section>
 
     <section class="nikki-section" aria-label="心愿共鸣">
-        <h2 class="nikki-section-title"><i class="fa-solid fa-star" aria-hidden="true"></i> 心愿共鸣</h2>
         <div class="nikki-resonance-total">
             <span>共鸣次数</span>
             <strong><?php echo esc_html($nikki_total_resonance); ?></strong>
