@@ -46,8 +46,6 @@ $nikki_stats = array(
     array('icon' => 'fa-clock', 'label' => '游戏时长', 'value' => $nikki['play_time']),
     array('icon' => 'fa-shirt', 'label' => '服装数量', 'value' => $nikki['clothes']),
     array('icon' => 'fa-scroll', 'label' => '设计图', 'value' => $nikki['designs']),
-    array('icon' => 'fa-star', 'label' => '共鸣次数', 'value' => $nikki['resonance']),
-    array('icon' => 'fa-layer-group', 'label' => '集齐套装', 'value' => $nikki['suits']),
     array('icon' => 'fa-trophy', 'label' => '奇迹之冠', 'value' => $nikki['crown']),
     array('icon' => 'fa-ranking-star', 'label' => '巅峰赛', 'value' => $nikki['crown_peak']),
 );
