@@ -168,6 +168,50 @@ body.dark .iro-annotation-popup .explanation{
   color: var(--dark-text-secondary);
 }
 
+body.dark {
+  color: var(--dark-text-primary);
+}
+
+body.dark header.page-header,
+body.dark h1.cat-title,
+body.dark .comment-respond input,
+body.dark .comment-respond textarea,
+body.dark .siren-checkbox-label,
+body.dark .aplayer .aplayer-list ol li .aplayer-list-author,
+body.dark,
+body.dark input,
+body.dark select,
+body.dark textarea,
+body.dark .skin-menu,
+body.dark .comment .info,
+body.dark .comment-respond .logged-in-as,
+body.dark .comment-respond .logged-in-as a,
+body.dark .comment h4 a,
+body.dark .comment .body .comment-at,
+body.dark h1.fes-title,
+body.dark h1.main-title,
+body.dark .entry-content h1,
+body.dark .entry-content h2,
+body.dark .entry-content h3,
+body.dark .entry-content h4,
+body.dark .entry-content h5,
+body.dark .entry-content h6,
+body.dark blockquote:before,
+body.dark blockquote:after,
+body.dark .post-footer p,
+body.dark .author_info .author-center,
+body.dark .post-squares h3,
+body.dark .shuoshuo-title h3,
+body.dark .ins-section .fa,
+body.dark .site-title,
+body.dark .header-info,
+body.dark .site-info,
+body.dark #emotion-toggle,
+body.dark .insert-image-tips,
+body.dark .markdown-toggle,
+body.dark .mo_toc_panel .user-menu-option a {
+  color: var(--dark-text-primary);
+}
 
 /* 合并卡片容器样式 */
 body.dark .skin-menu .row-container .menu-list,
