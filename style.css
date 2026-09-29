@@ -6,7 +6,7 @@ Theme URI: https://github.com/cometwhisk/koyori
 Author: Smallmaple
 Author URI: https://www.smallmaple.com/
 Description: A personal derivative theme based on Sakurairo, customized for Smallmaple.
-Version: 1.0.46
+Version: 1.0.47
 Tested up to: 6.8
 Requires at least: 6.0
 Requires PHP: 8.0
@@ -473,8 +473,8 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
   margin-left: auto;
   margin-right: auto;
   text-align: left;
-  top: auto;
-  bottom: 30px;
+  top: 45%;
+  bottom: auto;
 }
 
 .single-center .single-header h1.entry-title {
