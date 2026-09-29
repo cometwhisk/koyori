@@ -30,10 +30,16 @@ if (function_exists('koyori_nikki_maybe_auto_sync_profile')) {
     $nikki_private = get_option('koyori_nikki_private', array());
 }
 $nikki_saved = is_array($nikki_private) && is_array($nikki_private['profile_data'] ?? null) ? $nikki_private['profile_data'] : array();
+$nikki_stats_saved = is_array($nikki_private) && is_array($nikki_private['stats_data'] ?? null) ? $nikki_private['stats_data'] : array();
 $nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['nickname'] : $nikki['nickname'];
 $nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];
 $nikki['avatar'] = !empty($nikki_saved['avatar']) ? (string) $nikki_saved['avatar'] : $nikki['avatar'];
 $nikki['level'] = !empty($nikki_saved['level']) ? (string) $nikki_saved['level'] : $nikki['level'];
+foreach (array('login_days', 'play_time', 'clothes', 'designs', 'momo', 'resonance', 'suits', 'crown', 'crown_peak') as $key) {
+    if (!empty($nikki_stats_saved[$key])) {
+        $nikki[$key] = (string) $nikki_stats_saved[$key];
+    }
+}
 
 $nikki_stats = array(
     array('icon' => 'fa-calendar-days', 'label' => '登录天数', 'value' => $nikki['login_days'] . ' 天'),
