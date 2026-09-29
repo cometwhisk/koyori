@@ -111,7 +111,7 @@ add_action('wp_enqueue_scripts', static function (): void {
         document.querySelectorAll('a[href]').forEach(function (link) {
             try {
                 var url = new URL(link.href, document.baseURI);
-                if (url.origin === window.location.origin && url.pathname === '/wp-login.php') {
+                if (url.origin === window.location.origin && (url.pathname === '/wp-login.php' || url.pathname === '/login')) {
                     link.setAttribute('data-no-pjax', '');
                 }
             } catch (error) {
