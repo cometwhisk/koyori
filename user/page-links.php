@@ -385,8 +385,10 @@ body.dark .link-form-submit:hover {
 }
 
 .link-form-group textarea {
-    resize: vertical;
+    height: 110px;
+    resize: none;
     max-width: 100%;
+    overflow-y: auto;
 }
 
 body.dark .link-form-group input,
