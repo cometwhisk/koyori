@@ -279,7 +279,10 @@ header('X-Frame-Options: SAMEORIGIN');
                 <?php get_template_part('layouts/imgbox'); ?>
             </div>
         <?php } ?>
-        <div id="page" class="site wrapper">
+        <?php
+        $unified_cover_background = is_singular() && iro_opt('post_cover_as_bg', false) && iro_opt('site_bg_as_cover', true) && koyori_has_cover(get_the_ID());
+        ?>
+        <div id="page" class="site wrapper<?= $unified_cover_background ? ' unified-cover-background' : ''; ?>">
             <?php
             $use_as_thumb = get_post_meta(get_the_ID(), 'use_as_thumb', true); //'true','only',(default)
             if ($use_as_thumb != 'only') {
