@@ -384,6 +384,11 @@ body.dark .link-form-submit:hover {
     transition: all 0.3s ease;
 }
 
+.link-form-group textarea {
+    resize: vertical;
+    max-width: 100%;
+}
+
 body.dark .link-form-group input,
 body.dark .link-form-group textarea,
 body.dark .captcha-container input {
