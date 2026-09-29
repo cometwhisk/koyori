@@ -122,15 +122,22 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $gm = is_array($payload['info_from_gm'] ?? null) ? $payload['info_from_gm'] : array();
         $self = is_array($payload['info_from_self'] ?? null) ? $payload['info_from_self'] : array();
         $owned_clothes = array();
+        $draw_by_result = array();
         foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
             if (!empty($draw['result'])) {
                 $owned_clothes[(string) $draw['result']] = true;
+                $rarity = (string) ($draw['rarity'] ?? '');
+                $draw_field = $rarity === '5' ? 'times_from_last_five_stars' : 'times_from_last_four_stars';
+                $draw_by_result[(string) $draw['result']] = (int) ($draw[$draw_field] ?? 0) + 1;
             }
         }
         $limited_five = 0;
         $limited_four = 0;
         $standard_five = 0;
         $four_star = 0;
+        $wish_total = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
+        $wish_owned = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
+        $wish_draws = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $suit_response = wp_remote_post('https://myl-api.nuanpaper.com/v1/strategy/main/suit/list', array(
             'timeout' => 20,
             'headers' => array('Accept' => 'application/json', 'Content-Type' => 'application/json', 'Origin' => 'https://myl.nuanpaper.com', 'Referer' => 'https://myl.nuanpaper.com/tools/journal'),
@@ -140,12 +147,23 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         foreach (is_array($suit_list['data']['list'] ?? null) ? $suit_list['data']['list'] : array() as $suit) {
             $type = (int) ($suit['card_type'] ?? 0);
             $level = (int) ($suit['level'] ?? 0);
+            $wish_key = $type === 2 && $level === 5 ? 'periodic5' : ($type === 2 && $level === 4 ? 'periodic4' : ($type === 1 && $level === 5 ? 'permanent5' : ''));
             $cloths = is_string($suit['cloths'] ?? null) ? json_decode($suit['cloths'], true) : ($suit['cloths'] ?? array());
+            if ($wish_key !== '') {
+                $wish_total[$wish_key] += is_array($cloths) ? count($cloths) : 0;
+            }
             $owned = 0;
+            $draws = 0;
             foreach (is_array($cloths) ? $cloths : array() as $cloth) {
-                if (!empty($owned_clothes[(string) ($cloth['cloth_id'] ?? '')])) {
+                $cloth_id = (string) ($cloth['cloth_id'] ?? '');
+                if (!empty($owned_clothes[$cloth_id])) {
                     $owned++;
+                    $draws += (int) ($draw_by_result[$cloth_id] ?? 0);
                 }
+            }
+            if ($wish_key !== '') {
+                $wish_owned[$wish_key] += $owned;
+                $wish_draws[$wish_key] += $draws;
             }
             if ($type === 2 && $level === 5) {
                 $limited_five += $owned;
@@ -182,6 +200,11 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
             'four_star' => (string) ($limited_four + $four_star),
             'resonance' => (string) ($gm['draw_num'] ?? 0),
             'suits' => (string) (is_array($self['suit_list'] ?? null) ? count($self['suit_list']) : 0) . ' / 128',
+            'wish_resonance' => array(
+                'periodic5' => array('owned' => $wish_owned['periodic5'], 'total' => $wish_total['periodic5'], 'average' => $wish_owned['periodic5'] > 0 ? number_format($wish_draws['periodic5'] / $wish_owned['periodic5'], 1, '.', '') : '0'),
+                'periodic4' => array('owned' => $wish_owned['periodic4'], 'total' => $wish_total['periodic4'], 'average' => $wish_owned['periodic4'] > 0 ? number_format($wish_draws['periodic4'] / $wish_owned['periodic4'], 1, '.', '') : '0'),
+                'permanent5' => array('owned' => $wish_owned['permanent5'], 'total' => $wish_total['permanent5'], 'average' => $wish_owned['permanent5'] > 0 ? number_format($wish_draws['permanent5'] / $wish_owned['permanent5'], 1, '.', '') : '0'),
+            ),
             'crown' => (string) ($gm['permanent_tower'] ?? 0) . ' / 15 层',
             'crown_peak' => (string) ($gm['periodic_tower'] ?? 0) . ' / 8 层',
             'stats_synced_at' => current_time('mysql'),

@@ -35,12 +35,8 @@ $nikki['nickname'] = !empty($nikki_saved['nickname']) ? (string) $nikki_saved['n
 $nikki['uid'] = !empty($nikki_saved['uid']) ? (string) $nikki_saved['uid'] : $nikki['uid'];
 $nikki['avatar'] = !empty($nikki_saved['avatar']) ? (string) $nikki_saved['avatar'] : $nikki['avatar'];
 $nikki['level'] = !empty($nikki_saved['level']) ? (string) $nikki_saved['level'] : $nikki['level'];
-foreach (array('login_days', 'play_time', 'clothes', 'designs', 'momo', 'dewdrop', 'pillar', 'limited_five', 'limited_four', 'standard_five', 'four_star', 'resonance', 'suits', 'crown', 'crown_peak') as $key) {
-    if (!empty($nikki_stats_saved[$key])) {
-        $nikki[$key] = (string) $nikki_stats_saved[$key];
-    }
-}
-
+$nikki_wish = is_array($nikki_stats_saved['wish_resonance'] ?? null) ? $nikki_stats_saved['wish_resonance'] : array();
+$nikki_total_resonance = (string) ($nikki_stats_saved['resonance'] ?? '0');
 $nikki_stats = array(
     array('icon' => 'fa-calendar-days', 'label' => '登录天数', 'value' => $nikki['login_days'] . ' 天'),
     array('icon' => 'fa-clock', 'label' => '游戏时长', 'value' => $nikki['play_time']),
@@ -182,6 +178,9 @@ get_header();
 }
 .nikki-detail-label { display:block; color:var(--nikki-muted); font-size:12px; }
 .nikki-detail-value { display:block; margin-top:6px; color:var(--global-font-color); font-size:18px; font-weight:600; }
+.nikki-detail small { display:block; margin-top:8px; color:var(--nikki-muted); font-size:12px; }
+.nikki-resonance-total { display:flex; align-items:baseline; justify-content:center; gap:12px; margin:0 0 18px; color:var(--nikki-muted); }
+.nikki-resonance-total strong { color:var(--theme-skin-matching); font-size:32px; line-height:1; }
 body.dark .nikki-identity,
 body.dark .nikki-stats,
 body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: rgba(100,100,100,.35); box-shadow: var(--dark-shadow-normal); }
@@ -231,17 +230,22 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
         </div>
     </section>
 
-    <section class="nikki-section" aria-label="收集与共鸣">
-        <h2 class="nikki-section-title"><i class="fa-solid fa-gem" aria-hidden="true"></i> 收集与共鸣</h2>
+    <section class="nikki-section" aria-label="心愿共鸣">
+        <h2 class="nikki-section-title"><i class="fa-solid fa-star" aria-hidden="true"></i> 心愿共鸣</h2>
+        <div class="nikki-resonance-total">
+            <span>共鸣次数</span>
+            <strong><?php echo esc_html($nikki_total_resonance); ?></strong>
+        </div>
         <div class="nikki-detail-grid">
-            <div class="nikki-detail"><span class="nikki-detail-label">灵感露珠</span><span class="nikki-detail-value"><?php echo esc_html($nikki['dewdrop']); ?></span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">流转之柱</span><span class="nikki-detail-value"><?php echo esc_html($nikki['pillar']); ?></span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">限定五星</span><span class="nikki-detail-value"><?php echo esc_html($nikki['limited_five']); ?> 件</span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">限定四星</span><span class="nikki-detail-value"><?php echo esc_html($nikki['limited_four']); ?> 件</span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">常驻五星</span><span class="nikki-detail-value"><?php echo esc_html($nikki['standard_five']); ?> 件</span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">四星数量</span><span class="nikki-detail-value"><?php echo esc_html($nikki['four_star']); ?></span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">套装完成</span><span class="nikki-detail-value"><?php echo esc_html($nikki['suits']); ?></span></div>
-            <div class="nikki-detail"><span class="nikki-detail-label">共鸣次数</span><span class="nikki-detail-value"><?php echo esc_html($nikki['resonance']); ?></span></div>
+            <?php foreach (array('periodic5' => '限定五星', 'periodic4' => '限定四星', 'permanent5' => '常驻五星') as $key => $label):
+                $wish = is_array($nikki_wish[$key] ?? null) ? $nikki_wish[$key] : array();
+            ?>
+                <div class="nikki-detail">
+                    <span class="nikki-detail-label"><?php echo esc_html($label); ?></span>
+                    <span class="nikki-detail-value"><?php echo esc_html((string) ($wish['owned'] ?? '0')); ?> / <?php echo esc_html((string) ($wish['total'] ?? '0')); ?> 件</span>
+                    <small>平均共鸣 <?php echo esc_html((string) ($wish['average'] ?? '0')); ?> 次</small>
+                </div>
+            <?php endforeach; ?>
         </div>
     </section>
 </div>
