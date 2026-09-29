@@ -35,7 +35,23 @@ add_action('template_redirect', static function (): void {
     }
 
     $action = sanitize_key((string)($_REQUEST['action'] ?? 'login'));
-    if (strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' || $action !== 'login') {
+    if (strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && $action === 'login') {
+        $redirect_to = isset($_POST['redirect_to']) ? wp_validate_redirect(wp_unslash((string) $_POST['redirect_to']), home_url('/')) : home_url('/');
+        $credentials = array(
+            'user_login' => sanitize_user(wp_unslash((string) ($_POST['log'] ?? ''))),
+            'user_password' => (string) wp_unslash($_POST['pwd'] ?? ''),
+            'remember' => !empty($_POST['rememberme']),
+        );
+        $user = wp_signon($credentials, is_ssl());
+        if (!is_wp_error($user)) {
+            wp_safe_redirect($redirect_to);
+            exit;
+        }
+        wp_safe_redirect(add_query_arg('login', 'failed', home_url('/login')));
+        exit;
+    }
+
+    if ($action !== 'login') {
         $user_login = '';
         $error = '';
         require ABSPATH . 'wp-login.php';
