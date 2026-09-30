@@ -1,0 +1,14 @@
+/* Gutenberg editor shell styles (loaded outside the content iframe). */
+
+textarea.editor-post-title__input,
+.editor-post-title__block textarea.editor-post-title__input {
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 48px;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    overflow: hidden !important;
+    field-sizing: content;
+    line-height: 1.35;
+}

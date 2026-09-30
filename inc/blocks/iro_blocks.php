@@ -44,6 +44,12 @@ function sakurairo_editor_styles() {
         array('wp-edit-post'),
         IRO_VERSION
     );
+    wp_enqueue_style(
+        'koyori-editor-shell',
+        get_template_directory_uri() . '/css/koyori-editor-shell.css',
+        array('wp-edit-post'),
+        IRO_VERSION
+    );
 }
 
 function iro_load_editor_block() {
