@@ -180,6 +180,11 @@ body.dark .entry-content li a:hover {
   color: var(--theme-skin-matching) !important;
 }
 
+body.dark .entry-content > ul,
+body.dark .entry-content > ol {
+  border-color: rgba(255, 255, 255, .28);
+}
+
 body.dark .entry-content blockquote,
 body.dark .entry-content blockquote p,
 body.dark .entry-content cite,
