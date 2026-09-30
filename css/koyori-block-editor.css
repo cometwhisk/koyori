@@ -41,6 +41,16 @@
     max-width: 100%;
 }
 
+/* Keep the post title aligned with the article canvas instead of spanning the iframe. */
+.editor-styles-wrapper .wp-block-post-title,
+.block-editor-writing-flow .wp-block-post-title {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .editor-styles-wrapper p,
 .block-editor-writing-flow p {
     margin-top: 0;
