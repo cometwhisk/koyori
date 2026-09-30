@@ -3,6 +3,17 @@
  * Editor-only styles. Keep admin chrome, panels and popovers untouched.
  */
 
+/* The post title is content, not a single-line toolbar label. */
+.editor-post-title__input {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 48px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.35;
+}
+
 /* These selectors work in the iframe canvas and in the legacy non-iframe canvas. */
 .editor-styles-wrapper,
 .block-editor-writing-flow {
