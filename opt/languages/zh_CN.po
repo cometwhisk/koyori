@@ -1307,7 +1307,7 @@ msgstr "柠檬形状"
 
 #: options/theme-options.php:772
 msgid "Background Transparency in the Frontend"
-msgstr "前台背景透明度"
+msgstr "前台背景不透明度"
 
 #: options/theme-options.php:773
 msgid "Slide to adjust, the recommended sliding value range is 0.6-0.8"
