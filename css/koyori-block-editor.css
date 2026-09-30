@@ -1,0 +1,174 @@
+/*
+ * Koyori Gutenberg writing canvas
+ * Editor-only styles. Keep admin chrome, panels and popovers untouched.
+ */
+
+/* These selectors work in the iframe canvas and in the legacy non-iframe canvas. */
+.editor-styles-wrapper,
+.block-editor-writing-flow {
+    background: #f3f4f6;
+    color: #24292f;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.85;
+}
+
+.editor-styles-wrapper > .block-editor-block-list__layout,
+.block-editor-writing-flow > .block-editor-block-list__layout {
+    box-sizing: border-box;
+    max-width: 900px;
+    margin: 28px auto 64px;
+    padding: 48px 72px 72px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+.editor-styles-wrapper .wp-block,
+.block-editor-writing-flow .wp-block {
+    max-width: 100%;
+}
+
+.editor-styles-wrapper p,
+.block-editor-writing-flow p {
+    margin-top: 0;
+    margin-bottom: 1.1em;
+}
+
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4,
+.editor-styles-wrapper h5,
+.editor-styles-wrapper h6,
+.block-editor-writing-flow h1,
+.block-editor-writing-flow h2,
+.block-editor-writing-flow h3,
+.block-editor-writing-flow h4,
+.block-editor-writing-flow h5,
+.block-editor-writing-flow h6 {
+    color: #1f2937;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-top: 1.7em;
+    margin-bottom: 0.65em;
+}
+
+.editor-styles-wrapper h1,
+.block-editor-writing-flow h1 { font-size: 2rem; }
+.editor-styles-wrapper h2,
+.block-editor-writing-flow h2 { font-size: 1.65rem; }
+.editor-styles-wrapper h3,
+.block-editor-writing-flow h3 { font-size: 1.35rem; }
+
+.editor-styles-wrapper a,
+.block-editor-writing-flow a {
+    color: #2271b1;
+}
+
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol,
+.block-editor-writing-flow ul,
+.block-editor-writing-flow ol {
+    margin-top: 0.6em;
+    margin-bottom: 1.2em;
+    padding-left: 1.7em;
+}
+
+.editor-styles-wrapper blockquote,
+.block-editor-writing-flow blockquote {
+    margin: 1.5em 0;
+    padding: 0.8em 1.4em;
+    border-left: 4px solid #e7a7bc;
+    border-radius: 0 8px 8px 0;
+    background: #fff7fa;
+    color: #4b5563;
+}
+
+.editor-styles-wrapper blockquote p,
+.block-editor-writing-flow blockquote p {
+    margin-bottom: 0;
+}
+
+.editor-styles-wrapper figure,
+.block-editor-writing-flow figure {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.editor-styles-wrapper .wp-block-image img,
+.block-editor-writing-flow .wp-block-image img {
+    border-radius: 10px;
+}
+
+.editor-styles-wrapper figcaption,
+.block-editor-writing-flow figcaption {
+    color: #6b7280;
+    font-size: 0.875em;
+    line-height: 1.5;
+}
+
+.editor-styles-wrapper hr,
+.block-editor-writing-flow hr {
+    margin: 2.2em 0;
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.editor-styles-wrapper table,
+.block-editor-writing-flow table {
+    border-collapse: collapse;
+}
+
+.editor-styles-wrapper th,
+.editor-styles-wrapper td,
+.block-editor-writing-flow th,
+.block-editor-writing-flow td {
+    border-color: #e5e7eb;
+}
+
+/* Code remains part of the same content system, but is visibly separated. */
+.editor-styles-wrapper pre.wp-block-code,
+.block-editor-writing-flow pre.wp-block-code {
+    margin: 1.5em 0;
+    padding: 1.1em 1.25em;
+    border: 1px solid #d8dee4;
+    border-radius: 9px;
+    background: #f6f8fa;
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    line-height: 1.65;
+}
+
+/* Keep Gutenberg's editing feedback visible without boxing every paragraph. */
+.editor-styles-wrapper .block-editor-block-list__block:not(.is-selected):hover,
+.block-editor-writing-flow .block-editor-block-list__block:not(.is-selected):hover {
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(34, 113, 177, 0.18);
+}
+
+.editor-styles-wrapper .block-editor-block-list__block.is-selected,
+.block-editor-writing-flow .block-editor-block-list__block.is-selected {
+    border-radius: 5px;
+}
+
+@media (max-width: 782px) {
+    .editor-styles-wrapper > .block-editor-block-list__layout,
+    .block-editor-writing-flow > .block-editor-block-list__layout {
+        margin: 12px 10px 36px;
+        padding: 30px 24px 48px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .editor-styles-wrapper > .block-editor-block-list__layout,
+    .block-editor-writing-flow > .block-editor-block-list__layout {
+        margin: 0;
+        padding: 24px 18px 36px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}

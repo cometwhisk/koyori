@@ -5,6 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+add_action( 'after_setup_theme', 'koyori_block_editor_theme_support' );
+function koyori_block_editor_theme_support() {
+    add_theme_support( 'editor-styles' );
+    add_editor_style( 'css/koyori-block-editor.css' );
+}
+
 add_action( 'admin_enqueue_scripts', 'iro_editor_vars' );
 function iro_editor_vars( $hook ) {
     // 仅在编辑页注入
@@ -32,6 +38,12 @@ function sakurairo_editor_styles() {
     global $core_lib_basepath;
     wp_enqueue_style('fontawesome-icons',iro_opt('fontawesome_source','https://s4.zstatic.net/ajax/libs/font-awesome/6.7.2/css/all.min.css'),array(),null);
     wp_enqueue_style('iro-codes', $core_lib_basepath . '/css/shortcodes.css', array(), IRO_VERSION);
+    wp_enqueue_style(
+        'koyori-block-editor',
+        get_template_directory_uri() . '/css/koyori-block-editor.css',
+        array('wp-edit-post'),
+        IRO_VERSION
+    );
 }
 
 function iro_load_editor_block() {
