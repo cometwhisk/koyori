@@ -422,3 +422,143 @@ td.hljs-ln-numbers {
 .code-block-fullscreen-html-scroll {
     overflow: hidden
 }
+
+/* Koyori highlight.js theme adaptation */
+.entry-content .highlight-wrap {
+    --hljs-wrap-bg: 255, 255, 255;
+    --hljs-code-fg: #24292f;
+    --hljs-comment: #6a737d;
+    --hljs-keyword: #d73a49;
+    --hljs-name: #22863a;
+    --hljs-string: #032f62;
+    --hljs-number: #005cc5;
+    --hljs-title: #6f42c1;
+    --hljs-built-in: #e36209;
+    --hljs-attr: #005cc5;
+    --hljs-meta: #6f42c1;
+    --hljs-regexp: #032f62;
+    --hljs-symbol: #e36209;
+    --hljs-line-number: #6e7781;
+    --hljs-line-number-bg: rgba(255, 255, 255, .35);
+    --hljs-header-bg: rgba(255, 255, 255, .72);
+    --hljs-header-fg: #24292f;
+    --hljs-control-fg: #24292f;
+    --hljs-hover-bg: rgba(0, 0, 0, .06);
+    background: rgba(var(--hljs-wrap-bg), var(--code-block-background-opacity, .5));
+    color: var(--hljs-code-fg);
+    border: 1px solid rgba(208, 215, 222, .85);
+    box-shadow: 0 10px 30px 0 rgba(31, 35, 40, .12);
+}
+
+.entry-content .highlight-wrap code.hljs,
+.entry-content .highlight-wrap .hljs {
+    background: transparent;
+    color: var(--hljs-code-fg);
+}
+
+.entry-content .highlight-wrap code[data-rel]:before {
+    background: var(--hljs-header-bg);
+    color: var(--hljs-header-fg);
+}
+
+.entry-content .highlight-wrap .copy-code {
+    color: var(--hljs-control-fg);
+}
+
+.entry-content .highlight-wrap .copy-code:hover {
+    color: var(--theme-skin-dark, #57606a);
+}
+
+.entry-content .highlight-wrap .hljs-comment,
+.entry-content .highlight-wrap .hljs-quote {
+    color: var(--hljs-comment);
+}
+
+.entry-content .highlight-wrap .hljs-doctag,
+.entry-content .highlight-wrap .hljs-formula,
+.entry-content .highlight-wrap .hljs-keyword {
+    color: var(--hljs-keyword);
+}
+
+.entry-content .highlight-wrap .hljs-deletion,
+.entry-content .highlight-wrap .hljs-name,
+.entry-content .highlight-wrap .hljs-section,
+.entry-content .highlight-wrap .hljs-selector-tag,
+.entry-content .highlight-wrap .hljs-subst {
+    color: var(--hljs-name);
+}
+
+.entry-content .highlight-wrap .hljs-literal,
+.entry-content .highlight-wrap .hljs-number,
+.entry-content .highlight-wrap .hljs-type,
+.entry-content .highlight-wrap .hljs-variable {
+    color: var(--hljs-number);
+}
+
+.entry-content .highlight-wrap .hljs-addition,
+.entry-content .highlight-wrap .hljs-attribute,
+.entry-content .highlight-wrap .hljs-meta-string,
+.entry-content .highlight-wrap .hljs-regexp,
+.entry-content .highlight-wrap .hljs-string {
+    color: var(--hljs-string);
+}
+
+.entry-content .highlight-wrap .hljs-built_in,
+.entry-content .highlight-wrap .hljs-class .hljs-title {
+    color: var(--hljs-built-in);
+}
+
+.entry-content .highlight-wrap .hljs-attr,
+.entry-content .highlight-wrap .hljs-selector-attr,
+.entry-content .highlight-wrap .hljs-selector-class,
+.entry-content .highlight-wrap .hljs-selector-pseudo,
+.entry-content .highlight-wrap .hljs-template-variable {
+    color: var(--hljs-attr);
+}
+
+.entry-content .highlight-wrap .hljs-bullet,
+.entry-content .highlight-wrap .hljs-link,
+.entry-content .highlight-wrap .hljs-meta,
+.entry-content .highlight-wrap .hljs-selector-id,
+.entry-content .highlight-wrap .hljs-symbol,
+.entry-content .highlight-wrap .hljs-title {
+    color: var(--hljs-title);
+}
+
+.entry-content .highlight-wrap td.hljs-ln-numbers {
+    color: var(--hljs-line-number);
+    background: var(--hljs-line-number-bg);
+}
+
+.entry-content .highlight-wrap .hljs-ln-code.hljs-ln-line:hover {
+    background-color: var(--hljs-hover-bg);
+}
+
+.entry-content .highlight-wrap ::selection {
+    background: var(--hljs-control-fg);
+    color: var(--hljs-header-bg);
+}
+
+body.dark .entry-content .highlight-wrap {
+    --hljs-wrap-bg: 33, 37, 43;
+    --hljs-code-fg: #abb2bf;
+    --hljs-comment: #888f96;
+    --hljs-keyword: #c678dd;
+    --hljs-name: #e06c75;
+    --hljs-string: #98c379;
+    --hljs-number: #d19a66;
+    --hljs-title: #61aeee;
+    --hljs-built-in: #e6c07b;
+    --hljs-attr: #d19a66;
+    --hljs-meta: #61aeee;
+    --hljs-regexp: #98c379;
+    --hljs-symbol: #56b6c2;
+    --hljs-line-number: #888f96;
+    --hljs-line-number-bg: rgba(29, 31, 33, .72);
+    --hljs-header-bg: rgba(33, 37, 43, .92);
+    --hljs-header-fg: #f0f2f5;
+    --hljs-control-fg: #f0f2f5;
+    --hljs-hover-bg: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .12);
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, .4);
+}
