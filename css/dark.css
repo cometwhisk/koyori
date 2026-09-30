@@ -521,8 +521,7 @@ body.dark .navigator i:hover {
   color: var(--theme-skin-dark);
 }
 
-body.dark .entry-content code:not(pre code),
-body.dark .entry-content code {
+body.dark .entry-content code:not(pre code) {
   background: rgba(22, 27, 34, 0.88);
   color: #c9d1d9;
   border-color: rgba(48, 54, 61, 0.85);
