@@ -3773,17 +3773,6 @@ $prefix = 'iro_options';
       ),
 
       array(
-        'id' => 'code_block_background_opacity',
-        'type' => 'slider',
-        'title' => __('代码块背景不透明度','sakurairo_csf'),
-        'desc' => __('白色和深色模式共用此设置，建议值为 0.5-0.8','sakurairo_csf'),
-        'step' => '0.01',
-        'min' => '0.2',
-        'max' => '1',
-        'default' => '0.5'
-      ),
-
-      array(
         'id' => 'code_highlight_prism_line_number_all',
         'type' => 'switcher',
         'title' => __('Prism.js: Add Line Number Display for All Code Blocks','sakurairo_csf'),
@@ -3824,6 +3813,17 @@ $prefix = 'iro_options';
           array( 'code_highlight_method', '==', 'prism', '', 'true' ),
         ),
         'default' => 'themes/prism-tomorrow.min.css'
+      ),
+
+      array(
+        'id' => 'code_block_background_opacity',
+        'type' => 'slider',
+        'title' => __('代码块背景不透明度','sakurairo_csf'),
+        'desc' => __('白色和深色模式共用此设置，建议值为 0.5-0.8','sakurairo_csf'),
+        'step' => '0.01',
+        'min' => '0.2',
+        'max' => '1',
+        'default' => '0.5'
       ),
 
       array(
