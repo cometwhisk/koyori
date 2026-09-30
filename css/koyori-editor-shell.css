@@ -1,14 +1,23 @@
 /* Gutenberg editor shell styles (loaded outside the content iframe). */
 
-textarea.editor-post-title__input,
-.editor-post-title__block textarea.editor-post-title__input {
-    box-sizing: border-box;
-    height: auto !important;
-    min-height: 48px;
-    white-space: pre-wrap !important;
+/* The visible text is the document-overview button label, not the post title field. */
+.editor-header__center .editor-document-tools__document-overview-toggle.components-button {
+    width: min(42vw, 520px);
+    max-width: 520px;
+    height: auto;
+    min-height: 56px;
+    align-items: center;
+}
+
+.editor-header__center .editor-document-tools__document-overview-toggle-title {
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: normal !important;
     overflow-wrap: anywhere !important;
     word-break: break-word !important;
-    overflow: hidden !important;
-    field-sizing: content;
-    line-height: 1.35;
+    text-overflow: clip;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.3;
 }
