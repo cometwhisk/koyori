@@ -51,7 +51,8 @@
 }
 
 .interface-interface-skeleton__sidebar .edit-post-sidebar__panel-tabs button:focus-visible {
-    box-shadow: inset 0 0 0 2px rgba(212, 106, 138, 0.28);
+    outline: 2px solid #d46a8a;
+    outline-offset: -2px;
 }
 
 .interface-interface-skeleton__sidebar .components-panel__body {
@@ -116,7 +117,8 @@
 }
 
 .interface-interface-skeleton__sidebar .components-panel__body .components-button:not(.components-panel__body-toggle):focus-visible {
-    box-shadow: 0 0 0 2px rgba(212, 106, 138, 0.3);
+    outline: 2px solid #d46a8a;
+    outline-offset: 1px;
 }
 
 @media (max-width: 782px) {
