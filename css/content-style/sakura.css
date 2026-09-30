@@ -439,7 +439,7 @@ td.hljs-ln-numbers {
     --hljs-regexp: #032f62;
     --hljs-symbol: #e36209;
     --hljs-line-number: #6e7781;
-    --hljs-line-number-bg: rgba(255, 255, 255, .35);
+    --hljs-line-number-bg: transparent;
     --hljs-header-bg: rgba(255, 255, 255, .72);
     --hljs-header-fg: #24292f;
     --hljs-control-fg: #24292f;
@@ -554,7 +554,7 @@ body.dark .entry-content .highlight-wrap {
     --hljs-regexp: #98c379;
     --hljs-symbol: #56b6c2;
     --hljs-line-number: #888f96;
-    --hljs-line-number-bg: rgba(29, 31, 33, .72);
+    --hljs-line-number-bg: transparent;
     --hljs-header-bg: rgba(33, 37, 43, .92);
     --hljs-header-fg: #f0f2f5;
     --hljs-control-fg: #f0f2f5;
