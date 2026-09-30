@@ -528,7 +528,7 @@ body.dark .entry-content code:not(pre code) {
 }
 
 body.dark pre.wp-block-code {
-  background: rgba(50,50,50,0.5);
+  background: rgba(50, 50, 50, var(--code-block-background-opacity, .5));
 }
 
 body.dark .shuoshuo-item {

@@ -15,6 +15,7 @@ if (iro_opt('theme_skin')) { ?>
     --theme-skin-dark:  <?=iro_opt('theme_skin_dark'); ?>;
     --global-font-weight:<?=iro_opt('global_font_weight');?>;
     --theme-dm-background_transparency:<?=iro_opt('theme_darkmode_background_transparency')?>;
+    --code-block-background-opacity:<?=iro_opt('code_block_background_opacity', '0.5'); ?>;
     --inline_code_background_color_in_dark_mode:<?=iro_opt('inline_code_background_color_in_dark_mode');?>;
     --front_background-transparency:<?=iro_opt('reception_background_transparency'); ?>;
 }
