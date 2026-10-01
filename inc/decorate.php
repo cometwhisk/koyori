@@ -70,13 +70,16 @@ echo $bg_style;
 echo iro_opt('site_bg_as_cover',false)? 'background:#0000;':'';
  ?>}
 
-<?php
-$page_cover_vertical_position = max(0, min(100, (int) iro_opt('page_cover_vertical_position', 50)));
+<?php if ( is_singular( array( 'post', 'page' ) ) ) :
+  $koyori_cover_vertical_position_meta = get_post_meta( get_queried_object_id(), '_koyori_cover_vertical_position', true );
+  $koyori_cover_vertical_position = $koyori_cover_vertical_position_meta === ''
+    ? 50
+    : max( 0, min( 100, (int) $koyori_cover_vertical_position_meta ) );
 ?>
-body.single .pattern-center:not(.post-cover-background) .pattern-attachment.bg,
-body.page .pattern-center:not(.post-cover-background) .pattern-attachment.bg {
-    background-position: center <?=$page_cover_vertical_position; ?>%;
+.pattern-center:not(.post-cover-background) .pattern-attachment.bg {
+    background-position: center <?=$koyori_cover_vertical_position; ?>%;
 }
+<?php endif; ?>
 
 /*预加载部分*/
 

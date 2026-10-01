@@ -6,7 +6,7 @@
     const { registerPlugin } = wp.plugins;
     const { PluginDocumentSettingPanel } = wp.editPost;
     const { MediaUpload, MediaUploadCheck } = wp.blockEditor;
-    const { Button, TextControl } = wp.components;
+    const { Button, TextControl, RangeControl } = wp.components;
     const { createElement: el, useEffect, useState } = wp.element;
     const { useDispatch, useSelect } = wp.data;
 
@@ -27,6 +27,8 @@
             };
         }, []);
         const externalImage = meta[META_KEY] || '';
+        const coverVerticalPositionMeta = parseInt(meta['_koyori_cover_vertical_position'], 10);
+        const coverVerticalPosition = isNaN(coverVerticalPositionMeta) ? 50 : Math.max(0, Math.min(100, coverVerticalPositionMeta));
         const [mode, setMode] = useState(externalImage ? 'external' : 'local');
         const [externalUrl, setExternalUrl] = useState(externalImage);
 
@@ -150,6 +152,17 @@
                     onClick: function () { selectMode('external'); },
                 }, '图床 URL')
             ),
+            postType !== 'shuoshuo' && el(RangeControl, {
+                label: '封面图垂直位置',
+                value: coverVerticalPosition,
+                onChange: function (value) {
+                    updateMeta(Math.max(0, Math.min(100, parseInt(value, 10))));
+                },
+                min: 0,
+                max: 100,
+                step: 1,
+                help: '50% 为居中位置；数值越大，显示图片越靠下的区域。',
+            }),
             mode === 'local' ? renderLocalMode() : renderExternalMode()
         );
     }

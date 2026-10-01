@@ -275,6 +275,24 @@ function koyori_register_external_cover_meta() {
 }
 add_action('init', 'koyori_register_external_cover_meta');
 
+function koyori_register_cover_vertical_position_meta() {
+    foreach (array('post', 'page') as $post_type) {
+        register_post_meta($post_type, '_koyori_cover_vertical_position', array(
+            'type'              => 'integer',
+            'single'            => true,
+            'default'           => 50,
+            'show_in_rest'      => true,
+            'sanitize_callback' => function ($value) {
+                return max(0, min(100, (int) $value));
+            },
+            'auth_callback'     => function ($allowed, $meta_key, $post_id) {
+                return current_user_can('edit_post', $post_id);
+            },
+        ));
+    }
+}
+add_action('init', 'koyori_register_cover_vertical_position_meta');
+
 function koyori_register_ai_excerpt_meta() {
     register_post_meta('post', '_koyori_ai_excerpt_hash', array(
         'type'              => 'string',
@@ -299,14 +317,14 @@ function koyori_enqueue_cover_editor_assets() {
         'koyori-cover-editor',
         get_template_directory_uri() . '/js/koyori-cover-editor.js',
         array('wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-block-editor'),
-        '1.0.2',
+        '1.0.3',
         true
     );
     wp_enqueue_style(
         'koyori-cover-editor',
         get_template_directory_uri() . '/css/koyori-cover-editor.css',
         array('wp-edit-post'),
-        '1.0.2'
+        '1.0.3'
     );
 
     if ($screen->post_type === 'post') {

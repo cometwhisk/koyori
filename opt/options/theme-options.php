@@ -2413,17 +2413,6 @@ $prefix = 'iro_options';
         'default' => true
       ),
 
-      array(
-        'id' => 'page_cover_vertical_position',
-        'type' => 'slider',
-        'title' => '页面和文章封面图垂直位置',
-        'desc' => '调整页面和文章顶部封面图片的垂直显示位置。50% 为当前居中位置；数值越大，显示图片越靠下的区域。',
-        'min' => '0',
-        'max' => '100',
-        'step' => '1',
-        'unit' => '%',
-        'default' => '50'
-      ),
 
       array(
         'id' => 'page_title_animation',
