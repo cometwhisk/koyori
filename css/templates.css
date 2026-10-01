@@ -118,6 +118,11 @@ body.dark .pagination-next:hover {
     transform: translateY(-1px);
 }
 
+.koyori-pagination__link:focus-visible {
+    outline: 2px solid var(--theme-skin-matching, var(--theme-skin, #505050));
+    outline-offset: 3px;
+}
+
 .koyori-pagination__current {
     color: var(--theme-skin-matching, var(--theme-skin, var(--global-font-color)));
     background: rgb(255 255 255 / 80%);

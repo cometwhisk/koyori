@@ -32,31 +32,39 @@ class Bilibili
             )
         );
         $response = wp_remote_get($url, $args);
-        if(is_array($response)){
-            $response_body = json_decode($response["body"], true);
-            return $response_body;
-        }else{
-            return array('code'=>-1);
+        if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+            return array('code' => -1);
         }
+        $response_body = json_decode(wp_remote_retrieve_body($response), true);
+        if (JSON_ERROR_NONE !== json_last_error() || !is_array($response_body) || !array_key_exists('code', $response_body)) {
+            return array('code' => -1);
+        }
+        return $response_body;
     }
 
     public function get_bgm_items($page = 1, $pagination_url = '')
     {
         $page = max(1, absint($page));
         $resp = $this->fetch_api(1, $page);
-        $code = $resp["code"];
+        $code = $resp['code'] ?? -1;
         switch ($code) {
             case -1://指示在网络请求阶段发生了错误
                 return "<div>" . __('Backend error', 'sakurairo') . "</div>";
             case 0: {
-                    $bgm = $resp['data'];
-                    $totalpage = (int) ceil($bgm["total"] / 12);
+                    $bgm = $resp['data'] ?? array();
+                    $totalpage = isset($bgm['total']) ? (int) ceil($bgm['total'] / 12) : 0;
+                    if (!isset($bgm['list']) || !is_array($bgm['list']) || !isset($bgm['total'])) {
+                        return "<div>" . __('Backend error', 'sakurairo') . "</div>";
+                    }
                     if ($totalpage > 0 && $page > $totalpage) {
                         $page = $totalpage;
                         $resp = $this->fetch_api(1, $page);
+                        if (($resp['code'] ?? -1) !== 0 || !isset($resp['data']['list']) || !isset($resp['data']['total']) || !is_array($resp['data']['list'])) {
+                            return "<div>" . __('Backend error', 'sakurairo') . "</div>";
+                        }
                         $bgm = $resp['data'];
                     }
-                    $lists = $bgm["list"];
+                    $lists = $bgm['list'];
                     $html = "";
                     foreach ((array)$lists as $item) {
                         $percent = Bilibili::get_percent($item);
@@ -86,12 +94,25 @@ class Bilibili
     {
         $page = max(1, absint($page));
         $resp = $this->fetch_api(2, $page);
-        $code = $resp["code"];
+        $code = $resp['code'] ?? -1;
         switch ($code) {
+            case -1:
+                return "<div>" . __('Backend error', 'sakurairo') . "</div>";
             case 0: {
-                    $bgm = $resp['data'];
-                    $totalpage = (int)ceil($bgm["total"] / 12);
-                    $lists = $bgm["list"];
+                    $bgm = $resp['data'] ?? array();
+                    if (!isset($bgm['total'], $bgm['list']) || !is_array($bgm['list'])) {
+                        return "<div>" . __('Backend error', 'sakurairo') . "</div>";
+                    }
+                    $totalpage = (int) ceil($bgm['total'] / 12);
+                    if ($totalpage > 0 && $page > $totalpage) {
+                        $page = $totalpage;
+                        $resp = $this->fetch_api(2, $page);
+                        if (($resp['code'] ?? -1) !== 0 || !isset($resp['data']['total'], $resp['data']['list']) || !is_array($resp['data']['list'])) {
+                            return "<div>" . __('Backend error', 'sakurairo') . "</div>";
+                        }
+                        $bgm = $resp['data'];
+                    }
+                    $lists = $bgm['list'];
                     $html = "";
                     foreach ((array)$lists as $item) {
                         $percent = Bilibili::get_percent($item);

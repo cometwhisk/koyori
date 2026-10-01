@@ -16,7 +16,7 @@ class BangumiAPI
 
         $this->userID = $userID;
         $this->collectionApi = $this->apiUrl . '/v0/users/' . $this->userID . '/collections';
-        $this->cache_content = get_transient('bangumi_cache');
+        $this->cache_content = get_transient('bangumi_cache_' . md5((string) $this->userID));
     }
 
     public function getCollections()
@@ -52,7 +52,7 @@ class BangumiAPI
     private function fetchCollections()
     {
         $bangumi_cache = iro_opt('bangumi_cache', true);
-        $cache_key = 'bangumi_cache';
+        $cache_key = 'bangumi_cache_' . md5((string) $this->userID);
         $collData = null;
 
         if ($bangumi_cache) {
@@ -80,8 +80,14 @@ class BangumiAPI
                     $this->collectionApi
                 );
                 $response = $this->http_get_contents($url);
+                if (false === $response) {
+                    throw new \RuntimeException(__('Bangumi backend request failed.', 'sakurairo'));
+                }
                 $batch = json_decode($response, true);
-                $batch_data = isset($batch['data']) && is_array($batch['data']) ? $batch['data'] : array();
+                if (JSON_ERROR_NONE !== json_last_error() || !is_array($batch) || !isset($batch['data']) || !is_array($batch['data']) || !array_key_exists('total', $batch)) {
+                    throw new \RuntimeException(__('Bangumi backend returned invalid data.', 'sakurairo'));
+                }
+                $batch_data = $batch['data'];
                 $all_data = array_merge($all_data, $batch_data);
                 $batch_total = absint($batch['total'] ?? 0);
                 $total = max($total, $batch_total);
@@ -89,6 +95,10 @@ class BangumiAPI
                 $offset += count($batch_data);
                 $batch_count++;
             } while (!empty($batch_data) && $offset < $total && $offset > $previous_offset && $batch_count < 100);
+
+            if ($offset < $total) {
+                throw new \RuntimeException(__('Bangumi backend returned incomplete data.', 'sakurairo'));
+            }
 
             $collData = array(
                 'data' => $all_data,
@@ -117,7 +127,7 @@ class BangumiAPI
             return wp_remote_retrieve_body($response);
         }
 
-        return json_encode(['error' => is_wp_error($response) ? $response->get_error_message() : 'An unknown error occurred.']);
+        return false;
     }
 }
 

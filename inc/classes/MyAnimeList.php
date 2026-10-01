@@ -22,7 +22,7 @@ class MyAnimeList
 	function get_data()
 	{
 		$bangumi_cache = iro_opt('bangumi_cache', true);
-		$cache_key = 'myanimelist_cache';
+		$cache_key = 'myanimelist_cache_' . md5((string) $this->username . '|' . (string) $this->sort);
 
 		if ($bangumi_cache) {
 			$cached_content = json_decode(get_transient($cache_key), true);
@@ -58,16 +58,23 @@ class MyAnimeList
 				]
 			];
 			$response = wp_remote_get($url, $args);
-			if (!is_array($response) || !isset($response['body'])) {
+			if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
 				return false;
 			}
-			$items = json_decode($response['body'], true);
-			$items = is_array($items) ? $items : array();
+			$body = wp_remote_retrieve_body($response);
+			$items = json_decode($body, true);
+			if (JSON_ERROR_NONE !== json_last_error() || !is_array($items) || (!empty($items) && !isset($items[0]['anime_url']))) {
+				return false;
+			}
 			$all_items = array_merge($all_items, $items);
 			$received = count($items);
 			$offset += $received;
 			$batch_count++;
 		} while ($received >= $batch_size && $batch_count < 100);
+
+		if ($received >= $batch_size) {
+			return false;
+		}
 
 		if ($bangumi_cache) {
 			auto_update_cache($cache_key, wp_json_encode($all_items));

@@ -24,6 +24,7 @@ class Steam
     {
         $id = $this->id;
         $key = $this->key;
+        $cache_name .= '_' . md5((string) $id . '|' . (string) $this->store);
         $url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=$key&steamid=$id&include_appinfo=1&include_played_free_games=1&include_free_games=1";
 
         $steam_cache = iro_opt('steam_cache', true);
