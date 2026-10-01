@@ -42,12 +42,12 @@ function koyori_render_pagination( int $current_page, int $total_pages, string $
         $items[] = '<a class="koyori-pagination__link koyori-pagination__prev' . ( $legacy_prefix ? ' ' . $legacy_prefix . '-pagination-link' : '' ) . '" href="' . esc_url( $previous_href ) . '" rel="prev" aria-label="' . esc_attr__( '上一页', 'sakurairo' ) . '"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></a>';
     }
 
-    $pages = $total_pages <= 7
+    $pages = $total_pages <= 5
         ? range( 1, $total_pages )
-        : ( $current_page <= 4
-            ? array( 1, 2, 3, 4, 5, 'ellipsis', $total_pages )
-            : ( $current_page >= $total_pages - 3
-                ? array( 1, 'ellipsis', $total_pages - 4, $total_pages - 3, $total_pages - 2, $total_pages - 1, $total_pages )
+        : ( $current_page <= 3
+            ? array( 1, 2, 3, 4, 'ellipsis', $total_pages )
+            : ( $current_page >= $total_pages - 2
+                ? array( 1, 'ellipsis', $total_pages - 3, $total_pages - 2, $total_pages - 1, $total_pages )
                 : array( 1, 'ellipsis', $current_page - 1, $current_page, $current_page + 1, 'ellipsis', $total_pages ) ) );
 
     foreach ( $pages as $page ) {
