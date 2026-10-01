@@ -11,6 +11,7 @@
     const { useDispatch, useSelect } = wp.data;
 
     const META_KEY = '_koyori_external_cover_url';
+    const POSITION_META_KEY = '_koyori_cover_vertical_position';
 
     function KoyoriCoverPanel() {
         const { editPost } = useDispatch('core/editor');
@@ -26,8 +27,8 @@
                 postType: editor.getCurrentPostType(),
             };
         }, []);
-        const externalImage = meta[META_KEY] || '';
-        const coverVerticalPositionMeta = parseInt(meta['_koyori_cover_vertical_position'], 10);
+        const externalImage = typeof meta[META_KEY] === 'string' ? meta[META_KEY] : '';
+        const coverVerticalPositionMeta = parseInt(meta[POSITION_META_KEY], 10);
         const coverVerticalPosition = isNaN(coverVerticalPositionMeta) ? 50 : Math.max(0, Math.min(100, coverVerticalPositionMeta));
         const [mode, setMode] = useState(externalImage ? 'external' : 'local');
         const [externalUrl, setExternalUrl] = useState(externalImage);
@@ -40,9 +41,9 @@
             return null;
         }
 
-        const updateMeta = function (value) {
+        const updateMeta = function (key, value) {
             editPost({
-                meta: Object.assign({}, meta, { [META_KEY]: value }),
+                meta: Object.assign({}, meta, { [key]: value }),
             });
         };
 
@@ -113,7 +114,7 @@
                         variant: 'primary',
                         disabled: externalUrl.trim() === externalImage,
                         onClick: function () {
-                            updateMeta(externalUrl.trim());
+                            updateMeta(META_KEY, externalUrl.trim());
                         },
                     }, '应用图床封面'),
                     externalImage && el(Button, {
@@ -121,7 +122,7 @@
                         isDestructive: true,
                         onClick: function () {
                             setExternalUrl('');
-                            updateMeta('');
+                            updateMeta(META_KEY, '');
                         },
                     }, '清除图床封面')
                 )
@@ -156,7 +157,11 @@
                 label: '封面图垂直位置',
                 value: coverVerticalPosition,
                 onChange: function (value) {
-                    updateMeta(Math.max(0, Math.min(100, parseInt(value, 10))));
+                    const numericValue = Number(value);
+                    if (!Number.isFinite(numericValue)) {
+                        return;
+                    }
+                    updateMeta(POSITION_META_KEY, Math.max(0, Math.min(100, Math.round(numericValue))));
                 },
                 min: 0,
                 max: 100,
