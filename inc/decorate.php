@@ -70,6 +70,14 @@ echo $bg_style;
 echo iro_opt('site_bg_as_cover',false)? 'background:#0000;':'';
  ?>}
 
+<?php
+$page_cover_vertical_position = max(0, min(100, (int) iro_opt('page_cover_vertical_position', 50)));
+?>
+body.single .pattern-center:not(.post-cover-background) .pattern-attachment.bg,
+body.page .pattern-center:not(.post-cover-background) .pattern-attachment.bg {
+    background-position: center <?=$page_cover_vertical_position; ?>%;
+}
+
 /*预加载部分*/
 
 <?php if (iro_opt('preload_animation', 'true')): ?>

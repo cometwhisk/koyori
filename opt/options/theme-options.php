@@ -2414,6 +2414,18 @@ $prefix = 'iro_options';
       ),
 
       array(
+        'id' => 'page_cover_vertical_position',
+        'type' => 'slider',
+        'title' => __('Page and Article Cover Vertical Position','sakurairo_csf'),
+        'desc' => __('Adjust which vertical area of the cover image is displayed. 50% keeps the current centered position; higher values show a lower area of the image.','sakurairo_csf'),
+        'min' => '0',
+        'max' => '100',
+        'step' => '1',
+        'unit' => '%',
+        'default' => '50'
+      ),
+
+      array(
         'id' => 'page_title_animation',
         'type' => 'switcher',
         'title' => __('Page Title Animation','sakurairo_csf'),
