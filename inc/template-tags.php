@@ -37,7 +37,9 @@ function koyori_render_pagination( int $current_page, int $total_pages, string $
     $items = array();
 
     if ( $current_page > 1 ) {
-        $items[] = '<a class="koyori-pagination__link koyori-pagination__prev' . ( $legacy_prefix ? ' ' . $legacy_prefix . '-pagination-link' : '' ) . '" href="' . esc_url( add_query_arg( $query_arg, $current_page - 1, $base_url ) ) . '" rel="prev" aria-label="' . esc_attr__( '上一页', 'sakurairo' ) . '"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></a>';
+        $previous_page = $current_page - 1;
+        $previous_href = 1 === $previous_page ? $base_url : add_query_arg( $query_arg, $previous_page, $base_url );
+        $items[] = '<a class="koyori-pagination__link koyori-pagination__prev' . ( $legacy_prefix ? ' ' . $legacy_prefix . '-pagination-link' : '' ) . '" href="' . esc_url( $previous_href ) . '" rel="prev" aria-label="' . esc_attr__( '上一页', 'sakurairo' ) . '"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></a>';
     }
 
     $pages = $total_pages <= 7
