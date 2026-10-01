@@ -100,6 +100,14 @@ class BangumiAPI
                 throw new \RuntimeException(__('Bangumi backend returned incomplete data.', 'sakurairo'));
             }
 
+            $unique_data = array();
+            foreach ($all_data as $item) {
+                $subject_id = absint($item['subject']['id'] ?? 0);
+                $unique_key = $subject_id > 0 ? (string) $subject_id : md5(wp_json_encode($item));
+                $unique_data[$unique_key] = $item;
+            }
+            $all_data = array_values($unique_data);
+
             $collData = array(
                 'data' => $all_data,
                 'total' => count($all_data),

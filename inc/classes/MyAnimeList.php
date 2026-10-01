@@ -76,6 +76,13 @@ class MyAnimeList
 			return false;
 		}
 
+		$unique_items = array();
+		foreach ($all_items as $item) {
+			$anime_key = isset($item['anime_url']) ? (string) $item['anime_url'] : md5(wp_json_encode($item));
+			$unique_items[$anime_key] = $item;
+		}
+		$all_items = array_values($unique_items);
+
 		if ($bangumi_cache) {
 			auto_update_cache($cache_key, wp_json_encode($all_items));
 		}
