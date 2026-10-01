@@ -2353,6 +2353,14 @@ $prefix = 'iro_options';
         'default' => true
       ),
 
+      array(
+        'id' => 'pattern_cover_blur',
+        'type' => 'switcher',
+        'title' => '封面图柔化效果',
+        'label' => '启用封面图的饱和度增强和轻微模糊效果',
+        'default' => true
+      ),
+
 
       array(
         'id' => 'page_title_animation',

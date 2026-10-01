@@ -55,6 +55,15 @@ font-family: <?= isset($text_logo['font']) ? $text_logo['font'] : 'Noto Serif SC
 <?php } ?>
 
 <?php } // theme-skin ?>
+
+<?php if ( ! iro_opt('pattern_cover_blur', true) ) { ?>
+/* 封面图柔化效果 */
+.pattern-center::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+<?php } ?>
+
 <?php // Custom style
 if ( iro_opt('site_custom_style') ) {
   echo iro_opt('site_custom_style');
