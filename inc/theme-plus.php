@@ -272,9 +272,8 @@ function the_headPattern(){
     $t .= '<h1 class="entry-title search-title"> '.sprintf( __( "Search results for \" %s \"","sakurairo" ), get_search_query()) ./*关于“ '.get_search_query().' ”的搜索结果*/'</h1>';
   }
   if(!iro_opt('patternimg')) $full_image_url = false;
-  $post_cover_as_background = is_singular() && iro_opt('post_cover_as_bg', false) && iro_opt('site_bg_as_cover', true) && $full_image_url;
   $cover_vertical_position_style = '';
-  if ( is_singular( array( 'post', 'page' ) ) && ! $post_cover_as_background ) {
+  if ( is_singular( array( 'post', 'page' ) ) ) {
     $cover_vertical_position_meta = get_post_meta( get_queried_object_id(), '_koyori_cover_vertical_position', true );
     $cover_vertical_position = $cover_vertical_position_meta === ''
       ? 50
@@ -283,7 +282,7 @@ function the_headPattern(){
   }
   if(!is_home() && $full_image_url) : ?>
   <div class="pattern-center-blank"></div>
-  <div class="pattern-center <?php if(is_single()){echo $center;} ?><?php echo $post_cover_as_background ? ' post-cover-background' : ''; ?>">
+  <div class="pattern-center <?php if(is_single()){echo $center;} ?>">
     <div class="pattern-attachment bg lazyload" style="background-image: url(<?php echo iro_opt('load_out_svg'); ?>);<?php echo esc_attr( $cover_vertical_position_style ); ?>" data-src="<?php echo $full_image_url; ?>"> </div>
     <header class="pattern-header <?php if(is_single()){echo $header;} ?>"><?php echo $t; ?></header>
   </div>

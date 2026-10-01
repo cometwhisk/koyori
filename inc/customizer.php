@@ -860,27 +860,7 @@ $sections = [
         'panel'       => 'iro_cover',
 
 		'fields'      =>[
-			[
-				'type'     => 'switch',
-				'settings' => 'site_bg_as_cover',
-				'iro_key'  => 'site_bg_as_cover',
-				'label'    => esc_html__( 'Cover and Frontend Background Integration', 'Sakurairo_C' ),
-				'description' => esc_html__( 'When enabled, the background of the cover will be set to transparent, while the frontend background will use the cover\'s random image API', 'Sakurairo_C' ),
-			],
-			[
-				'type'     => 'switch',
-				'settings' => 'post_cover_as_bg',
-				'iro_key'  => 'post_cover_as_bg',
-				'label'    => esc_html__( 'Post Cover As Background', 'Sakurairo_C' ),
-				'description' => esc_html__( 'Use post feature image as background in post pages', 'Sakurairo_C' ),
-			    'active_callback' => [
-					[
-						'setting'  => 'site_bg_as_cover',
-						'operator' => '==',
-						'value'    => true,
-					],
-				],
-			],
+
 			[
 				'type'     => 'switch',
 				'settings' => 'wave_effects',

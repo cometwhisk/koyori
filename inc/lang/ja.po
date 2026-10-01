@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Sakurairo\n"
@@ -38,9 +39,7 @@ msgstr "ナビゲーションメニュー"
 msgid ""
 "<p>You can edit your nav menu options <a href=\"/wp-admin/nav-"
 "menus.php\">here</a></p>"
-msgstr ""
-"<p>ナビゲーションメニューの設定は<a href=\"/wp-admin/nav-menus.php\">こちら</"
-"a>で編集できます</p>"
+msgstr "<p>ナビゲーションメニューの設定は<a href=\"/wp-admin/nav-menus.php\">こちら</a>で編集できます</p>"
 
 #: customizer.php:102
 msgid "Nav Menu Style"
@@ -144,10 +143,9 @@ msgstr "注目画像から記事のハイライトを抽出"
 
 #: customizer.php:331
 msgid ""
-"After turning on,the colors displayed on the article page will be taken from "
-"the article featured image"
-msgstr ""
-"オンにすると、記事ページに表示される色は、記事の特集画像から取得されます。"
+"After turning on,the colors displayed on the article page will be taken from"
+" the article featured image"
+msgstr "オンにすると、記事ページに表示される色は、記事の特集画像から取得されます。"
 
 #: customizer.php:336
 msgid "Theme Color"
@@ -301,24 +299,11 @@ msgstr "Typed.js初期設定"
 msgid "Others"
 msgstr "その他"
 
-#: customizer.php:867
-msgid "Cover and Frontend Background Integration"
-msgstr "カバーと背景統合"
-
 #: customizer.php:868
 msgid ""
 "When enabled, the background of the cover will be set to transparent, while "
 "the frontend background will use the cover's random image API"
-msgstr ""
-"有効化するとカバー背景を透明化し、サイト背景にカバー画像APIを使用します"
-
-#: customizer.php:874
-msgid "Post Cover As Background"
-msgstr "背景として投稿カバー"
-
-#: customizer.php:875
-msgid "Use post feature image as background in post pages"
-msgstr "投稿ページの背景として投稿フィーチャー画像を使用する"
+msgstr "有効化するとカバー背景を透明化し、サイト背景にカバー画像APIを使用します"
 
 #: customizer.php:888
 msgid "Cover Wave Effects"
@@ -442,11 +427,9 @@ msgstr "メダルバッジスタイルカプセルを表示"
 
 #: customizer.php:1110
 msgid ""
-"Enable to show bronze/silver/gold medal badges for blog milestones, Requires "
-"you to unlock the relevant achievement to replace the relevant capsule"
-msgstr ""
-"ブログのマイルストーンにブロンズ／シルバー／ゴールドのメダルバッジを表示でき"
-"るようにする。"
+"Enable to show bronze/silver/gold medal badges for blog milestones, Requires"
+" you to unlock the relevant achievement to replace the relevant capsule"
+msgstr "ブログのマイルストーンにブロンズ／シルバー／ゴールドのメダルバッジを表示できるようにする。"
 
 #: customizer.php:1116
 msgid "Announcement Text"
@@ -457,9 +440,7 @@ msgid ""
 "Set the text for announcement capsule. The front-end will automatically "
 "split the text into two lines, you can also use line breaks for manual line "
 "breaks"
-msgstr ""
-"アナウンスカプセルのテキストを設定します。フロントエンドは自動的にテキストを2"
-"行に分割しますが、手動で改行することもできます。"
+msgstr "アナウンスカプセルのテキストを設定します。フロントエンドは自動的にテキストを2行に分割しますが、手動で改行することもできます。"
 
 #: customizer.php:1131
 msgid "Article Aera"
@@ -559,10 +540,9 @@ msgstr "デフォルトフォント"
 
 #: customizer.php:1324
 msgid ""
-"Fill in the font name,and you can add your customize font in Font Options of "
-"Global Options in iro-Options."
-msgstr ""
-"フォント名を入力（iroオプションのフォント設定でカスタムフォントを追加可能）"
+"Fill in the font name,and you can add your customize font in Font Options of"
+" Global Options in iro-Options."
+msgstr "フォント名を入力（iroオプションのフォント設定でカスタムフォントを追加可能）"
 
 #: customizer.php:1338
 msgid "Non-Emphasis Text Weight"

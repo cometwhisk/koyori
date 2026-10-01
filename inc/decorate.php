@@ -76,7 +76,6 @@ $bg_style = iro_opt('cover_full_screen') ?'': 'background-position: center cente
 ?>
 #centerbg{<?php 
 echo $bg_style;
-echo iro_opt('site_bg_as_cover',false)? 'background:#0000;':'';
  ?>}
 
 /*预加载部分*/

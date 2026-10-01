@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Sakurairo\n"
@@ -38,8 +39,7 @@ msgstr "導航欄"
 msgid ""
 "<p>You can edit your nav menu options <a href=\"/wp-admin/nav-"
 "menus.php\">here</a></p>"
-msgstr ""
-"<p>您可以<a href=\"/wp-admin/nav-menus.php\">在此处</a>编辑导航菜单选项</p>"
+msgstr "<p>您可以<a href=\"/wp-admin/nav-menus.php\">在此处</a>编辑导航菜单选项</p>"
 
 #: customizer.php:102
 msgid "Nav Menu Style"
@@ -143,8 +143,8 @@ msgstr "從文章特色圖中提取主題色"
 
 #: customizer.php:331
 msgid ""
-"After turning on,the colors displayed on the article page will be taken from "
-"the article featured image"
+"After turning on,the colors displayed on the article page will be taken from"
+" the article featured image"
 msgstr "開啟後，文章頁面上顯示的顏色將取自文章的特色圖片。"
 
 #: customizer.php:336
@@ -299,23 +299,11 @@ msgstr "Typed.js打字配置"
 msgid "Others"
 msgstr "雜項"
 
-#: customizer.php:867
-msgid "Cover and Frontend Background Integration"
-msgstr "封面與前台背景一體化"
-
 #: customizer.php:868
 msgid ""
 "When enabled, the background of the cover will be set to transparent, while "
 "the frontend background will use the cover's random image API"
 msgstr "開啟後封面會設為透明，前台背景將使用封面隨機圖片API"
-
-#: customizer.php:874
-msgid "Post Cover As Background"
-msgstr "文章封面作為背景"
-
-#: customizer.php:875
-msgid "Use post feature image as background in post pages"
-msgstr "在頁面將使用對應特色圖片作為背景"
 
 #: customizer.php:888
 msgid "Cover Wave Effects"
@@ -439,11 +427,9 @@ msgstr "展示徽章膠囊"
 
 #: customizer.php:1110
 msgid ""
-"Enable to show bronze/silver/gold medal badges for blog milestones, Requires "
-"you to unlock the relevant achievement to replace the relevant capsule"
-msgstr ""
-"開啟之後將為部落格里程碑顯示銅牌/銀牌/金牌徽章，需要解鎖相關里程碑才能替換相"
-"關膠囊"
+"Enable to show bronze/silver/gold medal badges for blog milestones, Requires"
+" you to unlock the relevant achievement to replace the relevant capsule"
+msgstr "開啟之後將為部落格里程碑顯示銅牌/銀牌/金牌徽章，需要解鎖相關里程碑才能替換相關膠囊"
 
 #: customizer.php:1116
 msgid "Announcement Text"
@@ -454,9 +440,7 @@ msgid ""
 "Set the text for announcement capsule. The front-end will automatically "
 "split the text into two lines, you can also use line breaks for manual line "
 "breaks"
-msgstr ""
-"為公告膠囊設定文字。前端會自動將文字分成兩行，你也可以使用換行符號進行手動換"
-"行"
+msgstr "為公告膠囊設定文字。前端會自動將文字分成兩行，你也可以使用換行符號進行手動換行"
 
 #: customizer.php:1131
 msgid "Article Aera"
@@ -556,11 +540,9 @@ msgstr "全局默認字體"
 
 #: customizer.php:1324
 msgid ""
-"Fill in the font name,and you can add your customize font in Font Options of "
-"Global Options in iro-Options."
-msgstr ""
-"填寫字體名稱即可，你可以在「iro主題設置」—「全局設置」—「字體設置」中添加自定"
-"義字體"
+"Fill in the font name,and you can add your customize font in Font Options of"
+" Global Options in iro-Options."
+msgstr "填寫字體名稱即可，你可以在「iro主題設置」—「全局設置」—「字體設置」中添加自定義字體"
 
 #: customizer.php:1338
 msgid "Non-Emphasis Text Weight"

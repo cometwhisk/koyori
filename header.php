@@ -279,10 +279,7 @@ header('X-Frame-Options: SAMEORIGIN');
                 <?php get_template_part('layouts/imgbox'); ?>
             </div>
         <?php } ?>
-        <?php
-        $unified_cover_background = is_singular() && iro_opt('post_cover_as_bg', false) && iro_opt('site_bg_as_cover', true) && koyori_has_cover(get_the_ID());
-        ?>
-        <div id="page" class="site wrapper<?= $unified_cover_background ? ' unified-cover-background' : ''; ?>">
+        <div id="page" class="site wrapper">
             <?php
             the_headPattern(); ?>
             <div id="content" class="site-content">

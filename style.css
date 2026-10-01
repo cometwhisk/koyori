@@ -6,7 +6,7 @@ Theme URI: https://github.com/cometwhisk/koyori
 Author: Smallmaple
 Author URI: https://www.smallmaple.com/
 Description: A personal derivative theme based on Sakurairo, customized for Smallmaple.
-Version: 1.0.85
+Version: 1.0.86
 Tested up to: 6.8
 Requires at least: 6.0
 Requires PHP: 8.0
@@ -360,33 +360,6 @@ blockquote:after {
   background-origin: border-box;
 }
 
-.pattern-center.post-cover-background::before {
-  background: linear-gradient(
-    #fff0,
-    #00000070
-  );
-  backdrop-filter: none;
-}
-
-body:not(.dark) .pattern-center.post-cover-background::before {
-  background: rgba(255, 255, 255, .55);
-}
-
-body:not(.dark) .pattern-center.post-cover-background header.pattern-header,
-body:not(.dark) .pattern-center.post-cover-background h1.entry-title,
-body:not(.dark) .pattern-center.post-cover-background .entry-census,
-body:not(.dark) .pattern-center.post-cover-background .entry-census a {
-  color: #222;
-  text-shadow: none;
-}
-
-.site.wrapper.unified-cover-background {
-  background-color: rgba(255, 255, 255, .5);
-}
-
-.pattern-center.post-cover-background .pattern-attachment.bg {
-  background-image: none !important;
-}
 
 .pattern-center header.pattern-header {
   position: absolute;
@@ -422,10 +395,10 @@ body:not(.dark) .pattern-center.post-cover-background .entry-census a {
   border: 0;
 }
 
-body:not(.dark) .pattern-center:not(.post-cover-background) header.pattern-header,
-body:not(.dark) .pattern-center:not(.post-cover-background) h1.entry-title,
-body:not(.dark) .pattern-center:not(.post-cover-background) .entry-census,
-body:not(.dark) .pattern-center:not(.post-cover-background) .entry-census a {
+body:not(.dark) .pattern-center header.pattern-header,
+body:not(.dark) .pattern-center h1.entry-title,
+body:not(.dark) .pattern-center .entry-census,
+body:not(.dark) .pattern-center .entry-census a {
   color: #222;
 }
 

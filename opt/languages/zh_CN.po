@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Codestar Framework Modified by Fuukei\n"
@@ -13,12 +14,11 @@ msgstr ""
 "X-Generator: Poedit 3.7\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: option-framework.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-WPHeader: option-framework.php\n"
 
 #: classes/admin-options.class.php:169
 msgid "Error while saving the changes."
@@ -712,10 +712,11 @@ msgid ""
 "<a href=\"https://afdian.com/a/mamori\"><img alt=\"afdian\" height=\"50\" "
 "src=\"https://s.nmxc.ltd/sakurairo_vision/@3.0/readme/afdian.webp\"></a><a "
 "href=\"https://liberapay.com/furina/donate\"><img alt=\"liberapay\" "
-"height=\"50\" src=\"https://s.nmxc.ltd/sakurairo_vision/@3.0/readme/"
-"liberapay.webp\"></a><a href=\"https://app.unifans.io/c/"
-"somekawahitomi\"><img alt=\"unifans\" height=\"50\" src=\"https://s.nmxc.ltd/"
-"sakurairo_vision/@3.0/readme/unifans.webp\"></a>"
+"height=\"50\" "
+"src=\"https://s.nmxc.ltd/sakurairo_vision/@3.0/readme/liberapay.webp\"></a><a"
+" href=\"https://app.unifans.io/c/somekawahitomi\"><img alt=\"unifans\" "
+"height=\"50\" "
+"src=\"https://s.nmxc.ltd/sakurairo_vision/@3.0/readme/unifans.webp\"></a>"
 msgstr ""
 
 #: options/theme-options.php:57
@@ -730,11 +731,12 @@ msgstr "初步设置"
 
 #: options/theme-options.php:72
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Preliminary/"
-"\">here</a> to learn how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Preliminary/\">here</a> to learn "
+"how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Preliminary/\">此处</"
-"a> 了解如何在此页面上设置选项"
+"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Preliminary/\">此处</a> "
+"了解如何在此页面上设置选项"
 
 #: options/theme-options.php:78
 msgid "Personal Avatar"
@@ -825,8 +827,8 @@ msgstr "站点关键词"
 
 #: options/theme-options.php:161
 msgid ""
-"The keywords should be separated with half width comma \",\" and it's better "
-"to set within 5 keywords"
+"The keywords should be separated with half width comma \",\" and it's better"
+" to set within 5 keywords"
 msgstr "各关键字间用半角逗号\",\"分割，数量在5个以内最佳"
 
 #: options/theme-options.php:167
@@ -849,12 +851,13 @@ msgstr "外观设置"
 
 #: options/theme-options.php:190
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%A4%96%E8%A7%82%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%A4%96%E8%A7%82%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%A4%96%E8%A7%82%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%A4%96%E8%A7%82%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:195
 msgid "Color Schemes"
@@ -914,14 +917,12 @@ msgstr "默认开启"
 
 #: options/theme-options.php:252
 msgid ""
-"<p><strong>Client local time:</strong>Dark mode will switch on automatically "
-"from 22:00 to 7:00</p><p><strong>Follow client settings:</strong>Follow "
+"<p><strong>Client local time:</strong>Dark mode will switch on automatically"
+" from 22:00 to 7:00</p><p><strong>Follow client settings:</strong>Follow "
 "client browser settings</p><p><strong>Always on:</strong>Always on, except "
 "being configured by the client</p>"
 msgstr ""
-"<p><strong>客户端当地时间:</strong>深色模式会在22:00-7:00自动切换</"
-"p><p><strong>跟随客户端设置:</strong>跟随客户端浏览器的设置</p><p><strong>永"
-"远开启:</strong>永远开启，除非客户端另有配置</p>"
+"<p><strong>客户端当地时间:</strong>深色模式会在22:00-7:00自动切换</p><p><strong>跟随客户端设置:</strong>跟随客户端浏览器的设置</p><p><strong>永远开启:</strong>永远开启，除非客户端另有配置</p>"
 
 #: options/theme-options.php:261
 msgid "Automatic Switch Strategy of Dark Mode"
@@ -959,10 +960,9 @@ msgstr "深色模式背景透明度"
 #: options/theme-options.php:297
 msgid ""
 "Slide to adjust, the recommended value range is 0.6-0.8. In order to ensure "
-"the best appearance, please keep the display of the frontend background image"
-msgstr ""
-"滑动滑块，推荐数值范围为0.6-0.8。为保证最佳观感，使用此项最好保留前台背景图像"
-"的显示"
+"the best appearance, please keep the display of the frontend background "
+"image"
+msgstr "滑动滑块，推荐数值范围为0.6-0.8。为保证最佳观感，使用此项最好保留前台背景图像的显示"
 
 #: options/theme-options.php:306
 msgid "Other Appearance Related"
@@ -992,12 +992,13 @@ msgstr "字体设置"
 
 #: options/theme-options.php:337
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:342
 msgid "Global"
@@ -1066,12 +1067,10 @@ msgid ""
 "Please make sure that the added fonts can be referenced in Google Fonts "
 "library. Fill in the font names. The added fonts must be preceded by \"|\". "
 "If multiple fonts are referenced, use \"|\" as the separator. If the font "
-"name has spaces, use a plus sign instead. For example: | zcool + xiaowei| Ma "
-"+ Shan + Zheng"
+"name has spaces, use a plus sign instead. For example: | zcool + xiaowei| Ma"
+" + Shan + Zheng"
 msgstr ""
-"请确保添加的字体在谷歌字体库内可被引用，填写字体名称。添加的字体前面必须"
-"有”|“。如果引用多个字体，请使用“|”作为分割符，如果字体名称有空格，请用加号替"
-"代。例如：|ZCOOL+XiaoWei|Ma+Shan+Zheng"
+"请确保添加的字体在谷歌字体库内可被引用，填写字体名称。添加的字体前面必须有”|“。如果引用多个字体，请使用“|”作为分割符，如果字体名称有空格，请用加号替代。例如：|ZCOOL+XiaoWei|Ma+Shan+Zheng"
 
 #: options/theme-options.php:435
 msgid "Navigation Menu Options"
@@ -1079,15 +1078,14 @@ msgstr "导航菜单设置"
 
 #: options/theme-options.php:442
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%AF%BC%E8%88%AA%E8%8F%9C%E5%8D%95%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page</br>Aou can edit your nav menu content "
-"<a href=\"/wp-admin/nav-menus.php\">here</a>"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%AF%BC%E8%88%AA%E8%8F%9C%E5%8D%95%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page</br>Aou can edit your nav menu"
+" content <a href=\"/wp-admin/nav-menus.php\">here</a>"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E5%AF%BC%E8%88%AA%E8%8F%9C%E5%8D%95%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项</br>您可以在<a href=\"/wp-admin/nav-menus.php\">此处</a>编辑"
-"导航菜单选项内容"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E5%AF%BC%E8%88%AA%E8%8F%9C%E5%8D%95%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项</br>您可以在<a href=\"/wp-admin/nav-menus.php\">此处</a>编辑导航菜单选项内容"
 
 #: options/theme-options.php:448
 msgid "Nav Menu Style"
@@ -1169,8 +1167,8 @@ msgstr "随机图片切换按钮"
 
 #: options/theme-options.php:555
 msgid ""
-"Enabled by default, only show cover random image toggle button when cover is "
-"on"
+"Enabled by default, only show cover random image toggle button when cover is"
+" on"
 msgstr "默认开启，仅在封面开启的时候显示封面随机图片切换按钮"
 
 #: options/theme-options.php:562
@@ -1191,13 +1189,13 @@ msgstr "小组件面板和前台相关设置"
 
 #: options/theme-options.php:589
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E6%A0%B7%E5%BC%8F%E8%8F%9C%E5%8D%95%E5%92%8C%E5%89%8D%E5%8F%B0%E8%83%8C%E6%99%AF%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</"
-"a> to learn how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E6%A0%B7%E5%BC%8F%E8%8F%9C%E5%8D%95%E5%92%8C%E5%89%8D%E5%8F%B0%E8%83%8C%E6%99%AF%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E6%A0%B7%E5%BC%8F%E8%8F%9C%E5%8D%95%E5%92%8C%E5%89%8D%E5%8F%B0%E8%83%8C%E6%99%AF%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">"
-"此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E6%A0%B7%E5%BC%8F%E8%8F%9C%E5%8D%95%E5%92%8C%E5%89%8D%E5%8F%B0%E8%83%8C%E6%99%AF%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:594
 msgid "Widgets Panel"
@@ -1229,8 +1227,7 @@ msgstr "开启之后 WP 小工具区将显示在小组件面板"
 
 #: options/theme-options.php:630
 msgid "You can edit it <a href=\"/wp-admin/widgets.php\"> here </a>"
-msgstr ""
-"你可以在<a href=\"/wp-admin/widgets.php\"> 这里 </a> 编辑WP小组件的内容"
+msgstr "你可以在<a href=\"/wp-admin/widgets.php\"> 这里 </a> 编辑WP小组件的内容"
 
 #: options/theme-options.php:637
 msgid "Widgets Panel Day&Night Switching"
@@ -1331,12 +1328,13 @@ msgstr "页尾设置"
 
 #: options/theme-options.php:814
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E9%A1%B5%E5%B0%BE%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E9%A1%B5%E5%B0%BE%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E9%A1%B5%E5%B0%BE%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E9%A1%B5%E5%B0%BE%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:820
 msgid "Footer Sakura Icon"
@@ -1374,8 +1372,7 @@ msgstr "页尾负载占用查询"
 msgid ""
 "Load occupancy information will appear at the end of the page after turning "
 "it on. Not recommended in production environment."
-msgstr ""
-"开始之后将加载占用信息，该信息将显示在页面末尾。不建议在生产环境中使用。"
+msgstr "开始之后将加载占用信息，该信息将显示在页面末尾。不建议在生产环境中使用。"
 
 #: options/theme-options.php:863
 msgid "Footer Upyun League Logo"
@@ -1391,7 +1388,8 @@ msgstr "页尾附加代码"
 
 #: options/theme-options.php:873
 msgid ""
-"Add HTML code at the end of the page. Useful for adding customize JavaScript."
+"Add HTML code at the end of the page. Useful for adding customize "
+"JavaScript."
 msgstr "在页尾添加 HTML 代码。可用于添加 JavaScript"
 
 #: options/theme-options.php:878
@@ -1426,18 +1424,18 @@ msgstr "使用自定义 MetingAPI 或者歌单文件"
 
 #: options/theme-options.php:900
 msgid ""
-"Enter a custom Meting-api, which can also point to a playlist file. However, "
-"the ID will only be effective if the playlist is specified"
+"Enter a custom Meting-api, which can also point to a playlist file. However,"
+" the ID will only be effective if the playlist is specified"
 msgstr "填写自定义 MetingAPI 地址（可以指向歌单文件），只在填写歌单 ID 后生效"
 
 #: options/theme-options.php:905
 msgid ""
-"Click <a href=\"./admin.php?iro_act=playlist\" target=\"_blank\">here</a> to "
-"use the built-in meting-API to get the playlist info file template.Its "
+"Click <a href=\"./admin.php?iro_act=playlist\" target=\"_blank\">here</a> to"
+" use the built-in meting-API to get the playlist info file template.Its "
 "content will be refreshed after the relevant settings are saved."
 msgstr ""
-"点击 <a href=\"./admin.php?iro_act=playlist\" target=\"_blank\">此处</a> 使用"
-"内置Meting-API来获取歌单文件模板。其内容将在相关设置项保存后立即刷新。"
+"点击 <a href=\"./admin.php?iro_act=playlist\" target=\"_blank\">此处</a> "
+"使用内置Meting-API来获取歌单文件模板。其内容将在相关设置项保存后立即刷新。"
 
 #: options/theme-options.php:912
 msgid "Footer Online Music Player Proxy"
@@ -1445,11 +1443,10 @@ msgstr "页尾在线音乐播放器代理"
 
 #: options/theme-options.php:914
 msgid ""
-"Ex. http://127.0.0.1:8080. Reference: https://curl.se/libcurl/c/"
-"CURLOPT_PROXY.html"
+"Ex. http://127.0.0.1:8080. Reference: "
+"https://curl.se/libcurl/c/CURLOPT_PROXY.html"
 msgstr ""
-"例如：http://127.0.0.1:8080 请参考：https://curl.se/libcurl/c/"
-"CURLOPT_PROXY.html"
+"例如：http://127.0.0.1:8080 请参考：https://curl.se/libcurl/c/CURLOPT_PROXY.html"
 
 #: options/theme-options.php:921
 msgid "Footer Online Music Player Songlist ID"
@@ -1460,8 +1457,7 @@ msgid ""
 "Fill in the song ID, e.g. https://music.163.com/#/playlist?id=5380675133 "
 "SongID:5380675133"
 msgstr ""
-"填写歌单ID，例如：https://music.163.com/#/playlist?id=5380675133的歌单ID是"
-"5380675133"
+"填写歌单ID，例如：https://music.163.com/#/playlist?id=5380675133的歌单ID是5380675133"
 
 #: options/theme-options.php:930
 msgid "Footer Online Music Player Mode"
@@ -1524,20 +1520,16 @@ msgstr "开启之后页尾将出现一言"
 #: options/theme-options.php:989
 msgid ""
 "<h4>Hitokoto API Setup Instructions</h4> <p>Fill in as the example:<code> "
-"[\"https://v1.hitokoto.cn/\", \"https://v1.hitokoto.cn/\"]</code>, where the "
-"first API will be used first and the next ones will be the backup. </p> "
-"<p><strong>Official API:</strong> See the <a href=\"https://"
-"developer.hitokoto.cn/sentence/\"> documentation</a> for how to use it, and "
-"the parameter \"return code\" should not be anything except JSON. <a "
-"href=\"https://v1.hitokoto.cn/\">https://v1.hitokoto.cn/</a></p>"
+"[\"https://v1.hitokoto.cn/\", \"https://v1.hitokoto.cn/\"]</code>, where the"
+" first API will be used first and the next ones will be the backup. </p> "
+"<p><strong>Official API:</strong> See the <a "
+"href=\"https://developer.hitokoto.cn/sentence/\"> documentation</a> for how "
+"to use it, and the parameter \"return code\" should not be anything except "
+"JSON. <a href=\"https://v1.hitokoto.cn/\">https://v1.hitokoto.cn/</a></p>"
 msgstr ""
 "<h4>一言 API 设置说明</h4>\n"
-"<p>填写示例:<code> [\"https://v1.hitokoto.cn/\",\"https://v1.hitokoto.cn/"
-"\"]</code>，此时会优先使用第一项 API，以后一项为后备。</p>\n"
-"<p><strong>官方 API:</strong>使用方法请参阅<a href=\"https://"
-"developer.hitokoto.cn/sentence/\">文档</a>，参数\"返回编码\"不应设置为JSON以"
-"外的其他值。<a href=\"https://v1.hitokoto.cn/\">https://v1.hitokoto.cn/</a></"
-"p>"
+"<p>填写示例:<code> [\"https://v1.hitokoto.cn/\",\"https://v1.hitokoto.cn/\"]</code>，此时会优先使用第一项 API，以后一项为后备。</p>\n"
+"<p><strong>官方 API:</strong>使用方法请参阅<a href=\"https://developer.hitokoto.cn/sentence/\">文档</a>，参数\"返回编码\"不应设置为JSON以外的其他值。<a href=\"https://v1.hitokoto.cn/\">https://v1.hitokoto.cn/</a></p>"
 
 #: options/theme-options.php:997
 msgid "Hitokoto API address"
@@ -1553,13 +1545,13 @@ msgstr "站内搜索设置"
 
 #: options/theme-options.php:1015
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:1021
 msgid "Nav Menu Search"
@@ -1610,11 +1602,9 @@ msgstr "在搜索结果中排除特定内容"
 #: options/theme-options.php:1079
 msgid ""
 "Fill in the posts or pages IDs that need to be excluded, such as "
-"\"12,34\".Recommend to fill in the custom login page id,and you can get them "
-"from the edit page of those content."
-msgstr ""
-"填写需要排除的文章或页面的ID，如 \"12,34\"。建议填写自定义登录页面的ID，你可"
-"从这些内容的编辑页面获取它。"
+"\"12,34\".Recommend to fill in the custom login page id,and you can get them"
+" from the edit page of those content."
+msgstr "填写需要排除的文章或页面的ID，如 \"12,34\"。建议填写自定义登录页面的ID，你可从这些内容的编辑页面获取它。"
 
 #: options/theme-options.php:1085
 msgid "Live Search"
@@ -1624,9 +1614,7 @@ msgstr "实时搜索"
 msgid ""
 "After turning on the live search in the frontend, call Rest API to update "
 "the cache once an hour. You can set the cache time manually in api.php"
-msgstr ""
-"开启之后将在前台实现实时搜索，调用 Rest API 每小时更新一次缓存，可在 api.php "
-"里手动设置缓存时间"
+msgstr "开启之后将在前台实现实时搜索，调用 Rest API 每小时更新一次缓存，可在 api.php 里手动设置缓存时间"
 
 #: options/theme-options.php:1093
 msgid "Live Search Comment Support"
@@ -1644,12 +1632,13 @@ msgstr "额外设置"
 
 #: options/theme-options.php:1112
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E9%A2%9D%E5%A4%96%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E9%A2%9D%E5%A4%96%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Global/"
-"#%E9%A2%9D%E5%A4%96%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Global/#%E9%A2%9D%E5%A4%96%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:1117
 msgid "Effects&Animations"
@@ -1709,8 +1698,7 @@ msgstr "粒子特效"
 msgid ""
 "Particles effects will appear in the global background. Please open the "
 "Cover-and-Frontend-Background-Integration Options to get the best experience"
-msgstr ""
-"粒子特效将会出现在全局背景，请打开封面与前台背景一体化选项以获取最佳体验"
+msgstr "粒子特效将会出现在全局背景，请打开封面与前台背景一体化选项以获取最佳体验"
 
 #: options/theme-options.php:1184
 msgid "Particles JSON"
@@ -1718,8 +1706,9 @@ msgstr "粒子特效 JSON"
 
 #: options/theme-options.php:1186
 msgid ""
-"You can go to the <a href=\"https://vincentgarreau.com/particles.js/"
-"\">Project Address</a> to generate your unique Particles Effects"
+"You can go to the <a "
+"href=\"https://vincentgarreau.com/particles.js/\">Project Address</a> to "
+"generate your unique Particles Effects"
 msgstr ""
 "你可以访问 <a href=\"https://vincentgarreau.com/particles.js/\">项目地址</a> "
 "以生成属于你的独特粒子特效"
@@ -1747,9 +1736,8 @@ msgid ""
 "resources that need to be reloaded on each page in the footer here, one per "
 "line. These resources will be reloaded once PJAX completes content loading."
 msgstr ""
-"启用 PJAX 后，你在页尾设置的自定义代码在页面跳转后将不再被刷新。你可以在此处"
-"填写需要每页都加载的 JavaScript 和 CSS 资源的路径，这些资源将在 PJAX 完成加载"
-"后被重新加载。"
+"启用 PJAX 后，你在页尾设置的自定义代码在页面跳转后将不再被刷新。你可以在此处填写需要每页都加载的 JavaScript 和 CSS "
+"资源的路径，这些资源将在 PJAX 完成加载后被重新加载。"
 
 #: options/theme-options.php:1324
 msgid "NProgress Loading Progress Bar"
@@ -1838,8 +1826,8 @@ msgstr "加载下一页占位 SVG"
 
 #: options/theme-options.php:1374
 msgid ""
-"Fill in the address, this is the SVG that will be displayed as a placeholder "
-"when the next page is loading"
+"Fill in the address, this is the SVG that will be displayed as a placeholder"
+" when the next page is loading"
 msgstr "填写地址，此为加载下一页时占位显示的SVG"
 
 #: options/theme-options.php:1381
@@ -1860,12 +1848,13 @@ msgstr "封面设置"
 
 #: options/theme-options.php:1410
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B0%81%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B0%81%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B0%81%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B0%81%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:1416
 msgid "Cover Switch"
@@ -2045,19 +2034,20 @@ msgstr "内建 API 控制器"
 
 #: options/theme-options.php:1700
 msgid ""
-"<a href=\"./admin.php?iro_act=gallery_init\" target=\"_blank\">Initlize/"
-"Rebuild index</a> | <a href=\"./admin.php?iro_act=gallery_webp\" "
-"target=\"_blank\">Refomart images to webp</a><br>After initlized,put images "
-"in `wp-content/uploads/iro_gallery/img` and then click to rebuild the index."
-"<br>You can use folders to categorize content, but please rebuild the index "
-"after the location of the relevant content changes.<br>Please make sure that "
-"the working directory is readable and writable when using relevant functions."
+"<a href=\"./admin.php?iro_act=gallery_init\" "
+"target=\"_blank\">Initlize/Rebuild index</a> | <a "
+"href=\"./admin.php?iro_act=gallery_webp\" target=\"_blank\">Refomart images "
+"to webp</a><br>After initlized,put images in `wp-"
+"content/uploads/iro_gallery/img` and then click to rebuild the index.<br>You"
+" can use folders to categorize content, but please rebuild the index after "
+"the location of the relevant content changes.<br>Please make sure that the "
+"working directory is readable and writable when using relevant functions."
 msgstr ""
-"<a href=\"./admin.php?iro_act=gallery_init\" target=\"_blank\">初始化/重建索"
-"引</a> | <a href=\"./admin.php?iro_act=gallery_webp\" target=\"_blank\">将图"
-"片优化为webp</a><br>初始化后将图片放置在 `wp-content/uploads/iro_gallery/"
-"img` 文件夹，然后点击重建索引。<br>您可以在其中使用文件夹分类内容，但是相关内"
-"容位置变更后请重建索引。<br>使用相关功能请确保工作目录可读写。"
+"<a href=\"./admin.php?iro_act=gallery_init\" target=\"_blank\">初始化/重建索引</a> "
+"| <a href=\"./admin.php?iro_act=gallery_webp\" "
+"target=\"_blank\">将图片优化为webp</a><br>初始化后将图片放置在 `wp-"
+"content/uploads/iro_gallery/img` "
+"文件夹，然后点击重建索引。<br>您可以在其中使用文件夹分类内容，但是相关内容位置变更后请重建索引。<br>使用相关功能请确保工作目录可读写。"
 
 #: options/theme-options.php:1711
 msgid "Cover Random Image Multi-terminal Separation"
@@ -2087,30 +2077,16 @@ msgstr "封面随机背景图片缓存"
 
 #: options/theme-options.php:1750
 msgid ""
-"Enabled by default, this feature will cache a cover image locally, which can "
-"improve the loading speed of the first cover after entering the homepage. "
+"Enabled by default, this feature will cache a cover image locally, which can"
+" improve the loading speed of the first cover after entering the homepage. "
 "Note: This feature needs the cover APIs that accept cross-domain requests."
-msgstr ""
-"默认开启，此功能会在本地缓存一份封面图片，可提升进入主页后第一张封面的加载速"
-"度。注意：此功能需要封面API能接受跨域请求。"
-
-#: options/theme-options.php:1758
-msgid "Cover and Frontend Background Integration"
-msgstr "封面与前台背景一体化"
+msgstr "默认开启，此功能会在本地缓存一份封面图片，可提升进入主页后第一张封面的加载速度。注意：此功能需要封面API能接受跨域请求。"
 
 #: options/theme-options.php:1759
 msgid ""
 "When enabled, the background of the cover will be set to transparent, while "
 "the frontend background will use the cover's random image API"
 msgstr "开启之后，封面的背景将设置为透明，同时前台背景将使用封面的随机图API"
-
-#: options/theme-options.php:1767
-msgid "Post Cover As Background"
-msgstr "文章特色图背景"
-
-#: options/theme-options.php:1768
-msgid "Use post feature image as background in post pages"
-msgstr "在文章页使用文章特色图作为背景"
 
 #: options/theme-options.php:1776
 msgid "Cover Random Images Filter"
@@ -2168,12 +2144,10 @@ msgstr "封面视频URL根路径"
 
 #: options/theme-options.php:1835
 msgid ""
-"Fill in the base path your video located at. For example: https://localhost. "
-"Your site's URL is used as default. Please pay attention to the protocol "
+"Fill in the base path your video located at. For example: https://localhost."
+" Your site's URL is used as default. Please pay attention to the protocol "
 "name of the URL."
-msgstr ""
-"填写视频所在的根路径。例如：https://localhost. 你站点的URL将作为默认URL。请注"
-"意URL的协议名称。"
+msgstr "填写视频所在的根路径。例如：https://localhost. 你站点的URL将作为默认URL。请注意URL的协议名称。"
 
 #: options/theme-options.php:1841
 msgid "Cover Video File Name"
@@ -2183,8 +2157,7 @@ msgstr "封面视频文件名称"
 msgid ""
 "For example: abc.mp4. Multiple videos should be separated by English commas "
 "like \"abc.mp4,efg.mp4,\" Random play is on by default."
-msgstr ""
-"例如：abc.mp4，多个视频请用英文逗号隔开如abc.mp4,efg.mp4。默认随机播放。"
+msgstr "例如：abc.mp4，多个视频请用英文逗号隔开如abc.mp4,efg.mp4。默认随机播放。"
 
 #: options/theme-options.php:1854
 msgid "Cover Social Area Options"
@@ -2192,13 +2165,13 @@ msgstr "封面社交区域设置"
 
 #: options/theme-options.php:1861
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B0%81%E9%9D%A2%E7%A4%BE%E4%BA%A4%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</"
-"a> to learn how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B0%81%E9%9D%A2%E7%A4%BE%E4%BA%A4%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B0%81%E9%9D%A2%E7%A4%BE%E4%BA%A4%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">"
-"此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B0%81%E9%9D%A2%E7%A4%BE%E4%BA%A4%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:1866
 msgid "Related Options"
@@ -2210,8 +2183,8 @@ msgstr "封面社交区域"
 
 #: options/theme-options.php:1873
 msgid ""
-"Enabled by default, show cover random image toggle button and social network "
-"icons"
+"Enabled by default, show cover random image toggle button and social network"
+" icons"
 msgstr "默认开启，显示封面随机图片切换按钮和社交网络图标"
 
 #: options/theme-options.php:1880
@@ -2397,9 +2370,7 @@ msgstr "电子邮件用户名"
 msgid ""
 "name@domain.com fo name, the full address can be known only when there is a "
 "js runtime in the frontend, you can fill in with confidence"
-msgstr ""
-"name@domain.com 的 name 部分，前端仅具有 JS 运行环境时才能获取完整地址，可放"
-"心填写"
+msgstr "name@domain.com 的 name 部分，前端仅具有 JS 运行环境时才能获取完整地址，可放心填写"
 
 #: options/theme-options.php:2131
 msgid "Email Domain"
@@ -2466,12 +2437,13 @@ msgstr "展示区域图标"
 
 #: options/theme-options.php:2205
 msgid ""
-"Default is \"fa-solid fa-laptop\", You can check the <a href=\"https://"
-"fontawesome.com/search?o=r&m=free\">FontAwesome Website</a> to see the icons "
-"that can be filled in"
+"Default is \"fa-solid fa-laptop\", You can check the <a "
+"href=\"https://fontawesome.com/search?o=r&m=free\">FontAwesome Website</a> "
+"to see the icons that can be filled in"
 msgstr ""
-"默认为“fa-solid fa-laptop”，你可以前往 <a href=\"https://fontawesome.com/"
-"search?o=r&m=free\">FontAwesome 网站</a> 查看可以填写的图标"
+"默认为“fa-solid fa-laptop”，你可以前往 <a "
+"href=\"https://fontawesome.com/search?o=r&m=free\">FontAwesome 网站</a> "
+"查看可以填写的图标"
 
 #: options/theme-options.php:2212
 msgid "Display Area Title"
@@ -2479,8 +2451,8 @@ msgstr "展示区域标题"
 
 #: options/theme-options.php:2213
 msgid ""
-"Default is \"Display\", you can change it to anything else, but of course it "
-"CANNOT be used as an ad! Not allowed!!!"
+"Default is \"Display\", you can change it to anything else, but of course it"
+" CANNOT be used as an ad! Not allowed!!!"
 msgstr "默认为“Display”，你可以修改为其他，当然不能当广告用！不允许！！"
 
 #: options/theme-options.php:2220
@@ -2489,12 +2461,13 @@ msgstr "文章区域图标"
 
 #: options/theme-options.php:2221
 msgid ""
-"Default is \"fa-regular fa-bookmark\", You can check the <a href=\"https://"
-"fontawesome.com/search?o=r&m=free\">FontAwesome Website</a> to see the icons "
-"that can be filled in"
+"Default is \"fa-regular fa-bookmark\", You can check the <a "
+"href=\"https://fontawesome.com/search?o=r&m=free\">FontAwesome Website</a> "
+"to see the icons that can be filled in"
 msgstr ""
-"默认为“fa-regular fa-bookmark”，你可以前往 <a href=\"https://fontawesome.com/"
-"search?o=r&m=free\">FontAwesome 网站</a> 查看可以填写的图标"
+"默认为“fa-regular fa-bookmark”，你可以前往 <a "
+"href=\"https://fontawesome.com/search?o=r&m=free\">FontAwesome 网站</a> "
+"查看可以填写的图标"
 
 #: options/theme-options.php:2228
 msgid "Post Area Title"
@@ -2502,8 +2475,8 @@ msgstr "文章区域标题"
 
 #: options/theme-options.php:2229
 msgid ""
-"Default is \"Article\", you can change it to anything else, but of course it "
-"CANNOT be used as an ad! Not allowed!!!"
+"Default is \"Article\", you can change it to anything else, but of course it"
+" CANNOT be used as an ad! Not allowed!!!"
 msgstr "默认为“Article”，你可以修改为其他，当然不能当广告用！不允许！！"
 
 #: options/theme-options.php:2236
@@ -2520,13 +2493,13 @@ msgstr "展示区域设置"
 
 #: options/theme-options.php:2265
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B1%95%E7%A4%BA%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B1%95%E7%A4%BA%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E5%B1%95%E7%A4%BA%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E5%B1%95%E7%A4%BA%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:2271
 msgid ""
@@ -2588,11 +2561,9 @@ msgstr "展示徽章胶囊"
 
 #: options/theme-options.php:2301
 msgid ""
-"Enable to show bronze/silver/gold medal badges for blog milestones, Requires "
-"you to unlock the relevant milestone to replace the relevant capsule"
-msgstr ""
-"开启之后将为博客里程碑显示铜牌/银牌/金牌徽章，需要解锁相关里程碑才能替换相关"
-"胶囊"
+"Enable to show bronze/silver/gold medal badges for blog milestones, Requires"
+" you to unlock the relevant milestone to replace the relevant capsule"
+msgstr "开启之后将为博客里程碑显示铜牌/银牌/金牌徽章，需要解锁相关里程碑才能替换相关胶囊"
 
 #: options/theme-options.php:2308
 msgid "Announcement Text"
@@ -2603,8 +2574,7 @@ msgid ""
 "Set the text for announcement capsule. The front-end will automatically "
 "split the text into two lines, you can also use line breaks for manual line "
 "breaks"
-msgstr ""
-"为公告胶囊设置文本。前端会自动将文本分成两行，你也可以使用换行符进行手动换行"
+msgstr "为公告胶囊设置文本。前端会自动将文本分成两行，你也可以使用换行符进行手动换行"
 
 #: options/theme-options.php:2316
 msgid "Display Area Content"
@@ -2632,13 +2602,13 @@ msgstr "文章区域设置"
 
 #: options/theme-options.php:2368
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E6%96%87%E7%AB%A0%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E6%96%87%E7%AB%A0%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"你可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Homepage/"
-"#%E6%96%87%E7%AB%A0%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"你可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Homepage/#%E6%96%87%E7%AB%A0%E5%8C%BA%E5%9F%9F%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:2374
 msgid ""
@@ -2740,12 +2710,13 @@ msgstr "综合设置"
 
 #: options/theme-options.php:2509
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E7%BB%BC%E5%90%88%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the "
-"options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E7%BB%BC%E5%90%88%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E7%BB%BC%E5%90%88%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E7%BB%BC%E5%90%88%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:2515
 msgid "Page Layout Style"
@@ -2793,9 +2764,7 @@ msgstr "在复制页面内容时添加引用信息"
 msgid ""
 "Enabled by default. When copying text content over 30 bytes, a reference in "
 "APA-style will be appended to the copying text."
-msgstr ""
-"默认开启。复制超过 30 字节的文本内容时，将在复制的文本中添加 APA 格式的引用信"
-"息"
+msgstr "默认开启。复制超过 30 字节的文本内容时，将在复制的文本中添加 APA 格式的引用信息"
 
 #: options/theme-options.php:2562
 msgid "Page LazyLoad"
@@ -2805,9 +2774,7 @@ msgstr "页面LazyLoad"
 msgid ""
 "LazyLoad effect for page images, WordPress block editor already comes with "
 "similar effect, not recommended to turn on"
-msgstr ""
-"开启之后页面图片会有LazyLoad加载效果，WordPress区块编辑器已经自带相似效果，不"
-"建议开启"
+msgstr "开启之后页面图片会有LazyLoad加载效果，WordPress区块编辑器已经自带相似效果，不建议开启"
 
 #: options/theme-options.php:2570
 msgid "Page LazyLoad Placeholder SVG"
@@ -2835,13 +2802,13 @@ msgstr "文章页面设置"
 
 #: options/theme-options.php:2596
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E6%96%87%E7%AB%A0%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E6%96%87%E7%AB%A0%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E6%96%87%E7%AB%A0%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E6%96%87%E7%AB%A0%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:2602
 msgid "Article Page Title Font Size"
@@ -2851,8 +2818,7 @@ msgstr "文章页面标题字体大小"
 msgid ""
 "Slide to adjust, recommended value range is 28-36. This option is only "
 "available for article pages that have a featured image set"
-msgstr ""
-"滑动滑块，推荐数值范围为28-36。此选项仅对已经设置了特色图片的文章页面生效"
+msgstr "滑动滑块，推荐数值范围为28-36。此选项仅对已经设置了特色图片的文章页面生效"
 
 #: options/theme-options.php:2613
 msgid "Article Page Title Underline Animation"
@@ -2860,8 +2826,8 @@ msgstr "文章页面标题下划线动画"
 
 #: options/theme-options.php:2614
 msgid ""
-"Article title will have underline animation when this is enabled and article "
-"has a featured image set"
+"Article title will have underline animation when this is enabled and article"
+" has a featured image set"
 msgstr "开启且文章设置了特色图片之后，文章标题将有下划线动画"
 
 #: options/theme-options.php:2621
@@ -2918,8 +2884,8 @@ msgstr "文章协议"
 
 #: options/theme-options.php:2672
 msgid ""
-"Enabled by default, Article license will appear on the function bar. License "
-"can also be selected by custom metadata \"license\"."
+"Enabled by default, Article license will appear on the function bar. License"
+" can also be selected by custom metadata \"license\"."
 msgstr "默认开启，将在文章页面功能栏中显示文章协议，你可以选择自定义你的协议"
 
 #: options/theme-options.php:2674
@@ -2928,30 +2894,28 @@ msgstr "不显示"
 
 #: options/theme-options.php:2689
 msgid ""
-"<p><strong>\"BY\"</strong> means reusers should give credit to the creator</"
-"p><p><strong>\"NC\"</strong> means no commercial use</p><p><strong>\"ND\"</"
-"strong> means no redistribution</p><p><strong>\"SA\"</strong> means must be "
-"shared under the same terms</p><p><strong>\"CC0\"</strong> is a public "
-"dedication tool, which enables creators to give up their copyright and put "
-"their works into the worldwide public domain.</p><p>For details and legal "
-"advice, You can visit <a href=\"https://creativecommons.org/\">the official "
-"website</a></p><p>If you want to change license <strong>per post</strong>, "
-"change (or add if not exist) the post meta \"license\" to the license name "
-"you want in specific format.</p><p>For example:</p><ul><li><code>cc0</code> "
-"for CC0 1.0</li><li><code>cc-by-nc-sa</code> for CC BY-NC-SA 4.0</li></ul>"
+"<p><strong>\"BY\"</strong> means reusers should give credit to the "
+"creator</p><p><strong>\"NC\"</strong> means no commercial "
+"use</p><p><strong>\"ND\"</strong> means no "
+"redistribution</p><p><strong>\"SA\"</strong> means must be shared under the "
+"same terms</p><p><strong>\"CC0\"</strong> is a public dedication tool, which"
+" enables creators to give up their copyright and put their works into the "
+"worldwide public domain.</p><p>For details and legal advice, You can visit "
+"<a href=\"https://creativecommons.org/\">the official website</a></p><p>If "
+"you want to change license <strong>per post</strong>, change (or add if not "
+"exist) the post meta \"license\" to the license name you want in specific "
+"format.</p><p>For example:</p><ul><li><code>cc0</code> for CC0 "
+"1.0</li><li><code>cc-by-nc-sa</code> for CC BY-NC-SA 4.0</li></ul>"
 msgstr ""
-"<p><strong>\"BY\"</strong> 是指用户可以复制、发行、展览、表演、放映、广播或通"
-"过信息网络传播本作品；您必须按照作者或者许可人指定的方式对作品进行署名</"
-"p><p><strong>\"NC\"</strong> 是指用户可以自由复制、散布、展示及演出本作品；用"
-"户不得为商业目的而使用本作品</p><p><strong>\"ND\"</strong> 是指用户可以自由复"
-"制、散布、展示及演出本作品；用户不得改变、转变或更改本作品</"
-"p><p><strong>\"SA\"</strong> 是指用户可以自由复制、散布、展示及演出本作品；若"
-"用户改变、转变或更改本作品，仅在遵守与本作品相同的许可条款下，用户才能散布由"
-"本作品产生的派生作品</p><p>你可以访问协议 <a href=\"https://"
-"creativecommons.org/\">官方网站</a> 了解更多</p><p>如果你想更改<strong>单篇文"
-"章</strong>的协议，请添加文章协议简码到文章中名称为 \"license\" 的自定义字段"
-"的值中来更改对应文章的协议。</p><p>例如：</p><ul><li><code>cc0</code>表示 "
-"CC0 1.0</li><li><code>cc-by-nc-sa</code> 表示 CC BY-NC-SA 4.0</li></ul>"
+"<p><strong>\"BY\"</strong> "
+"是指用户可以复制、发行、展览、表演、放映、广播或通过信息网络传播本作品；您必须按照作者或者许可人指定的方式对作品进行署名</p><p><strong>\"NC\"</strong>"
+" 是指用户可以自由复制、散布、展示及演出本作品；用户不得为商业目的而使用本作品</p><p><strong>\"ND\"</strong> "
+"是指用户可以自由复制、散布、展示及演出本作品；用户不得改变、转变或更改本作品</p><p><strong>\"SA\"</strong> "
+"是指用户可以自由复制、散布、展示及演出本作品；若用户改变、转变或更改本作品，仅在遵守与本作品相同的许可条款下，用户才能散布由本作品产生的派生作品</p><p>你可以访问协议"
+" <a href=\"https://creativecommons.org/\">官方网站</a> "
+"了解更多</p><p>如果你想更改<strong>单篇文章</strong>的协议，请添加文章协议简码到文章中名称为 \"license\" "
+"的自定义字段的值中来更改对应文章的协议。</p><p>例如：</p><ul><li><code>cc0</code>表示 CC0 "
+"1.0</li><li><code>cc-by-nc-sa</code> 表示 CC BY-NC-SA 4.0</li></ul>"
 
 #: options/theme-options.php:2705
 msgid "Reward"
@@ -3025,13 +2989,13 @@ msgstr "模板页面设置"
 
 #: options/theme-options.php:2806
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E6%A8%A1%E6%9D%BF%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E6%A8%A1%E6%9D%BF%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E6%A8%A1%E6%9D%BF%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E6%A8%A1%E6%9D%BF%E9%A1%B5%E9%9D%A2%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:2811
 msgid "Public Settings"
@@ -3045,8 +3009,7 @@ msgstr "模板页面标题字体大小"
 msgid ""
 "Slide to adjust, recommended value range is 36-48. This option is only "
 "available for template pages with featured images already set"
-msgstr ""
-"滑动滑块，推荐数值范围为36-48。此选项仅对已经设置了特色图片的模板页面生效"
+msgstr "滑动滑块，推荐数值范围为36-48。此选项仅对已经设置了特色图片的模板页面生效"
 
 #: options/theme-options.php:2827
 msgid "Bangumi Template Settings"
@@ -3086,11 +3049,9 @@ msgstr "哔哩哔哩 UID"
 
 #: options/theme-options.php:2868
 msgid ""
-"Fill in your account ID, e.g. https://space.bilibili.com/13972644/, just the "
-"number part \"13972644\""
-msgstr ""
-"填写你的帐号ID，例如：https://space.bilibili.com/13972644/，只需填写数"
-"字“13972644”部分"
+"Fill in your account ID, e.g. https://space.bilibili.com/13972644/, just the"
+" number part \"13972644\""
+msgstr "填写你的帐号ID，例如：https://space.bilibili.com/13972644/，只需填写数字“13972644”部分"
 
 #: options/theme-options.php:2876
 msgid "Bilibili Account Cookies"
@@ -3098,12 +3059,10 @@ msgstr "哔哩哔哩帐号 Cookies"
 
 #: options/theme-options.php:2877
 msgid ""
-"Fill in your account cookies, F12 to open your browser web panel, go to your "
-"bilibili homepage to get cookies. If left empty, it will not show the "
+"Fill in your account cookies, F12 to open your browser web panel, go to your"
+" bilibili homepage to get cookies. If left empty, it will not show the "
 "progress of catching up bangumis"
-msgstr ""
-"填写你的帐号 Cookies，F12打开浏览器网络面板，前往你的B站主页获取Cookies。如果"
-"留空，将不会显示追番进度"
+msgstr "填写你的帐号 Cookies，F12打开浏览器网络面板，前往你的B站主页获取Cookies。如果留空，将不会显示追番进度"
 
 #: options/theme-options.php:2885
 msgid "Bangumi Account UID"
@@ -3113,9 +3072,7 @@ msgstr "Bangumi 用户 ID"
 msgid ""
 "Fill in your Bangumi account ID, e.g. https://bangumi.tv/user/944883, just "
 "the number part \"944883\""
-msgstr ""
-"填写你的 Bangumi 帐号 ID，例如：https://bangumi.tv/user/944883，只需填写数"
-"字“944883”部分"
+msgstr "填写你的 Bangumi 帐号 ID，例如：https://bangumi.tv/user/944883，只需填写数字“944883”部分"
 
 #: options/theme-options.php:2894 options/theme-options.php:3005
 msgid "Use cached or pre-set responses"
@@ -3123,8 +3080,8 @@ msgstr "使用缓存或预设响应内容"
 
 #: options/theme-options.php:2895 options/theme-options.php:3006
 msgid ""
-"If the following content is empty, it will be automatically updated on first "
-"visit."
+"If the following content is empty, it will be automatically updated on first"
+" visit."
 msgstr "如果内容为空，将会在相关内容被访问时自动更新"
 
 #: options/theme-options.php:2901
@@ -3201,11 +3158,12 @@ msgstr "Steam 账号 64ID"
 
 #: options/theme-options.php:2965
 msgid ""
-"Fill in your account 64ID, e.g. https://steamcommunity.com/profiles/"
-"76561199029689067/, just the number part \"76561199029689067\""
+"Fill in your account 64ID, e.g. "
+"https://steamcommunity.com/profiles/76561199029689067/, just the number part"
+" \"76561199029689067\""
 msgstr ""
-"填写你的帐号ID，例如：https://steamcommunity.com/profiles/"
-"76561199029689067/, 只需填写数字 \"76561199029689067\" 部分"
+"填写你的帐号ID，例如：https://steamcommunity.com/profiles/76561199029689067/, 只需填写数字 "
+"\"76561199029689067\" 部分"
 
 #: options/theme-options.php:2971
 msgid "Steam API Key"
@@ -3221,8 +3179,7 @@ msgstr "游戏封面 CDN"
 
 #: options/theme-options.php:2979
 msgid "Select based on your user region"
-msgstr ""
-"基于国内访问Steam可能加载不出来游戏封面,推荐使用Steam China, 其次akamai"
+msgstr "基于国内访问Steam可能加载不出来游戏封面,推荐使用Steam China, 其次akamai"
 
 #: options/theme-options.php:2981
 msgid "Steam China"
@@ -3262,13 +3219,13 @@ msgstr "评论相关设置"
 
 #: options/theme-options.php:3022
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</a> to learn "
-"how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在"
-"此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:3027
 msgid "Comment Area Style"
@@ -3332,9 +3289,7 @@ msgstr "评论区域表情"
 msgid ""
 "Select the emoticons to be displayed in the comment area input box. Uncheck "
 "all to turn off the comment input box emoticon function."
-msgstr ""
-"选择要在评论区域输入框中显示的表情。全部取消选中可关闭评论区域输入框表情功"
-"能。"
+msgstr "选择要在评论区域输入框中显示的表情。全部取消选中可关闭评论区域输入框表情功能。"
 
 #: options/theme-options.php:3077
 msgid "BiliBili Emoticon Pack"
@@ -3358,8 +3313,8 @@ msgstr "自定义表情包名称"
 
 #: options/theme-options.php:3089
 msgid ""
-"It is recommended to enter less than 4 Chinese characters in length to avoid "
-"causing compatibility issues on mobile terminals."
+"It is recommended to enter less than 4 Chinese characters in length to avoid"
+" causing compatibility issues on mobile terminals."
 msgstr "建议输入少于4个汉字的内容，以免造成移动端的兼容性问题。"
 
 #: options/theme-options.php:3097
@@ -3369,15 +3324,15 @@ msgstr "自定义表情包路径"
 #: options/theme-options.php:3098
 msgid ""
 "Click <a href=\"./admin.php?update_custom_smilies=true\" "
-"target=\"_blank\">here</a> updating emoticon list. Specific usage reference: "
-"<a href=\"https://docs.fuukei.org/Sakurairo/Pages/"
-"#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\" "
-"target=\"_blank\">Comment related settings</a>"
+"target=\"_blank\">here</a> updating emoticon list. Specific usage reference:"
+" <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\""
+" target=\"_blank\">Comment related settings</a>"
 msgstr ""
-"点击 <a href=\"./admin.php?update_custom_smilies=true\" target=\"_blank\">这"
-"里</a> 更新表情包列表。使用方法请参考：<a href=\"https://docs.fuukei.org/"
-"Sakurairo/Pages/#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\" "
-"target=\"_blank\">评论相关设置</a>"
+"点击 <a href=\"./admin.php?update_custom_smilies=true\" "
+"target=\"_blank\">这里</a> 更新表情包列表。使用方法请参考：<a "
+"href=\"https://docs.fuukei.org/Sakurairo/Pages/#%E8%AF%84%E8%AE%BA%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\""
+" target=\"_blank\">评论相关设置</a>"
 
 #: options/theme-options.php:3105
 msgid "Custom Emoticon Proxy Address"
@@ -3405,7 +3360,8 @@ msgstr "页面评论区域位置信息"
 
 #: options/theme-options.php:3125
 msgid ""
-"When enabled, the page comment area will show the user’s location information"
+"When enabled, the page comment area will show the user’s location "
+"information"
 msgstr "开启之后页面评论区域将显示用户的位置信息"
 
 #: options/theme-options.php:3132
@@ -3486,8 +3442,8 @@ msgstr "Imgur Client ID"
 
 #: options/theme-options.php:3209
 msgid ""
-"Fill in Client ID here, to register please visit https://api.imgur.com/"
-"oauth2/addclient"
+"Fill in Client ID here, to register please visit "
+"https://api.imgur.com/oauth2/addclient"
 msgstr "此处填写Client ID，注册请访问 https://api.imgur.com/oauth2/addclient"
 
 #: options/theme-options.php:3215
@@ -3500,8 +3456,8 @@ msgid ""
 "to the tutorial: https://2heng.xin/2018/06/06/javascript-upload-images-with-"
 "imgur-api/"
 msgstr ""
-"后端上传图片到 Imgur 的时候使用的代理。你可以参考教程：https://2heng.xin/"
-"2018/06/06/javascript-upload-images-with-imgur-api/"
+"后端上传图片到 Imgur 的时候使用的代理。你可以参考教程：https://2heng.xin/2018/06/06/javascript-"
+"upload-images-with-imgur-api/"
 
 #: options/theme-options.php:3224
 msgid "SM.MS Secret Token"
@@ -3518,8 +3474,8 @@ msgstr "Chevereto API v1 Key"
 
 #: options/theme-options.php:3234
 msgid ""
-"Fill in the Key here, to get please visit your Chevereto home page address/"
-"dashboard/settings/api"
+"Fill in the Key here, to get please visit your Chevereto home page "
+"address/dashboard/settings/api"
 msgstr "此处填写Key，获取请访问你的Chevereto首页地址/dashboard/settings/api"
 
 #: options/theme-options.php:3240
@@ -3530,8 +3486,7 @@ msgstr "Chevereto地址"
 msgid ""
 "Your Chevereto home page address. Please note that there is no \"/\" at the "
 "end, e.g. https://your.cherverto.com"
-msgstr ""
-"你的Chevereto首页地址, 注意结尾没有 /, 例如：https://your.cherverto.com"
+msgstr "你的Chevereto首页地址, 注意结尾没有 /, 例如：https://your.cherverto.com"
 
 #: options/theme-options.php:3248
 msgid "Lsky Pro v1 Token"
@@ -3541,9 +3496,7 @@ msgstr "Lsky Pro v1 Token"
 msgid ""
 "Fill in the Token here, Please note that there is no \"Bearer \" at first, "
 "to get please visit your Lsky Pro home page address/api"
-msgstr ""
-"在这里填写令牌，请注意，首先没有“Bearer”，要获得请访问您的Lsky Pro主页地址/ "
-"api"
+msgstr "在这里填写令牌，请注意，首先没有“Bearer”，要获得请访问您的Lsky Pro主页地址/ api"
 
 #: options/theme-options.php:3256
 msgid "Lsky Pro Address"
@@ -3573,12 +3526,10 @@ msgstr "用户邮件回复通知"
 
 #: options/theme-options.php:3279
 msgid ""
-"By default WordPress will use email notifications to notify users when their "
-"comments receive a reply. After turning it on users are allowed to set "
+"By default WordPress will use email notifications to notify users when their"
+" comments receive a reply. After turning it on users are allowed to set "
 "whether to use email notifications when their comments receive a reply"
-msgstr ""
-"WordPress默认会使用邮件通知用户评论收到回复，开启之后允许用户设置自己的评论收"
-"到回复时是否使用邮件通知"
+msgstr "WordPress默认会使用邮件通知用户评论收到回复，开启之后允许用户设置自己的评论收到回复时是否使用邮件通知"
 
 #: options/theme-options.php:3286
 msgid "Admin Email Reply Notification"
@@ -3586,8 +3537,8 @@ msgstr "管理员邮件回复通知"
 
 #: options/theme-options.php:3287
 msgid ""
-"Use email notifications when admin comments receive a reply after turning it "
-"on"
+"Use email notifications when admin comments receive a reply after turning it"
+" on"
 msgstr "开启之后当管理员评论收到回复时使用邮件通知"
 
 #: options/theme-options.php:3296
@@ -3600,13 +3551,13 @@ msgstr "登录界面和仪表盘相关设置"
 
 #: options/theme-options.php:3309
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%92%8C%E4%BB%AA%E8%A1%A8%E7%9B%98%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</"
-"a> to learn how to set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%92%8C%E4%BB%AA%E8%A1%A8%E7%9B%98%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%92%8C%E4%BB%AA%E8%A1%A8%E7%9B%98%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">"
-"此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%92%8C%E4%BB%AA%E8%A1%A8%E7%9B%98%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:3314
 msgid "Login Screen"
@@ -3631,7 +3582,6 @@ msgstr "设置你的登录界面Logo"
 #: options/theme-options.php:3338
 msgid "Captcha Selection"
 msgstr "验证码选项"
-
 
 #: options/theme-options.php:3383
 msgid "Turnstile Site Key"
@@ -3705,12 +3655,13 @@ msgstr "ChatGPT 设置"
 
 #: options/theme-options.php:3494
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#ChatGPT%E8%AE%BE%E7%BD%AE\">here</a> to learn how to set the options on "
-"this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#ChatGPT%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#ChatGPT%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#ChatGPT%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:3499
 msgid ""
@@ -3752,12 +3703,12 @@ msgstr "ChatGPT API密钥"
 
 #: options/theme-options.php:3565
 msgid ""
-"Fill in Your ChatGPT API keys, please refer to <a href=\"https://"
-"platform.openai.com/account/api-keys\">OpenAI Website</a> for further "
-"information."
+"Fill in Your ChatGPT API keys, please refer to <a "
+"href=\"https://platform.openai.com/account/api-keys\">OpenAI Website</a> for"
+" further information."
 msgstr ""
-"填写您的 ChatGPT API 密钥，您可以访问 <a href=\"https://platform.openai.com/"
-"account/api-keys\">OpenAI 网站</a> 获取您的 API 密钥"
+"填写您的 ChatGPT API 密钥，您可以访问 <a href=\"https://platform.openai.com/account/api-"
+"keys\">OpenAI 网站</a> 获取您的 API 密钥"
 
 #: options/theme-options.php:3571
 msgid "ChatGPT Max Tokens"
@@ -3773,8 +3724,9 @@ msgstr "ChatGPT 模型"
 
 #: options/theme-options.php:3583
 msgid ""
-"Only models support Chat Completion API can be used. The default is \"gpt-4o-"
-"mini. View https://platform.openai.com/docs/models/overview for further info."
+"Only models support Chat Completion API can be used. The default is "
+"\"gpt-4o-mini. View https://platform.openai.com/docs/models/overview for "
+"further info."
 msgstr ""
 "只有兼容 ChatGPT API 的模型才能使用。默认为 “gpt-4o-mini”。更多信息请查看 "
 "https://platform.openai.com/docs/models/overview"
@@ -3785,8 +3737,8 @@ msgstr "ChatGPT API 请求超时时间设置"
 
 #: options/theme-options.php:3590
 msgid ""
-"The maximum time to wait for a response from the AI service. Increase if you "
-"experience frequent \"request timed out\" errors."
+"The maximum time to wait for a response from the AI service. Increase if you"
+" experience frequent \"request timed out\" errors."
 msgstr "等待AI服务响应的最大时间。如果遇到频繁的“请求超时”错误，请增加。"
 
 #: options/theme-options.php:3599
@@ -3798,8 +3750,8 @@ msgstr "ChatGPT 文章摘要"
 #: options/theme-options.php:3600
 #, fuzzy
 #| msgid ""
-#| "After turning on, title and context of your articles will be "
-#| "automatically sent to ChatGPT to generate excerpts."
+#| "After turning on, title and context of your articles will be automatically "
+#| "sent to ChatGPT to generate excerpts."
 msgid ""
 "After turning on, title and context of your articles will be automatically "
 "sent to ChatGPT to generate excerpts when you save your articles."
@@ -3810,9 +3762,7 @@ msgid ""
 "Each update of your post will trigger a request to generate a summary. Due "
 "to current API limitations, if your article exceeds 4097 Token, the system "
 "will only send the unexceeded portion to generate a summary"
-msgstr ""
-"你的每次文章更新都会触发生成摘要请求。由于目前API限制，如果你的文章超过 4097 "
-"Token，系统将会只发送未超出部分以生成摘要"
+msgstr "你的每次文章更新都会触发生成摘要请求。由于目前API限制，如果你的文章超过 4097 Token，系统将会只发送未超出部分以生成摘要"
 
 #: options/theme-options.php:3612
 msgid "Article IDs that do not Require ChatGPT Summarize"
@@ -3832,9 +3782,7 @@ msgstr "ChatGPT 文章摘要初始化提示"
 msgid ""
 "Init Prompt instructs AI how to generate summaries for your articles. Init "
 "Prompt will be passed to ChatGPT as \"system\" role"
-msgstr ""
-"用于指示 AI 如何为你的文章生成摘要。初始化提示将作为 “系统 ”角色传递给 "
-"ChatGPT"
+msgstr "用于指示 AI 如何为你的文章生成摘要。初始化提示将作为 “系统 ”角色传递给 ChatGPT"
 
 #: options/theme-options.php:3628
 msgid "ChatGPT Article Annotations Init Prompt"
@@ -3842,11 +3790,9 @@ msgstr "ChatGPT 文章注解初始化提示"
 
 #: options/theme-options.php:3629
 msgid ""
-"Init Prompt instructs AI how to generate annotations for your articles. Init "
-"Prompt will be passed to ChatGPT as \"system\" role"
-msgstr ""
-"用于指示 AI 如何为你的文章生成注解。初始化提示将作为 “系统 ”角色传递给 "
-"ChatGPT"
+"Init Prompt instructs AI how to generate annotations for your articles. Init"
+" Prompt will be passed to ChatGPT as \"system\" role"
+msgstr "用于指示 AI 如何为你的文章生成注解。初始化提示将作为 “系统 ”角色传递给 ChatGPT"
 
 #: options/theme-options.php:3638
 msgid "ChatGPT API self test"
@@ -3874,13 +3820,13 @@ msgstr "低使用设置"
 
 #: options/theme-options.php:3692
 msgid ""
-"You can click <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#%E4%BD%8E%E4%BD%BF%E7%94%A8%E8%AE%BE%E7%BD%AE\">here</a> to learn how to "
-"set the options on this page"
+"You can click <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#%E4%BD%8E%E4%BD%BF%E7%94%A8%E8%AE%BE%E7%BD%AE\">here</a>"
+" to learn how to set the options on this page"
 msgstr ""
-"您可以单击 <a href=\"https://docs.fuukei.org/Sakurairo/Others/"
-"#%E4%BD%8E%E4%BD%BF%E7%94%A8%E8%AE%BE%E7%BD%AE\">此处</a> 了解如何在此页面上"
-"设置选项"
+"您可以单击 <a "
+"href=\"https://docs.fuukei.org/Sakurairo/Others/#%E4%BD%8E%E4%BD%BF%E7%94%A8%E8%AE%BE%E7%BD%AE\">此处</a>"
+" 了解如何在此页面上设置选项"
 
 #: options/theme-options.php:3698
 msgid "Statistics API"
@@ -3965,9 +3911,7 @@ msgid ""
 "Slide to adjust. If the comment has a time difference problem, adjust it "
 "here, fill in an integer. Calculation method: actual time = time of display "
 "error - the integer you entered (in hours)"
-msgstr ""
-"滑动滑块，如果评论出现时差问题在这里调整，填入一个整数，计算方法：实际时间=显"
-"示错误的时间-你输入的整数（单位：小时）"
+msgstr "滑动滑块，如果评论出现时差问题在这里调整，填入一个整数，计算方法：实际时间=显示错误的时间-你输入的整数（单位：小时）"
 
 #: options/theme-options.php:3767
 msgid "Gravatar Service Proxy"
@@ -3977,9 +3921,7 @@ msgstr "Gravatar 服务代理"
 msgid ""
 "You can select multiple proxy as the Gravatar Service Proxy. By default, "
 "Weavatar is used as the Gravatar Service Proxy."
-msgstr ""
-"你可以选择多种代理作为 Gravatar 服务代理。默认使用 Weavatar 作为 Gravatar 服"
-"务代理。"
+msgstr "你可以选择多种代理作为 Gravatar 服务代理。默认使用 Weavatar 作为 Gravatar 服务代理。"
 
 #: options/theme-options.php:3770
 msgid "Weavatar Service"
@@ -4001,9 +3943,7 @@ msgstr "自定义代理地址"
 msgid ""
 "Enter your Gravatar proxy address without starting with \"http(s)://\" and "
 "ending with \"/\". Example: gravatar.com/avatar."
-msgstr ""
-"输入你的头像代理地址，请勿以\"http(s)://\" 开头 “/” 结尾。示例：gravatar.com/"
-"avatar。"
+msgstr "输入你的头像代理地址，请勿以\"http(s)://\" 开头 “/” 结尾。示例：gravatar.com/avatar。"
 
 #: options/theme-options.php:3790
 msgid "GitHub repository card proxy"
@@ -4013,9 +3953,7 @@ msgstr "Github 卡片仓库代理"
 msgid ""
 "Use your server proxy to get the github repository card image so that "
 "Chinese users who cannot access vercel.app can see it"
-msgstr ""
-"使用你的服务器代理获取 Github 仓库卡片，可让无法访问 Vercel 的中国用户能正常"
-"加载"
+msgstr "使用你的服务器代理获取 Github 仓库卡片，可让无法访问 Vercel 的中国用户能正常加载"
 
 #: options/theme-options.php:3797
 msgid "Lightbox"
@@ -4049,34 +3987,37 @@ msgstr ""
 
 #: options/theme-options.php:3816
 msgid ""
-"<strong>Attension: Please read <a href=\"https://github.com/sachinchoolur/"
-"lightGallery#license\">License Instruction</a> before use.</strong><br/"
-"><strong><a href=\"https://www.lightgalleryjs.com/demos/thumbnails/\">Demos</"
-"a></strong> | <strong><a href=\"https://www.lightgalleryjs.com/docs/settings/"
-"\">Reference</a></strong> | <strong><a href=\"https://fastly.jsdelivr.net/"
-"npm/lightgallery@latest/plugins/\">Plugin List</a></strong> <br/> Please "
-"write settings in JavaScript. An example has been provided as default "
-"setting.<br/> It should be captiable for Most User using WordPress "
-"Guttenberg Editor.<br/>Submit new discussion on Github for assistance. "
-"https://github.com/mirai-mamori/Sakurairo/discussions"
+"<strong>Attension: Please read <a "
+"href=\"https://github.com/sachinchoolur/lightGallery#license\">License "
+"Instruction</a> before use.</strong><br/><strong><a "
+"href=\"https://www.lightgalleryjs.com/demos/thumbnails/\">Demos</a></strong>"
+" | <strong><a "
+"href=\"https://www.lightgalleryjs.com/docs/settings/\">Reference</a></strong>"
+" | <strong><a "
+"href=\"https://fastly.jsdelivr.net/npm/lightgallery@latest/plugins/\">Plugin"
+" List</a></strong> <br/> Please write settings in JavaScript. An example has"
+" been provided as default setting.<br/> It should be captiable for Most User"
+" using WordPress Guttenberg Editor.<br/>Submit new discussion on Github for "
+"assistance. https://github.com/mirai-mamori/Sakurairo/discussions"
 msgstr ""
-"<strong>注意：使用前请阅读<a href=\"https://github.com/sachinchoolur/"
-"lightGallery#license\">许可证</a> 说明。</strong><br/><strong><a "
-"href=\"https://www.lightgalleryjs.com/demos/thumbnails/\">演示站点</a></"
-"strong> | <strong><a href=\"https://www.lightgalleryjs.com/docs/settings/\">"
-"参考</a></strong> | <strong><a href=\"https://fastly.jsdelivr.net/npm/"
-"lightgallery@latest/plugins/\">插件列表</a></strong> <br/>请使用JavaScript语"
-"言来编写设置。示例已在默认设置提供。<br/> 对于大多数使用 WordPress 古腾堡编辑"
-"器用户来说应该是可被接受的。<br/>提交关于 Github 的新讨论以寻求帮助。https://"
-"github.com/mirai-mamori/Sakurairo/discussions"
+"<strong>注意：使用前请阅读<a "
+"href=\"https://github.com/sachinchoolur/lightGallery#license\">许可证</a> "
+"说明。</strong><br/><strong><a "
+"href=\"https://www.lightgalleryjs.com/demos/thumbnails/\">演示站点</a></strong> "
+"| <strong><a "
+"href=\"https://www.lightgalleryjs.com/docs/settings/\">参考</a></strong> | "
+"<strong><a "
+"href=\"https://fastly.jsdelivr.net/npm/lightgallery@latest/plugins/\">插件列表</a></strong>"
+" <br/>请使用JavaScript语言来编写设置。示例已在默认设置提供。<br/> 对于大多数使用 WordPress "
+"古腾堡编辑器用户来说应该是可被接受的。<br/>提交关于 Github 的新讨论以寻求帮助。https://github.com/mirai-"
+"mamori/Sakurairo/discussions"
 
 #: options/theme-options.php:3827
 msgid ""
-"Start from Sakurairo v2.4.0, plugins names in LightGallery option follow the "
-"form cite in official document (eg. lgHash instead of \"hash\")"
+"Start from Sakurairo v2.4.0, plugins names in LightGallery option follow the"
+" form cite in official document (eg. lgHash instead of \"hash\")"
 msgstr ""
-"从Sakurairo v2.4.0开始，LightGallery中的插件名称会与官方文档中引用的表格保持"
-"一致（例如“hash”将被表示为IgHash）"
+"从Sakurairo v2.4.0开始，LightGallery中的插件名称会与官方文档中引用的表格保持一致（例如“hash”将被表示为IgHash）"
 
 #: options/theme-options.php:3835
 msgid "LightGallery Lightbox Effect Options"
@@ -4088,18 +4029,18 @@ msgstr "代码高亮"
 
 #: options/theme-options.php:3851
 msgid ""
-"<p><strong>Highlight.js:</strong> Default. Automatic language recognition. </"
-"p> <p><strong>Prism.js:</strong> Requires a language to be specified, see <a "
-"href=\"https://prismjs.com/#basic-usage\">basic usage</a> and <a "
+"<p><strong>Highlight.js:</strong> Default. Automatic language recognition. "
+"</p> <p><strong>Prism.js:</strong> Requires a language to be specified, see "
+"<a href=\"https://prismjs.com/#basic-usage\">basic usage</a> and <a "
 "href=\"https://prismjs.com/plugins/file-highlight/\">How to code highlight "
 "dynamically loaded files</a>. </p> <p><strong>Custom:</strong> For cases "
 "where another configuration is available. </p>"
 msgstr ""
-"<p><strong>Highlight.js：</strong> 默认值，自动识别语言。</"
-"p><p><strong>Prism.js：</strong> 需要指定语言，使用方法请参阅 <a "
-"href=\"https://prismjs.com/#basic-usage\">基本用法</a> 和 <a href=\"https://"
-"prismjs.com/plugins/file-highlight/\">如何代码高亮动态载入的文件</a>。 </"
-"p><p><strong>自定义：</strong> 适用于另有配置的情况。</p>"
+"<p><strong>Highlight.js：</strong> "
+"默认值，自动识别语言。</p><p><strong>Prism.js：</strong> 需要指定语言，使用方法请参阅 <a "
+"href=\"https://prismjs.com/#basic-usage\">基本用法</a> 和 <a "
+"href=\"https://prismjs.com/plugins/file-highlight/\">如何代码高亮动态载入的文件</a>。 "
+"</p><p><strong>自定义：</strong> 适用于另有配置的情况。</p>"
 
 #: options/theme-options.php:3859
 msgid "Code Highlight Method"
@@ -4117,8 +4058,7 @@ msgstr "Prism.js：为所有代码块增加行数显示"
 msgid ""
 "See the <a href=\"https://prismjs.com/plugins/line-numbers/\">plugin "
 "description documentation</a>"
-msgstr ""
-"请参阅 <a href=\"https://prismjs.com/plugins/line-numbers/\">插件描述文档</a>"
+msgstr "请参阅 <a href=\"https://prismjs.com/plugins/line-numbers/\">插件描述文档</a>"
 
 #: options/theme-options.php:3881
 msgid "Prism.js: Autoload Address"
@@ -4142,8 +4082,8 @@ msgstr "Prism.js：代码高亮主题（深色模式）"
 
 #: options/theme-options.php:3914
 msgid ""
-"The following Options are not recommended to be modified blindly, please use "
-"them under the guidance of others"
+"The following Options are not recommended to be modified blindly, please use"
+" them under the guidance of others"
 msgstr "以下设置不推荐盲目进行修改，请在他人的指导下使用"
 
 #: options/theme-options.php:3920
@@ -4154,17 +4094,16 @@ msgstr "图片 CDN"
 #, fuzzy
 #| msgid ""
 #| "Note: fill in the format https://your CDN domain/. This means that images "
-#| "with original path http://your.domain/wp-content/uploads/2018/05/xx.png "
-#| "will be loaded from http://your CDN domain/2018/05/xx.png"
+#| "with original path http://your.domain/wp-content/uploads/2018/05/xx.png will"
+#| " be loaded from http://your CDN domain/2018/05/xx.png"
 msgid ""
 "Note: fill in the format https://cdn.example.org, DO NOT add a slash at the "
-"end of the url. This means that images with original path http://"
-"cdn.example.org/wp-content/uploads/2018/05/xx.png will be loaded from http://"
-"cdn.example.org/2018/05/xx.png"
+"end of the url. This means that images with original path "
+"http://cdn.example.org/wp-content/uploads/2018/05/xx.png will be loaded from"
+" http://cdn.example.org/2018/05/xx.png"
 msgstr ""
-"注意：填写格式为 http(s)://你的CDN域名/。也就是说，原路径为 http://"
-"your.domain/wp-content/uploads/2018/05/xx.png 的图片将从 http://你的CDN域名/"
-"2018/05/xx.png 加载"
+"注意：填写格式为 http(s)://你的CDN域名/。也就是说，原路径为 http://your.domain/wp-"
+"content/uploads/2018/05/xx.png 的图片将从 http://你的CDN域名/2018/05/xx.png 加载"
 
 #: options/theme-options.php:3928
 msgid "Articles Categories (Do not display)"
@@ -4192,8 +4131,8 @@ msgstr "隐藏登录入口"
 
 #: options/theme-options.php:3950
 msgid ""
-"Hide login address in theme as much as possible, if you used plugins to hide "
-"this."
+"Hide login address in theme as much as possible, if you used plugins to hide"
+" this."
 msgstr "将尽可能隐藏主题中可能出现的登录入口，如果你使用了相关插件"
 
 #: options/theme-options.php:3957
@@ -4230,8 +4169,8 @@ msgstr "过滤大部分错误"
 
 #: options/theme-options.php:3980
 msgid ""
-"It is recommended to set it to normal to block log information that does not "
-"affect usage."
+"It is recommended to set it to normal to block log information that does not"
+" affect usage."
 msgstr "建议设置为“只显示严重错误”来防止不影响使用的php日志渲染到前端"
 
 #: options/theme-options.php:3986
@@ -4259,8 +4198,8 @@ msgstr ""
 #: options/theme-options.php:4016
 #, php-format
 msgid ""
-"Theme Sakurairo Version %s | Internal Version %s | <a href=\"https://"
-"github.com/mirai-mamori/Sakurairo\">Project Address</a>"
+"Theme Sakurairo Version %s | Internal Version %s | <a "
+"href=\"https://github.com/mirai-mamori/Sakurairo\">Project Address</a>"
 msgstr ""
 "Sakurairo 主题版本 %s | 内部版本 %s | <a href=\"https://github.com/mirai-"
 "mamori/Sakurairo\">项目地址</a>"
@@ -4277,9 +4216,7 @@ msgstr "主题更新源"
 msgid ""
 "If you are using a server set up in mainland China, please use the Upyun "
 "source or the official theme source as your theme update source"
-msgstr ""
-"如果你使用的是架设在国内的服务器，请使用又拍云源或主题官方源作为你的主题更新"
-"源"
+msgstr "如果你使用的是架设在国内的服务器，请使用又拍云源或主题官方源作为你的主题更新源"
 
 #: options/theme-options.php:4040
 msgid "Theme Update Test Channel Disclaimer"
@@ -4293,10 +4230,9 @@ msgid ""
 "not limited to possible data loss) into the options text box <strong> \"I "
 "agree and am willing to bear all unexpected consequences\"</strong>"
 msgstr ""
-"请在 <strong> 确保你已经认真了解参与测试带来的风险并且愿意自行承担一切后果 </"
-"strong>（包括但不限于可能的数据丢失）之后，复制后文引号内的文本到选项文本框"
-"内 <strong> \"I agree and am willing to bear all unexpected consequences\" </"
-"strong>"
+"请在 <strong> 确保你已经认真了解参与测试带来的风险并且愿意自行承担一切后果 "
+"</strong>（包括但不限于可能的数据丢失）之后，复制后文引号内的文本到选项文本框内 <strong> \"I agree and am "
+"willing to bear all unexpected consequences\" </strong>"
 
 #: options/theme-options.php:4052
 msgid "Theme Update Channel"
@@ -4359,9 +4295,7 @@ msgid ""
 "When disabled, 3rd-party dependencies, which have been built to bundles "
 "along with themes's entry script, will be loaded from the exact same origin "
 "with Critical Frontend Resource. "
-msgstr ""
-"当禁用时，与主题脚本一起被构建打包的第三方依赖，将从与关键前端资源完全相同的"
-"来源加载。"
+msgstr "当禁用时，与主题脚本一起被构建打包的第三方依赖，将从与关键前端资源完全相同的来源加载。"
 
 #: options/theme-options.php:4112
 msgid "Vision Resource Basepath"
@@ -4371,13 +4305,14 @@ msgstr "视觉资源路径"
 msgid ""
 "This link directory structure needs to be consistent with the <a "
 "href=\"https://github.com/Fuukei/Sakurairo_Vision\">Sakurairo Vision</a> "
-"repositories officially provided by fuukei, otherwise some resources 404 may "
-"appear. The image source officially provided by <a href=\"https://waf.pro/"
-"\">WAFPRO</a> is adopted by default."
+"repositories officially provided by fuukei, otherwise some resources 404 may"
+" appear. The image source officially provided by <a "
+"href=\"https://waf.pro/\">WAFPRO</a> is adopted by default."
 msgstr ""
-"此链接目录结构需要与 Fuukei 官方提供的 <a href=\"https://github.com/Fuukei/"
-"Sakurairo_Vision\">Sakurairo Vision</a> 公共仓库保持一致，否则可能会出现一些"
-"资源 404。默认采用 <a href=\"https://waf.pro/\">WAFPRO</a> 提供的镜像源。"
+"此链接目录结构需要与 Fuukei 官方提供的 <a "
+"href=\"https://github.com/Fuukei/Sakurairo_Vision\">Sakurairo Vision</a> "
+"公共仓库保持一致，否则可能会出现一些资源 404。默认采用 <a href=\"https://waf.pro/\">WAFPRO</a> "
+"提供的镜像源。"
 
 #: options/theme-options.php:4119
 msgid "Theme Contributors"
@@ -4396,18 +4331,12 @@ msgstr "隐私信息"
 #: options/theme-options.php:4134
 msgid ""
 "<p>The theme respects your privacy</p>\n"
-"        <p>However, when you use a service provider pre-populated by the "
-"theme to provide relevant services in mainland China, the service provider "
-"may collect data about your visitors and compile statistics</p>\n"
-"        <p>You can reduce the amount of information sent to third parties by "
-"localising the theme-related resources, which are pre-configured with "
-"options for you to modify</p>"
+"        <p>However, when you use a service provider pre-populated by the theme to provide relevant services in mainland China, the service provider may collect data about your visitors and compile statistics</p>\n"
+"        <p>You can reduce the amount of information sent to third parties by localising the theme-related resources, which are pre-configured with options for you to modify</p>"
 msgstr ""
 "<p>主题尊重你的隐私</p>\n"
-"        <p>但是，当你使用主题预置的中国大陆服务商提供的服务时，服务商可能会收"
-"集有关你的访问者的数据并统计数据</p>\n"
-"        <p>你可以通过本地化与主题相关的资源来减少发送给第三方的信息，主题提供"
-"相关选项配置</p>"
+"        <p>但是，当你使用主题预置的中国大陆服务商提供的服务时，服务商可能会收集有关你的访问者的数据并统计数据</p>\n"
+"        <p>你可以通过本地化与主题相关的资源来减少发送给第三方的信息，主题提供相关选项配置</p>"
 
 #: options/theme-options.php:4142
 msgid "Send Theme Version to Fuukei"
@@ -4418,9 +4347,7 @@ msgid ""
 "The theme will only send time and version information to Fuukei officials "
 "and the data will be cleaned regularly and used only to count version "
 "updates."
-msgstr ""
-"主题只会向 Fuukei 官方发送时间和版本信息，数据将定期清理并仅用于统计版本更"
-"新。"
+msgstr "主题只会向 Fuukei 官方发送时间和版本信息，数据将定期清理并仅用于统计版本更新。"
 
 #: options/theme-options.php:4149
 msgid "Reference Information"
@@ -4429,8 +4356,7 @@ msgstr "引用信息"
 #: options/theme-options.php:4154
 msgid ""
 "<p>Fluent Design Icon Referenced by Paradox Fluent Icon Pack</p>\n"
-"        <p>MUH2 Design Icon Referenced by 缄默 <a href=\"https://"
-"www.coolapk.com/apk/com.muh2.icon\">MUH2 Icon Pack</a></p>"
+"        <p>MUH2 Design Icon Referenced by 缄默 <a href=\"https://www.coolapk.com/apk/com.muh2.icon\">MUH2 Icon Pack</a></p>"
 msgstr ""
 
 #: options/theme-options.php:4160
@@ -4439,24 +4365,21 @@ msgstr "依赖信息"
 
 #: options/theme-options.php:4165
 msgid ""
-"<p>Options Framework Relies on the Codestar Open Source <a href=\"https://"
-"github.com/Codestar/codestar-framework\">Codestar Framework</a> Project</p>\n"
-"        <p>Update Function Relies on YahnisElsts Open Source <a "
-"href=\"https://github.com/YahnisElsts/plugin-update-checker\">Plugin Update "
-"Checker</a> Project</p>\n"
-"        <p>Visual Editor Related Functions Relies on Themeum Open Source <a "
-"href=\"https://github.com/themeum/kirki\">Kirki</a> Project</p>"
+"<p>Options Framework Relies on the Codestar Open Source <a href=\"https://github.com/Codestar/codestar-framework\">Codestar Framework</a> Project</p>\n"
+"        <p>Update Function Relies on YahnisElsts Open Source <a href=\"https://github.com/YahnisElsts/plugin-update-checker\">Plugin Update Checker</a> Project</p>\n"
+"        <p>Visual Editor Related Functions Relies on Themeum Open Source <a href=\"https://github.com/themeum/kirki\">Kirki</a> Project</p>"
 msgstr ""
 
 #: options/theme-options.php:4172
 msgid ""
-"<img src=\"https://img.shields.io/github/v/release/mirai-mamori/"
-"Sakurairo.svg?style=flat-square\"  alt=\"Theme latest version\" "
-"style=\"border-radius: 3px;\" />  <img src=\"https://img.shields.io/github/"
-"release-date/mirai-mamori/Sakurairo?style=flat-square\"  alt=\"Theme latest "
-"version release date\" style=\"border-radius: 3px;\" />  <img src=\"https://"
-"data.jsdelivr.com/v1/package/gh/mirai-mamori/Sakurairo/badge\"  alt=\"Theme "
-"CDN resource access\" style=\"border-radius: 3px;\" />"
+"<img src=\"https://img.shields.io/github/v/release/mirai-"
+"mamori/Sakurairo.svg?style=flat-square\"  alt=\"Theme latest version\" "
+"style=\"border-radius: 3px;\" />  <img "
+"src=\"https://img.shields.io/github/release-date/mirai-"
+"mamori/Sakurairo?style=flat-square\"  alt=\"Theme latest version release "
+"date\" style=\"border-radius: 3px;\" />  <img "
+"src=\"https://data.jsdelivr.com/v1/package/gh/mirai-mamori/Sakurairo/badge\""
+"  alt=\"Theme CDN resource access\" style=\"border-radius: 3px;\" />"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

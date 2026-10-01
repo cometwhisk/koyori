@@ -66,8 +66,7 @@ function font_end_js_control()
         'land_at_home' => check(is_home()),
         'extract_article_highlight' => iro_opt('extract_article_highlight_from_feature', false)?true:false, // 首页卡片是否计算
         'post_theme_color' => var_post_theme_color(),
-        'post_cover_as_bg' => check(iro_opt('post_cover_as_bg',false) && iro_opt('site_bg_as_cover',true)),
-        'post_feature_img' => ( is_singular() && koyori_has_cover(get_the_ID()) ) ? koyori_get_cover_url(get_the_ID(), 'full') : '',
+
         'live_search' => check(iro_opt('live_search')),
         'loading_ph' => iro_opt('load_in_svg'),
         'clipboardRef' => iro_opt('clipboard_ref') == '0' ? false : true,
@@ -78,7 +77,7 @@ function font_end_js_control()
         'comment_upload_img' => iro_opt('img_upload_api') == 'off' ? false : true,
         'img_upload_max_size' => iro_opt('img_upload_max_size',5),
         'cache_cover' => check(iro_opt('cache_cover')),
-        'site_bg_as_cover' => check(iro_opt('site_bg_as_cover')),
+
         'yiyan_api' => empty(iro_opt('yiyan_api')) ? ["https://v1.hitokoto.cn/", "https://api.nmxc.ltd/yiyan/"] : json_decode(iro_opt('yiyan_api')),
         'skin_bg0' => $reception_background['img1'] ?? '',
         'skin_bg1' => $reception_background['img2'] ?? '',
