@@ -57,10 +57,11 @@ get_header();
 
 <style>
 .nikki-page-title {
-    margin: 0 0 28px;
+    display: block;
+    margin: 6.5% 0 7.5%;
     text-align: center;
     font-size: 30px;
-    line-height: 1.3;
+    line-height: normal;
     letter-spacing: 2px;
     font-weight: var(--global-font-weight);
 }
