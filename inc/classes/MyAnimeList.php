@@ -22,11 +22,11 @@ class MyAnimeList
 	function get_data()
 	{
 		$bangumi_cache = iro_opt('bangumi_cache', true);
-		$cache_key = 'bangumi_cache';
+		$cache_key = 'myanimelist_cache';
 
 		if ($bangumi_cache) {
-			$cached_content = json_decode(get_transient($cache_key),true);
-			if ($cached_content && isset($cached_content[0]['anime_url']) && !empty($cached_content[0]['anime_url'])) {
+			$cached_content = json_decode(get_transient($cache_key), true);
+			if (is_array($cached_content) && (empty($cached_content) || isset($cached_content[0]['anime_url']))) {
 				return $cached_content;
 			}
 		}
@@ -34,42 +34,51 @@ class MyAnimeList
 		$username = $this->username;
 		$sort = $this->sort;
 		switch ($sort) {
-			case 1: // Status and Last Updated
+			case 1:
 				$sort = 'order=16&order2=5&status=7';
 				break;
-			case 2: // Last Updated
+			case 2:
 				$sort = 'order=5&status=7';
 				break;
-			case 3: // Status
+			case 3:
 				$sort = 'order=16&status=7';
 				break;
 		}
-		
-		$url = "https://myanimelist.net/animelist/$username/load.json?$sort";
-		$args = [
-			'headers' => [
-				'Host' => 'myanimelist.net',
-				'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97'
-			]
-		];
-		
-		$response = wp_remote_get($url, $args);
-		
-		if (is_array($response) && isset($response["body"])) {
-			$body = $response["body"];
 
-			if ($bangumi_cache && !empty($body)) {
-				auto_update_cache($cache_key, json_encode($response['body'],true));
+		$all_items = array();
+		$offset = 0;
+		$batch_size = 300;
+		$batch_count = 0;
+		do {
+			$url = add_query_arg('offset', $offset, "https://myanimelist.net/animelist/$username/load.json?$sort");
+			$args = [
+				'headers' => [
+					'Host' => 'myanimelist.net',
+					'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97'
+				]
+			];
+			$response = wp_remote_get($url, $args);
+			if (!is_array($response) || !isset($response['body'])) {
+				return false;
 			}
+			$items = json_decode($response['body'], true);
+			$items = is_array($items) ? $items : array();
+			$all_items = array_merge($all_items, $items);
+			$received = count($items);
+			$offset += $received;
+			$batch_count++;
+		} while ($received >= $batch_size && $batch_count < 100);
 
-			return json_decode($body, true);
-		} else {
-			return false;
+		if ($bangumi_cache) {
+			auto_update_cache($cache_key, wp_json_encode($all_items));
 		}
+
+		return $all_items;
 	}
 
 	public function get_all_items($page = 1, $pagination_url = '')
 	{
+		$page = max(1, absint($page));
 		$resp = $this->get_data();
 		if ($resp === false)
 		{
@@ -85,8 +94,9 @@ class MyAnimeList
 				$total_episodes += $item['num_watched_episodes'];
 			}
 			$per_page = 12;
-			$total_pages = (int)ceil($item_count / $per_page);
-			$items = array_slice($resp, max(0, ($page - 1) * $per_page), $per_page);
+			$total_pages = (int) ceil($item_count / $per_page);
+			$page = $total_pages > 0 ? min($page, $total_pages) : 1;
+			$items = array_slice($resp, ($page - 1) * $per_page, $per_page);
 			foreach ($items as $item)
 			{
 				$html .= MyAnimeList::get_item_details($item);
@@ -97,23 +107,19 @@ class MyAnimeList
 			            '</div>';
 			$html = $top_info . $html;
 			if ($total_pages > 1 && $pagination_url) {
-				$html .= MyAnimeList::pagination_html($page, $total_pages, $pagination_url);
+				$html .= \koyori_render_pagination(
+					$page,
+					$total_pages,
+					$pagination_url,
+					'bangumi_page',
+					array(
+						'aria_label' => __('Bangumi pagination', 'sakurairo'),
+						'legacy_prefix' => 'bangumi',
+					)
+				);
 			}
 			return $html;
 		}
-	}
-
-	private static function pagination_html($page, $total_pages, $pagination_url)
-	{
-		$html = '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
-		if ($page > 1) {
-			$html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
-		}
-		$html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $total_pages) . '</span>';
-		if ($page < $total_pages) {
-			$html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
-		}
-		return $html . '</nav>';
 	}
 
 	private static function get_item_details(array $item)

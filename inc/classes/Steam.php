@@ -95,13 +95,15 @@ class Steam
 
     public function get_steam_items($page = 1, $pagination_url = '')
     {
+        $page = max(1, absint($page));
         $resp = $this->fetch_api();
         // 添加检查，确保 $resp['response']['games'] 存在且为数组
         $games = isset($resp['response']['games']) && is_array($resp['response']['games']) ? $resp['response']['games'] : [];
 
         $total = count($games); // 总条目数
         $perPage = 12; // 每页条目数
-        $totalPages = ceil($total / $perPage); // 总页数
+        $totalPages = (int) ceil($total / $perPage); // 总页数
+        $page = $totalPages > 0 ? min($page, $totalPages) : 1;
         $offset = ($page - 1) * $perPage;
         $games = array_slice($games, $offset, $perPage); // 当前页数据
 
@@ -127,19 +129,17 @@ class Steam
             $html .= $card_html;
         }
 
-        // 标准分页，Steam 页面使用普通链接跳转，不追加内容。
         if ($totalPages > 1 && $pagination_url) {
-            $html .= '<nav class="steam-pagination" aria-label="' . esc_attr__('Steam library pagination', 'sakurairo') . '">';
-            if ($page > 1) {
-                $prev_url = add_query_arg('steam_page', $page - 1, $pagination_url);
-                $html .= '<a class="steam-pagination-link steam-pagination-prev" href="' . esc_url($prev_url) . '"><i class="fa-solid fa-angle-left"></i> ' . esc_html__('上一页', 'sakurairo') . '</a>';
-            }
-            $html .= '<span class="steam-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalPages) . '</span>';
-            if ($page < $totalPages) {
-                $next_url = add_query_arg('steam_page', $page + 1, $pagination_url);
-                $html .= '<a class="steam-pagination-link steam-pagination-next" href="' . esc_url($next_url) . '">' . esc_html__('下一页', 'sakurairo') . ' <i class="fa-solid fa-angle-right"></i></a>';
-            }
-            $html .= '</nav>';
+            $html .= \koyori_render_pagination(
+                $page,
+                $totalPages,
+                $pagination_url,
+                'steam_page',
+                array(
+                    'aria_label' => __('Steam library pagination', 'sakurairo'),
+                    'legacy_prefix' => 'steam',
+                )
+            );
         }
 
         return $html;

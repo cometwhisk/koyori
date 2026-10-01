@@ -53,36 +53,61 @@ class BangumiAPI
     {
         $bangumi_cache = iro_opt('bangumi_cache', true);
         $cache_key = 'bangumi_cache';
-        $collDataArr = [];
+        $collData = null;
 
         if ($bangumi_cache) {
             $cachedData = get_transient($cache_key);
-            $collData = $cachedData ?json_decode($cachedData, true) : null;
-    
+            $collData = $cachedData ? json_decode($cachedData, true) : null;
             if (!isset($collData['data']) || !is_array($collData['data'])) {
                 $collData = null;
             }
-        } else {
-            $collData = null;
         }
-    
+
         if ($collData === null) {
-            $response = $this->http_get_contents($this->collectionApi);
-            $collData = json_decode($response, true);
-    
-            if (isset($collData['data']) && is_array($collData['data']) && $bangumi_cache) {
-                auto_update_cache($cache_key, $response);
+            $all_data = array();
+            $offset = 0;
+            $limit = 50;
+            $total = 0;
+            $batch_count = 0;
+
+            do {
+                $url = add_query_arg(
+                    array(
+                        'subject_type' => 2,
+                        'limit' => $limit,
+                        'offset' => $offset,
+                    ),
+                    $this->collectionApi
+                );
+                $response = $this->http_get_contents($url);
+                $batch = json_decode($response, true);
+                $batch_data = isset($batch['data']) && is_array($batch['data']) ? $batch['data'] : array();
+                $all_data = array_merge($all_data, $batch_data);
+                $batch_total = absint($batch['total'] ?? 0);
+                $total = max($total, $batch_total);
+                $previous_offset = $offset;
+                $offset += count($batch_data);
+                $batch_count++;
+            } while (!empty($batch_data) && $offset < $total && $offset > $previous_offset && $batch_count < 100);
+
+            $collData = array(
+                'data' => $all_data,
+                'total' => count($all_data),
+                'limit' => $limit,
+                'offset' => 0,
+            );
+            if ($bangumi_cache) {
+                auto_update_cache($cache_key, wp_json_encode($collData));
             }
         }
-    
-        // 过滤符合条件的数据
+
         if (isset($collData['data']) && is_array($collData['data'])) {
-            $collDataArr = array_filter($collData['data'], function($item) {
-                return in_array($item['type'], [2, 3]) && $item['subject_type'] == 2;
-            });
+            return array_values(array_filter($collData['data'], function ($item) {
+                return in_array((int) ($item['type'] ?? 0), array(2, 3), true) && (int) ($item['subject_type'] ?? 0) === 2;
+            }));
         }
-    
-        return $collDataArr;
+
+        return array();
     }
 
     private function http_get_contents($url)
@@ -100,6 +125,7 @@ class BangumiList
 {
     public function get_bgm_items($userID, $page = 1, $pagination_url = '')
     {
+        $page = max(1, absint($page));
         if (empty($userID)) {
             return '<p>' . __('Bangumi ID not set.', 'sakurairo') . '</p>';
         }
@@ -114,7 +140,8 @@ class BangumiList
 
             $total = count($collections); // 总条目数
             $perPage = 12; // 每页条目数
-            $totalPages = ceil($total / $perPage); // 总页数
+            $totalPages = (int) ceil($total / $perPage); // 总页数
+            $page = $totalPages > 0 ? min($page, $totalPages) : 1;
             $offset = ($page - 1) * $perPage;
             $collections = array_slice($collections, $offset, $perPage); // 当前页数据
 
@@ -138,25 +165,21 @@ class BangumiList
             }
 
             if ($totalPages > 1 && $pagination_url) {
-                $html .= '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
-                if ($page > 1) {
-                    $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
-                }
-                $html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalPages) . '</span>';
-                if ($page < $totalPages) {
-                    $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
-                }
-                $html .= '</nav>';
+                $html .= \koyori_render_pagination(
+                    $page,
+                    $totalPages,
+                    $pagination_url,
+                    'bangumi_page',
+                    array(
+                        'aria_label' => __('Bangumi pagination', 'sakurairo'),
+                        'legacy_prefix' => 'bangumi',
+                    )
+                );
             }
 
             return $html;
         } catch (\Exception $e) {
             return '<p>' . __('An error occured: ', 'sakurairo') . esc_html($e->getMessage()) . '</p>';
         }
-    }
-
-    private static function anchor_pagination_next(string $href)
-    {
-        return '<a class="pagination-next" data-href="' . esc_url($href) . '"><i class="fa-solid fa-guitar"></i> ' . __('Load more...', 'sakurairo') . '</a>';
     }
 }

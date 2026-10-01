@@ -42,6 +42,7 @@ class Bilibili
 
     public function get_bgm_items($page = 1, $pagination_url = '')
     {
+        $page = max(1, absint($page));
         $resp = $this->fetch_api(1, $page);
         $code = $resp["code"];
         switch ($code) {
@@ -49,7 +50,12 @@ class Bilibili
                 return "<div>" . __('Backend error', 'sakurairo') . "</div>";
             case 0: {
                     $bgm = $resp['data'];
-                    $totalpage = (int)ceil($bgm["total"] / 12);
+                    $totalpage = (int) ceil($bgm["total"] / 12);
+                    if ($totalpage > 0 && $page > $totalpage) {
+                        $page = $totalpage;
+                        $resp = $this->fetch_api(1, $page);
+                        $bgm = $resp['data'];
+                    }
                     $lists = $bgm["list"];
                     $html = "";
                     foreach ((array)$lists as $item) {
@@ -57,7 +63,16 @@ class Bilibili
                         $html .= Bilibili::bangumi_item($item, $percent);
                     }
                     if ($totalpage > 1 && $pagination_url) {
-                        $html .= Bilibili::pagination_html($page, $totalpage, $pagination_url);
+                        $html .= \koyori_render_pagination(
+                            $page,
+                            $totalpage,
+                            $pagination_url,
+                            'bangumi_page',
+                            array(
+                                'aria_label' => __('Bangumi pagination', 'sakurairo'),
+                                'legacy_prefix' => 'bangumi',
+                            )
+                        );
                     }
                     return $html;
                 }
@@ -69,6 +84,7 @@ class Bilibili
 
     public function get_bfv_items($page = 1, $pagination_url = '')
     {
+        $page = max(1, absint($page));
         $resp = $this->fetch_api(2, $page);
         $code = $resp["code"];
         switch ($code) {
@@ -82,28 +98,20 @@ class Bilibili
                         $html .= Bilibili::bangumi_item($item, $percent);
                     }
                     if ($totalpage > 1 && $pagination_url) {
-                        $html .= Bilibili::pagination_html($page, $totalpage, $pagination_url);
+                        $html .= \koyori_render_pagination(
+                            $page,
+                            $totalpage,
+                            $pagination_url,
+                            'bangumi_page',
+                            array(
+                                'aria_label' => __('Bangumi pagination', 'sakurairo'),
+                                'legacy_prefix' => 'bangumi',
+                            )
+                        );
                     }
                     return $html;
                 }
         }
-    }
-    private static function pagination_html($page, $totalpage, $pagination_url)
-    {
-        $html = '<nav class="bangumi-pagination" aria-label="' . esc_attr__('Bangumi pagination', 'sakurairo') . '">';
-        if ($page > 1) {
-            $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page - 1, $pagination_url)) . '">‹ ' . esc_html__('上一页', 'sakurairo') . '</a>';
-        }
-        $html .= '<span class="bangumi-pagination-current">' . sprintf(esc_html__('第 %d / %d 页', 'sakurairo'), $page, $totalpage) . '</span>';
-        if ($page < $totalpage) {
-            $html .= '<a class="bangumi-pagination-link" href="' . esc_url(add_query_arg('bangumi_page', $page + 1, $pagination_url)) . '">' . esc_html__('下一页', 'sakurairo') . ' ›</a>';
-        }
-        return $html . '</nav>';
-    }
-
-    private static function anchor_pagination_next(string $href)
-    {
-        return '<a class="pagination-next" data-href="' . $href . '"><i class="fa-solid fa-guitar"></i>' . __('Load More', 'sakurairo') . '</a>';
     }
     private static function bangumi_item(array $item, $percent)
     {
