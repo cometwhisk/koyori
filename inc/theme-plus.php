@@ -10,22 +10,6 @@ remove_filter('term_description', 'wp_kses_data');
 // 去除顶部工具栏
 show_admin_bar(false);
 
-/*
- * 视频
- */
-function bgvideo(){
-  $dis=null;
-  if(!iro_opt('cover_video'))return '';
-  if(!iro_opt('cover_full_screen')) $dis = 'display:none;';
-  $html = '<div id="video-container" style="'.$dis.'">'; 
-  $html .= '<video id="bgvideo" class="video" preload="auto"></video>';
-  $html .= '<div id="video-btn" class="loadvideo videolive"></div>';
-  $html .= '<div id="video-add"></div>';
-  $html .= '<div class="video-stu"></div>';
-  $html .= '</div>';
-  return $html;
-}
-
 
 /*
  * 使用本地图片作为头像，防止外源抽风问题
@@ -306,78 +290,6 @@ function the_headPattern(){
   <?php else :
     echo '<div class="blank"></div>';
   endif;
-}
-
-/**
- * 文章封面视频
- * @param $isHls 
- */
-function the_video_headPattern(bool $isHls = false)
-{
-    $t = ''; // 标题
-    $thubm_image_url = koyori_get_cover_url(get_the_ID(), 'thumbnail');
-
-    $video_cover = get_post_meta(get_the_ID(), 'video_cover', true);
-    $video_cover_thumb = get_post_meta(get_the_ID(), 'video_cover_thumb', true);
-    // 检查这个字段是否有值
-    if (empty($video_cover_thumb)) { //如果值为空，输出默认值
-        $video_poster_attr = "";
-    } else {
-        $video_poster_attr = ' poster="' . $video_cover_thumb . '" ';
-    }
-    $thubm_image_url = $thubm_image_url ?: null;
-    if (is_single()) {
-      require_once get_template_directory() . '/tpl/entry-census.php';
-        while (have_posts()) {
-            the_post();
-            $center = 'single-center';
-            $header = 'single-header';
-            //$ava = iro_opt('personal_avatar', '') ? iro_opt('personal_avatar', '') : get_avatar_url(get_the_author_meta('user_email'));
-            $btn_playControl = '<button id="cv-pc" class="coverVideo-btn" onclick="coverVideo()"><i class="fa-solid fa-pause"></i></button>';
-//            $btn_volumeControl = '<button id="cv-vc" class="coverVideo-btn" onclick="coverVideoMute()"><i class="fa-solid fa-volume-xmark"></i></button>';
-            $t .= the_title('<h1 class="entry-title">', $btn_playControl./* $btn_volumeControl. */'</h1>', false);
-            $t .= get_entry_census_html(true);
-        }
-    } elseif (is_page()) {
-        $t .= the_title('<h1 class="entry-title">', '</h1>', false);
-    } elseif (is_archive()) {
-        $thubm_image_url = iro_opt('load_out_svg');
-        $des = category_description() ? category_description() : ''; // 描述
-        $t .= '<h1 class="cat-title">' . single_cat_title('', false) . '</h1>';
-        $t .= ' <span class="cat-des">' . $des . '</span>';
-    } elseif (is_search()) {
-        $thubm_image_url = iro_opt('load_out_svg');
-        $t .= '<h1 class="entry-title search-title"> ' . sprintf(__("Search results for \" %s \"", "sakurairo"), get_search_query()) ./*关于“ '.get_search_query().' ”的搜索结果*/ '</h1>';
-    }
-    $thubm_image_url = $thubm_image_url . "#lazyload-blur";
-    $thubm_image_url = str_replace(iro_opt('image_cdn'), 'https://cdn.2heng.xin/', $thubm_image_url);
-    if (!is_home()) { ?>
-        <div class="pattern-center-blank"></div>
-        <div class="pattern-center <?php if (is_single()) : echo $center;endif; ?>">
-            <div class="pattern-attachment">
-                <?php
-                if ($isHls) {
-                ?>
-                    <video loop playsinline muted id="coverVideo" class="hls" <?php echo $video_poster_attr; ?> data-src="<?php echo $video_cover; ?>"></video>
-                <?php
-                } else {
-                ?>
-                    <video autoplay loop playsinline muted id="coverVideo" class="normal-cover-video" <?php echo $video_poster_attr; ?>>
-                        <source src="<?php echo $video_cover; ?>" type="video/mp4">
-                        <?php _e('Your browser does not support HTML5 video.','sakurairo')?>
-                    </video>
-                <?php
-                }
-                ?>
-            </div>
-            <header class="pattern-header <?php if (is_single()) : echo $header;
-                                            endif; ?>">
-                <?php echo $t; ?>
-            </header>
-        </div>
-<?php } else {
-        echo '<div class="blank"></div>';
-    }
 }
 
 

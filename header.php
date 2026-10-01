@@ -284,17 +284,5 @@ header('X-Frame-Options: SAMEORIGIN');
         ?>
         <div id="page" class="site wrapper<?= $unified_cover_background ? ' unified-cover-background' : ''; ?>">
             <?php
-            $use_as_thumb = get_post_meta(get_the_ID(), 'use_as_thumb', true); //'true','only',(default)
-            if ($use_as_thumb != 'only') {
-                $cover_type = get_post_meta(get_the_ID(), 'cover_type', true);
-                if ($cover_type == 'hls') {
-                    the_video_headPattern(true);
-                } elseif ($cover_type == 'normal') {
-                    the_video_headPattern(false);
-                } else {
-                    the_headPattern();
-                }
-            } else {
-                the_headPattern();
-            } ?>
+            the_headPattern(); ?>
             <div id="content" class="site-content">

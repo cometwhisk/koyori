@@ -24,14 +24,6 @@ function font_end_js_control()
     };
 
     $vision_resource_basepath = iro_opt('vision_resource_basepath', 'https://s.nmxc.ltd/sakurairo_vision/@3.0/');
-    $movies = iro_opt('cover_video') ?
-        array(
-            'url' => iro_opt('cover_video_link'),
-            'name' => iro_opt('cover_video_title'),
-            'live' => iro_opt('cover_video_live') ? true : false,
-            'loop' => iro_opt('cover_video_loop') ? true : false
-        )
-        : 'close';
     $auto_height = !iro_opt('cover_full_screen') ? 'fixed' : 'auto';
     if (iro_opt('gravatar_proxy') == 'custom_proxy_address_of_gravatar') {
         $gravatar_url = iro_opt('custom_proxy_address_of_gravatar') ?: 'secure.gravatar.com/avatar';
@@ -43,7 +35,8 @@ function font_end_js_control()
     $iro_opt = [
         // Poi
         'pjax' => check(iro_opt('poi_pjax')),
-        'movies' => $movies,
+        // 保留关闭哨兵，兼容共享前端配置对象；封面视频功能已移除。
+        'movies' => 'close',
         'windowheight' => $auto_height,
         'ajaxurl' => admin_url('admin-ajax.php'),
         'language' => esc_js(str_replace('-', '_', get_locale())),

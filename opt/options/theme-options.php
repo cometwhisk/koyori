@@ -1670,66 +1670,6 @@ $prefix = 'iro_options';
         'default' => 'filter-nothing'
       ),
 
-      array(
-        'type' => 'subheading',
-        'content' => __('Cover Video','sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'cover_video',
-        'type' => 'switcher',
-        'title' => __('Cover Video','sakurairo_csf'),
-        'label' => __('Use a video instead of the images as the cover','sakurairo_csf'),
-        'dependency' => array( 'cover_switch', '==', 'true', '', 'true' ),
-        'default' => false
-      ),
-
-      array(
-        'id' => 'cover_video_loop',
-        'type' => 'switcher',
-        'title' => __('Cover Video Loop','sakurairo_csf'),
-        'dependency' => array(
-                              array( 'cover_video', '==', 'true' ),
-                              array( 'cover_switch', '==', 'true', '', 'true' ),
-                        ),
-        'label' => __('Video will loop automatically when enabled.','sakurairo_csf'),
-        'default' => false
-      ),
-
-      array(
-        'id' => 'cover_video_live',
-        'type' => 'switcher',
-        'title' => __('Cover Video Auto Resume','sakurairo_csf'),
-        'dependency' => array(
-                              array( 'cover_video', '==', 'true' ),
-                              array( 'cover_switch', '==', 'true', '', 'true' ),
-                        ),
-        'label' => __('Cover Video will resume automatically when coming back to homepage while Pjax enabled.','sakurairo_csf'),
-        'default' => false
-      ),
-
-      array(
-        'id' => 'cover_video_link',
-        'type' => 'text',
-        'title' => __('Cover Video URL Base Path','sakurairo_csf'),
-        'dependency' => array(
-                              array( 'cover_video', '==', 'true' ),
-                              array( 'cover_switch', '==', 'true', '', 'true' ),
-                        ),
-        'validate' => 'iro_validate_optional_url',
-        'desc' => __("Fill in the base path your video located at. For example: https://localhost. Your site's URL is used as default. Please pay attention to the protocol name of the URL.",'sakurairo_csf'),
-      ),
-
-      array(
-        'id' => 'cover_video_title',
-        'type' => 'text',
-        'title' => __('Cover Video File Name','sakurairo_csf'),
-        'dependency' => array(
-                              array( 'cover_video', '==', 'true' ),
-                              array( 'cover_switch', '==', 'true', '', 'true' ),
-                        ),
-        'desc' => __('For example: abc.mp4. Multiple videos should be separated by English commas like "abc.mp4,efg.mp4," Random play is on by default.','sakurairo_csf'),
-      ),
 
     )
   ) );

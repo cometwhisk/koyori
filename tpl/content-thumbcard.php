@@ -46,33 +46,12 @@ if (!function_exists('render_article_meta')) {
 if (!function_exists('get_post_cover_html')) {
     function get_post_cover_html() {
         global $post;
-        $use_as_thumb = get_post_meta(get_the_ID(), 'use_as_thumb', true); //'true','only',(default)
-        $cover_type = ($use_as_thumb == 'true' || $use_as_thumb == 'only') ? get_post_meta(get_the_ID(), 'cover_type', true) : '';
-        $cover_html = "";
-        switch ($cover_type) {
-            case 'hls':
-                $video_cover = get_post_meta(get_the_ID(), 'video_cover', true);
-                $cover_html = '<video class="hls" poster="' . esc_url(iro_opt('load_out_svg')) . '#lazyload-blur" src="' . esc_url($video_cover) . '" loop muted="true" disablePictureInPicture disableRemotePlayback playsinline>'
-                    . __('Your browser does not support HTML5 video.', 'sakurairo')
-                    . '</video>';
-                break;
-            case 'normal':
-                $video_cover = get_post_meta(get_the_ID(), 'video_cover', true);
-                $cover_html = '<video class="lazyload" poster="' . esc_url(iro_opt('load_out_svg')) . '#lazyload-blur" data-src="' . esc_url($video_cover) . '" autoplay loop muted="true" disablePictureInPicture disableRemotePlayback playsinline>'
-                    . __('Your browser does not support HTML5 video.', 'sakurairo')
-                    . '</video>';
-                break;
-            default:
-                $post_img = '';
-                if (koyori_has_cover($post->ID)) {
-                    $post_img = koyori_get_cover_url($post->ID, 'large');
-                } else {
-                    $post_img = DEFAULT_FEATURE_IMAGE('th');
-                }
-                $cover_html = '<img alt="post_img" class="lazyload" src="' . esc_url(iro_opt('load_out_svg')) . '#lazyload-blur" data-src="' . esc_url($post_img) . '"/>';
-                break;
+        if (koyori_has_cover($post->ID)) {
+            $post_img = koyori_get_cover_url($post->ID, 'large');
+        } else {
+            $post_img = DEFAULT_FEATURE_IMAGE('th');
         }
-        return $cover_html;
+        return '<img alt="post_img" class="lazyload" src="' . esc_url(iro_opt('load_out_svg')) . '#lazyload-blur" data-src="' . esc_url($post_img) . '"/>';
     }
 }
 

@@ -4178,8 +4178,7 @@ function should_show_title(): bool
     $id = get_the_ID();
     $use_as_thumb = get_post_meta($id, 'use_as_thumb', true); //'true','only',(default)
     return !iro_opt('patternimg')
-        || !koyori_has_cover($id)
-        && $use_as_thumb != 'true' && !get_post_meta($id, 'video_cover', true);
+        || (!koyori_has_cover($id) && $use_as_thumb != 'true');
 }
 
 // 管理员访问任何页面更新最后在线时间
