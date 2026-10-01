@@ -56,6 +56,14 @@ get_header();
 ?>
 
 <style>
+.nikki-page-title {
+    margin: 0 0 28px;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1.3;
+    letter-spacing: 2px;
+    font-weight: var(--global-font-weight);
+}
 .nikki-page {
     --nikki-card: rgba(255, 255, 255, .68);
     --nikki-card-strong: rgba(255, 255, 255, .82);
@@ -215,6 +223,10 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
     .nikki-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
+
+<?php if (!iro_opt('patternimg') || !koyori_has_cover(get_the_ID())): ?>
+    <h1 class="nikki-page-title"><?php the_title(); ?></h1>
+<?php endif; ?>
 
 <div class="nikki-page">
     <section class="nikki-profile" aria-label="<?php echo esc_attr(get_the_title()); ?>个人资料卡">
