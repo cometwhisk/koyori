@@ -225,7 +225,7 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
 }
 </style>
 
-<?php if (!iro_opt('patternimg') || !koyori_has_cover(get_the_ID())): ?>
+<?php if (should_show_title()): ?>
     <h1 class="nikki-page-title"><?php the_title(); ?></h1>
 <?php endif; ?>
 
