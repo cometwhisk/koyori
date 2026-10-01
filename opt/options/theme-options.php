@@ -2416,8 +2416,8 @@ $prefix = 'iro_options';
       array(
         'id' => 'page_cover_vertical_position',
         'type' => 'slider',
-        'title' => __('Page and Article Cover Vertical Position','sakurairo_csf'),
-        'desc' => __('Adjust which vertical area of the cover image is displayed. 50% keeps the current centered position; higher values show a lower area of the image.','sakurairo_csf'),
+        'title' => '页面和文章封面图垂直位置',
+        'desc' => '调整页面和文章顶部封面图片的垂直显示位置。50% 为当前居中位置；数值越大，显示图片越靠下的区域。',
         'min' => '0',
         'max' => '100',
         'step' => '1',
