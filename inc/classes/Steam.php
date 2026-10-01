@@ -100,7 +100,7 @@ class Steam
         $games = isset($resp['response']['games']) && is_array($resp['response']['games']) ? $resp['response']['games'] : [];
 
         $total = count($games); // 总条目数
-        $perPage = 20; // 每页条目数
+        $perPage = 12; // 每页条目数
         $totalPages = ceil($total / $perPage); // 总页数
         $offset = ($page - 1) * $perPage;
         $games = array_slice($games, $offset, $perPage); // 当前页数据
