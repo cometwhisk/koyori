@@ -56,6 +56,9 @@ get_header();
 ?>
 
 <style>
+.site-content {
+    max-width: 1280px;
+}
 .nikki-page-title {
     display: block;
     margin: 6.5% 0 7.5%;
@@ -70,7 +73,7 @@ get_header();
     --nikki-card-strong: rgba(255, 255, 255, .82);
     --nikki-border: rgba(255, 255, 255, .84);
     --nikki-muted: #77727b;
-    max-width: 1120px;
+    max-width: 1240px;
     margin: 0 auto 80px;
     padding: 30px 18px 0;
 }
