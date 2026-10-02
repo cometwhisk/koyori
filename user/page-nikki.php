@@ -144,6 +144,7 @@ get_header();
 .nikki-stat {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     min-height: 84px;
     padding: 15px;
@@ -151,6 +152,7 @@ get_header();
     border-radius: 16px;
     background: var(--nikki-card-strong);
 }
+.nikki-stat > div { text-align: center; }
 .nikki-stat i {
     flex: 0 0 35px;
     color: var(--theme-skin-matching);
