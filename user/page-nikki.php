@@ -192,17 +192,18 @@ get_header();
     gap: 12px;
 }
 .nikki-detail {
-    padding: 14px 15px;
+    padding: 15px;
     border-radius: 14px;
-    background: rgba(255,255,255,.46);
+    background: rgba(255,255,255,.58);
     text-align: center;
 }
-.nikki-detail-label { display:block; color:var(--nikki-muted); font-size:12px; }
-.nikki-detail-value { display:block; margin-top:6px; color:var(--global-font-color); font-size:18px; font-weight:600; }
-.nikki-detail small { display:block; margin-top:8px; color:var(--nikki-muted); font-size:12px; }
-.nikki-resonance-total { display:flex; align-items:baseline; justify-content:center; gap:12px; margin:0 0 24px; color:var(--nikki-muted); }
-.nikki-resonance-total span { font-size:16px; }
-.nikki-resonance-total strong { color:var(--theme-skin-matching); font-size:36px; line-height:1; }
+.nikki-detail-label { display:block; color:#625d66; font-size:13px; font-weight:500; line-height:1.4; }
+.nikki-detail-value { display:block; margin-top:5px; color:var(--global-font-color); font-size:20px; font-weight:600; line-height:1.3; }
+.nikki-detail small { display:block; margin-top:6px; color:#625d66; font-size:13px; font-weight:400; line-height:1.5; }
+.nikki-detail small strong { font-weight:600; }
+.nikki-resonance-total { display:flex; align-items:baseline; justify-content:center; gap:10px; margin:0 0 20px; color:#625d66; }
+.nikki-resonance-total span { font-size:16px; font-weight:500; line-height:1.4; }
+.nikki-resonance-total strong { color:#71859a; font-size:36px; font-weight:700; line-height:1; }
 body.dark .nikki-identity,
 body.dark .nikki-stats,
 body.dark .nikki-section { background: var(--dark-bg-secondary); border-color: rgba(100,100,100,.35); box-shadow: var(--dark-shadow-normal); }
@@ -216,8 +217,11 @@ body.dark .nikki-stat,
 body.dark .nikki-detail { background: rgba(255,255,255,.06); border-color: rgba(100,100,100,.28); }
 body.dark .nikki-name,
 body.dark .nikki-section-title,
-body.dark .nikki-stat-value,
-body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
+body.dark .nikki-stat-value { color: var(--dark-text-secondary); }
+body.dark .nikki-resonance-total,
+body.dark .nikki-detail-label,
+body.dark .nikki-detail small { color: var(--dark-text-secondary); }
+body.dark .nikki-detail-value { color: var(--dark-text-primary); }
 @media (max-width: 760px) {
     .nikki-page { padding: 15px 12px 0; }
     .nikki-profile { grid-template-columns: 1fr; }
@@ -226,7 +230,16 @@ body.dark .nikki-detail-value { color: var(--dark-text-secondary); }
     .nikki-stat { min-height: 76px; padding: 12px 10px; gap: 8px; }
     .nikki-stat i { flex-basis: 27px; font-size: 18px; }
     .nikki-stat-value { font-size: 17px; }
-    .nikki-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nikki-resonance-total { gap: 8px; margin-bottom: 18px; }
+    .nikki-resonance-total span { font-size: 15px; }
+    .nikki-resonance-total strong { font-size: 32px; }
+    .nikki-detail { padding: 13px 10px; }
+    .nikki-detail-label { font-size: 13px; }
+    .nikki-detail-value { font-size: 19px; }
+    .nikki-detail small { font-size: 13px; line-height: 1.45; }
+}
+@media (max-width: 360px) {
+    .nikki-detail-grid { grid-template-columns: 1fr; }
 }
 </style>
 
