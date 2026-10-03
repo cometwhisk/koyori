@@ -78,7 +78,7 @@ function koyori_render_rss_preview_stylesheet(): void
     $background_split = iro_opt('random_graphs_mts') ? '1' : '0';
     $darkmode_auto = iro_opt('theme_darkmode_auto') ? '1' : '0';
     $darkmode_strategy = esc_attr(iro_opt('theme_darkmode_strategy', 'time'));
-    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss16'));
+    $css_url = esc_url(get_stylesheet_directory_uri() . '/rss/feed.css?ver=' . rawurlencode((string) IRO_VERSION . '-rss17'));
 
     $xsl = <<<'XSL'
 <?xml version="1.0" encoding="utf-8"?>
