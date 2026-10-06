@@ -4455,7 +4455,7 @@ function iro_action_operator()
             break;
         
         case 'steam_library' :
-            $direct_url = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' . iro_opt('steam_key') .'&steamid=' . iro_opt('steam_id') .'&include_appinfo=1&include_played_free_games=1&include_free_games=1';
+            $direct_url = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' . iro_opt('steam_key') .'&steamid=' . iro_opt('steam_id') .'&include_appinfo=1&include_played_free_games=1&include_free_games=1&include_family_licenses=true';
             header("Location: $direct_url", true, 302);
             break;
 
