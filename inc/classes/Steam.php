@@ -100,6 +100,9 @@ class Steam
         $resp = $this->fetch_api();
         // 添加检查，确保 $resp['response']['games'] 存在且为数组
         $games = isset($resp['response']['games']) && is_array($resp['response']['games']) ? $resp['response']['games'] : [];
+        $games = array_values(array_filter($games, static function ($game) {
+            return absint($game['playtime_forever'] ?? 0) > 0;
+        }));
 
         $total = count($games); // 总条目数
         $perPage = 12; // 每页条目数
