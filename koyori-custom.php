@@ -124,6 +124,7 @@ add_action('wp_enqueue_scripts', static function (): void {
 
     document.addEventListener('click', function (event) {
         var tiledBackground = event.target.closest('#diy1-bg, #diy2-bg, #diy3-bg, #diy4-bg');
+        var darkBackground = event.target.closest('#dark-bg');
         var regularBackground = event.target.closest('#white-bg, #dark-bg');
         if (tiledBackground) {
             document.body.style.backgroundRepeat = 'repeat';
@@ -131,6 +132,11 @@ add_action('wp_enqueue_scripts', static function (): void {
         } else if (regularBackground) {
             document.body.style.backgroundRepeat = 'no-repeat';
             document.body.style.backgroundSize = '';
+            if (darkBackground) {
+                var customBackground = window._iro && window._iro.skin_bg0;
+                document.body.style.backgroundImage = customBackground ? 'url(' + customBackground + ')' : '';
+                localStorage.setItem('bgImgSetting', 'white-bg');
+            }
         }
     }, true);
 }());
