@@ -59,12 +59,11 @@ get_header();
 .site-content {
     max-width: 1280px;
 }
-.nikki-page-title {
+span.linkss-title {
+    font-size: 30px;
+    text-align: center;
     display: block;
     margin: 6.5% 0 7.5%;
-    text-align: center;
-    font-size: 30px;
-    line-height: normal;
     letter-spacing: 2px;
     font-weight: var(--global-font-weight);
 }
@@ -75,7 +74,7 @@ get_header();
     --nikki-muted: #77727b;
     max-width: 1240px;
     margin: 0 auto 80px;
-    padding: 30px 18px 0;
+    padding: 0 18px;
 }
 .nikki-page * { box-sizing: border-box; }
 .nikki-profile {
@@ -223,7 +222,7 @@ body.dark .nikki-detail-label,
 body.dark .nikki-detail small { color: var(--dark-text-secondary); }
 body.dark .nikki-detail-value { color: var(--dark-text-primary); }
 @media (max-width: 760px) {
-    .nikki-page { padding: 15px 12px 0; }
+    .nikki-page { padding: 0 12px; }
     .nikki-profile { grid-template-columns: 1fr; }
     .nikki-identity { min-height: 260px; }
     .nikki-stats { gap: 9px; padding: 11px; }
@@ -244,7 +243,7 @@ body.dark .nikki-detail-value { color: var(--dark-text-primary); }
 </style>
 
 <?php if (should_show_title()): ?>
-    <h1 class="nikki-page-title"><?php the_title(); ?></h1>
+    <span class="linkss-title"><?php the_title(); ?></span>
 <?php endif; ?>
 
 <div class="nikki-page">
