@@ -2829,10 +2829,13 @@ $prefix = 'iro_options';
               if(!values.nikki_client_id||!values.nikki_token||!values.nikki_openid){status.textContent='请填写完整的三个字段。';status.className='is-error';return;}
               button.disabled=true;status.textContent='同步中…';status.className='';
               const body=new URLSearchParams({action:'koyori_nikki_sync_profile',nonce:'<?= esc_js($nonce) ?>',client_id:values.nikki_client_id,token:values.nikki_token,openid:values.nikki_openid});
-              fetch('<?= esc_url($ajax_url) ?>',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body:body}).then(r=>r.json()).then(data=>{
-                status.textContent=data.success ? (data.data.message+' '+data.data.profile.nickname+' / Lv.'+data.data.profile.level) : (data.data?.message||'同步失败。');
-                status.className=data.success?'is-ok':'is-error';
-              }).catch(()=>{status.textContent='网络请求失败，请稍后重试。';status.className='is-error'}).finally(()=>{button.disabled=false});
+              return fetch('<?= esc_url($ajax_url) ?>',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},body:body}).then(
+                response=>window.koyoriAdminErrors.syncResponse(response),
+                ()=>({success:false,message:'网络请求失败，请稍后重试。'})
+              ).then(result=>{
+                status.textContent=result.message;
+                status.className=result.success?'is-ok':'is-error';
+              }).catch(()=>{status.textContent='处理同步响应时发生错误，无法确认同步结果。';status.className='is-error'}).finally(()=>{button.disabled=false});
             });
           }());
           </script>
