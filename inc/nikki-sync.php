@@ -134,6 +134,7 @@ if (!function_exists('koyori_nikki_fetch_stats')) {
         $wish_collected = array('periodic5' => 0, 'periodic4' => 0, 'permanent5' => 0);
         $standard_four_owned = 0;
         $owned_suit_ids = array_fill_keys(array_map('strval', is_array($self['suit_list'] ?? null) ? $self['suit_list'] : array()), true);
+        $gacha_by_pool_rarity_result = array();
         foreach (is_array($self['gacha_list'] ?? null) ? $self['gacha_list'] : array() as $draw) {
             $pool_id = (string) ($draw['card_pool_id'] ?? '');
             $rarity = (string) ($draw['rarity'] ?? '');
@@ -281,13 +282,22 @@ if (!function_exists('koyori_nikki_sync_profile')) {
         ));
 
         if (is_wp_error($response)) {
-            return new WP_Error('nikki_request_failed', '官方接口请求失败，请稍后重试。');
+            return new WP_Error('nikki_request_failed', '连接官方接口失败，请稍后重试。');
         }
         $status = wp_remote_retrieve_response_code($response);
+        if ($status !== 200) {
+            return new WP_Error('nikki_upstream_http_error', '官方接口返回 HTTP ' . (int) $status . '，未更新现有资料。');
+        }
         $payload = json_decode(wp_remote_retrieve_body($response), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($payload)) {
+            return new WP_Error('nikki_invalid_profile_response', '官方接口返回内容无效，未更新现有资料。');
+        }
+        if ((int) ($payload['code'] ?? -1) !== 0) {
+            return new WP_Error('nikki_upstream_rejected', '官方接口拒绝了请求，请检查登录态或稍后重试。');
+        }
         $role = is_array($payload['data']['role'] ?? null) ? $payload['data']['role'] : array();
-        if ($status !== 200 || (int) ($payload['code'] ?? -1) !== 0 || empty($role)) {
-            return new WP_Error('nikki_auth_failed', '登录态无效或已过期，请更新登录态字段。');
+        if (empty($role)) {
+            return new WP_Error('nikki_invalid_profile', '官方接口用户资料格式不完整，未更新现有资料。');
         }
         foreach (array('uid', 'nickname', 'avatar', 'level') as $key) {
             if (!isset($role[$key]) || (!is_string($role[$key]) && !is_int($role[$key])) || trim((string) $role[$key]) === '') {

@@ -580,7 +580,8 @@ if ( ! class_exists( 'Sakurairo_CSF' ) ) {
 
       // Main scripts
       wp_enqueue_script( 'csf-plugins', self::include_plugin_url( 'assets/js/plugins'. $min .'.js' ), array(), self::$version, true );
-      wp_enqueue_script( 'sakurairo_csf', self::include_plugin_url( 'assets/js/main'. $min .'.js' ), array( 'csf-plugins' ), self::$version, true );
+      wp_enqueue_script( 'koyori-admin-errors', self::include_plugin_url( 'assets/js/admin-errors.js' ), array(), filemtime( self::$dir .'/assets/js/admin-errors.js' ), true );
+      wp_enqueue_script( 'sakurairo_csf', self::include_plugin_url( 'assets/js/main'. $min .'.js' ), array( 'csf-plugins', 'koyori-admin-errors' ), self::$version .'-koyori-admin-errors-1', true );
 
       // Main variables
       wp_localize_script( 'sakurairo_csf', 'csf_vars', array(
